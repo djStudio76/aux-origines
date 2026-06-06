@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre II — Origines Mythiques · Noé, Hénoch, Déluge · Aux Origines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav { padding: 1rem 0; flex: 1; }
+
+.sidebar-nav .chapitre-item {
+  display: block;
+  padding: 0.4rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: rgba(245,237,224,0.5);
+  transition: all 0.25s ease;
+  line-height: 1.4;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-nav .chapitre-item:hover {
+  color: var(--or-pale);
+  border-left-color: var(--or);
+  background: rgba(200,148,58,0.08);
+  padding-left: 1.8rem;
+}
+
+.sidebar-nav .chapitre-item.actif {
+  color: var(--or-pale);
+  border-left-color: var(--or-vif);
+  background: rgba(200,148,58,0.12);
+}
+
+.sidebar-nav .chap-numero {
+  display: block;
+  font-size: 0.58rem;
+  color: var(--or);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.1rem;
+}
+
+.sidebar-nav .section-item {
+  display: block;
+  padding: 0.25rem 1.5rem 0.25rem 2rem;
+  font-family: var(--font-corps);
+  font-size: 0.72rem;
+  font-style: italic;
+  text-decoration: none;
+  color: rgba(245,237,224,0.35);
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+  line-height: 1.3;
+}
+
+.sidebar-nav .section-item:hover {
+  color: rgba(245,237,224,0.7);
+  padding-left: 2.3rem;
+}
+
+.sidebar-nav .section-item.active-section {
+  color: var(--or-pale);
+  border-left-color: rgba(200,148,58,0.5);
+}
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.15);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══ CONTENU PRINCIPAL ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.chapter-hero {
+  position: relative;
+  min-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 3rem 4rem;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 100%, rgba(200,148,58,0.10) 0%, transparent 50%),
+    linear-gradient(180deg, #0d0a05 0%, #1e1208 55%, #1a1208 100%);
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Pluie stylisée — effet déluge */
+.chapter-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    170deg,
+    transparent 0px,
+    transparent 18px,
+    rgba(200,148,58,0.025) 18px,
+    rgba(200,148,58,0.025) 19px
+  );
+  pointer-events: none;
+}
+
+.hero-ornement {
+  font-size: 1.8rem;
+  color: var(--or);
+  opacity: 0.6;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5em;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.85; }
+}
+
+.hero-numero {
+  font-family: var(--font-deco);
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.hero-numero::before, .hero-numero::after {
+  content: '——';
+  opacity: 0.4;
+  margin: 0 1rem;
+}
+
+.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  color: var(--parchemin-pale);
+  line-height: 1.1;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 30px rgba(139,26,26,0.4), 0 0 60px rgba(0,0,0,0.6);
+  font-weight: 400;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.15rem;
+  color: var(--or-pale);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  opacity: 0.85;
+}
+
+.hero-epigraphe {
+  max-width: 520px;
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: rgba(245,237,224,0.65);
+  font-style: italic;
+  line-height: 1.6;
+  border-left: 2px solid rgba(200,148,58,0.4);
+  padding-left: 1.2rem;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  font-style: normal;
+  font-family: var(--font-titre);
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to top, var(--parchemin-pale) 0%, transparent 100%);
+}
+
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 1.5rem auto 0;
+}
+
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,148,58,0.4), transparent);
+}
+
+.deco-ligne-symbole {
+  color: var(--or);
+  font-size: 0.7rem;
+  opacity: 0.6;
+  letter-spacing: 0.3em;
+}
+
+/* ═══ CORPS ═══ */
+.contenu {
+  max-width: calc(var(--max-prose) + 6rem);
+  margin: 0 auto;
+  padding: 4rem 3rem 6rem;
+}
+
+.section {
+  margin-bottom: 4.5rem;
+  scroll-margin-top: 2rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.2);
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--or), transparent);
+}
+
+.section-numero {
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--or);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(200,148,58,0.4);
+  border-radius: 2px;
+  white-space: nowrap;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  color: var(--encre);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1rem;
+  color: var(--brun);
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+.sous-section { margin-bottom: 2.5rem; }
+
+.sous-section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.05rem;
+  color: var(--brun);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sous-section-titre::before {
+  content: '✦';
+  color: var(--or);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--encre);
+  margin-bottom: 1.2rem;
+  text-align: justify;
+  hyphens: auto;
+}
+
+p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-deco);
+  font-size: 3.8rem;
+  line-height: 0.8;
+  margin: 0.1rem 0.12rem -0.1rem 0;
+  color: var(--or);
+  text-shadow: 1px 1px 0 rgba(139,94,60,0.3);
+}
+
+blockquote {
+  margin: 2rem 0;
+  padding: 1.5rem 1.8rem;
+  background: rgba(139,94,60,0.06);
+  border-left: 3px solid var(--or);
+  border-radius: 0 4px 4px 0;
+  position: relative;
+}
+
+blockquote::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.5rem;
+  left: 1.2rem;
+  font-family: var(--font-deco);
+  font-size: 4rem;
+  color: var(--or);
+  opacity: 0.25;
+  line-height: 1;
+}
+
+blockquote p {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  font-style: italic;
+  color: var(--encre-douce);
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+blockquote p:first-of-type::first-letter { all: unset; }
+blockquote p:last-child { margin-bottom: 0; }
+
+blockquote cite {
+  display: block;
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--brun-clair);
+  text-align: right;
+  margin-top: 0.8rem;
+  font-style: normal;
+}
+
+.heb {
+  font-size: 1.1em;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+}
+
+.ar {
+  font-size: 1.1em;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+}
+
+.translitt {
+  font-style: italic;
+  color: var(--brun-clair);
+}
+
+/* Tableaux */
+.tableau-wrapper {
+  margin: 2.5rem 0;
+  overflow-x: auto;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  box-shadow: 0 2px 12px var(--ombre);
+}
+
+.tableau-titre {
+  background: var(--encre);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.2rem;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+
+thead { background: rgba(139,94,60,0.12); }
+
+thead th {
+  font-family: var(--font-titre);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(200,148,58,0.3);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover { background: rgba(200,148,58,0.05); }
+
+tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+  line-height: 1.55;
+  color: var(--encre);
+}
+
+tbody td:first-child {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+tbody tr:nth-child(even) { background: rgba(245,237,224,0.5); }
+
+/* Encadré */
+.encadre {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(200,148,58,0.35);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encadre-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(200,148,58,0.1);
+  border-bottom: 1px solid rgba(200,148,58,0.2);
+}
+
+.encadre-icone { color: var(--or); font-size: 0.9rem; }
+
+.encadre-label {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brun);
+}
+
+.encadre-body {
+  padding: 1.3rem 1.5rem;
+  background: rgba(245,237,224,0.3);
+}
+
+.encadre-body p { font-size: 0.95rem; margin-bottom: 0.8rem; }
+.encadre-body p:last-child { margin-bottom: 0; }
+.encadre-body p:first-of-type::first-letter { all: unset; }
+
+/* Note marginale */
+.note-marge {
+  float: right;
+  clear: right;
+  width: 200px;
+  margin: 0 -1rem 1rem 2rem;
+  padding: 1rem;
+  background: rgba(200,148,58,0.07);
+  border-top: 2px solid var(--or);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--brun);
+  font-style: italic;
+}
+
+.note-marge strong {
+  display: block;
+  font-family: var(--font-titre);
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun-clair);
+  margin-bottom: 0.4rem;
+}
+
+/* Timeline */
+.timeline {
+  margin: 2.5rem 0;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 110px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--or), rgba(200,148,58,0.2));
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+.timeline-date {
+  width: 100px;
+  text-align: right;
+  padding-right: 1.2rem;
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--brun-clair);
+  padding-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.timeline-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--parchemin-pale);
+  border: 2px solid var(--or);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-dot.important {
+  background: var(--or);
+  width: 14px;
+  height: 14px;
+  margin-left: 4px;
+  margin-top: 0.35rem;
+}
+
+.timeline-texte {
+  padding-left: 1.2rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--encre);
+  flex: 1;
+}
+
+.timeline-texte strong {
+  color: var(--brun);
+  font-family: var(--font-titre);
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+
+/* Débat académique */
+.debat {
+  margin: 2.5rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(139,94,60,0.15);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.debat-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.debat-col {
+  padding: 1.5rem;
+  background: var(--parchemin-pale);
+}
+
+.debat-col:first-child { background: rgba(245,237,224,0.6); }
+
+.debat-titre {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(139,94,60,0.2);
+}
+
+.debat-col:nth-child(1) .debat-titre { color: var(--rouge-antique); }
+.debat-col:nth-child(2) .debat-titre { color: var(--brun); }
+.debat-col:nth-child(3) .debat-titre { color: var(--or-encre); }
+
+.debat-col p {
+  font-size: 0.9rem;
+  margin-bottom: 0.7rem;
+  text-align: left;
+}
+
+.debat-col p:first-of-type::first-letter { all: unset; }
+
+/* Synthèse finale */
+.synthese {
+  background: linear-gradient(135deg, var(--encre) 0%, #2d1e0a 100%);
+  color: var(--parchemin-fonce);
+  padding: 3rem;
+  margin: 3rem 0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.synthese::before {
+  content: '✦';
+  position: absolute;
+  top: 1rem; right: 1.5rem;
+  font-size: 4rem;
+  color: rgba(200,148,58,0.1);
+  font-family: var(--font-deco);
+}
+
+.synthese h3 {
+  font-family: var(--font-titre);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 1.5rem;
+}
+
+.synthese p {
+  color: rgba(245,237,224,0.8);
+  font-size: 0.98rem;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.synthese p:first-of-type::first-letter { all: unset; }
+
+.synthese ul { list-style: none; margin: 1rem 0; }
+
+.synthese ul li {
+  padding: 0.4rem 0 0.4rem 1.5rem;
+  position: relative;
+  font-size: 0.95rem;
+  color: rgba(245,237,224,0.8);
+  border-bottom: 1px solid rgba(200,148,58,0.1);
+  line-height: 1.5;
+}
+
+.synthese ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--or);
+  opacity: 0.7;
+}
+
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.3);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+.nav-btn:hover {
+  background: var(--encre);
+  color: var(--or-pale);
+  border-color: var(--encre);
+}
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.75rem;
+  color: var(--or);
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.nav-centre:hover { opacity: 1; }
+
+#btn-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 200;
+}
+
+#btn-top.visible { opacity: 1; transform: translateY(0); }
+#btn-top:hover { background: var(--or); color: var(--encre); }
+
+em { color: var(--brun); font-style: italic; }
+strong { color: var(--encre); font-weight: 600; }
+.terme-cle { color: var(--brun); font-style: italic; font-weight: 500; }
+
+/* Grille de transmission mythique */
+.fleche-schema {
+  margin: 2.5rem 0;
+  background: rgba(245,237,224,0.4);
+  border: 1px solid rgba(139,94,60,0.15);
+  border-radius: 4px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.fleche-schema-titre {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  margin-bottom: 1.5rem;
+}
+
+.fleche-etape {
+  display: inline-block;
+  background: var(--encre);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+
+.fleche-etape small {
+  display: block;
+  font-family: var(--font-corps);
+  font-style: italic;
+  font-size: 0.72rem;
+  color: rgba(245,237,224,0.55);
+  letter-spacing: 0;
+  margin-top: 0.2rem;
+}
+
+.fleche-connex {
+  display: inline-block;
+  color: var(--or);
+  font-size: 1.4rem;
+  vertical-align: middle;
+  margin: 0 0.5rem;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.fleche-schema .ligne { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+
+/* Grille tradition abrahamique */
+.traditions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: rgba(139,94,60,0.15);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 2.5rem 0;
+}
+
+.tradition-col {
+  padding: 1.5rem;
+  background: var(--parchemin-pale);
+}
+
+.tradition-col:nth-child(2) { background: rgba(245,237,224,0.7); }
+.tradition-col:nth-child(3) { background: rgba(245,237,224,0.4); }
+
+.tradition-label {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brun);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(139,94,60,0.2);
+}
+
+.tradition-col p {
+  font-size: 0.88rem;
+  margin-bottom: 0.6rem;
+  text-align: left;
+}
+
+.tradition-col p:first-of-type::first-letter { all: unset; }
+
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    width: 280px;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 30px rgba(0,0,0,0.5);
+  }
+
+  #main { margin-left: 0; }
+  #menu-toggle { display: flex; }
+
+  .contenu { padding: 2rem 1.5rem 4rem; }
+  .debat { grid-template-columns: 1fr; }
+  .debat-3 { grid-template-columns: 1fr; }
+  .traditions-grid { grid-template-columns: 1fr; }
+  .note-marge { float: none; width: 100%; margin: 1rem 0; }
+  .timeline::before { left: 80px; }
+  .timeline-date { width: 70px; }
+  .fleche-schema .ligne { flex-direction: column; }
+}
+
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 150;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 2px;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — REFONTE COMPLÈTE
+   Cible : tablette (≤900px) + mobile (≤600px)
+═══════════════════════════════════════════ */
+
+/* --- Tableaux : toujours scrollables horizontalement --- */
+.tableau-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  min-width: 480px; /* force scroll sur narrow plutôt que d'écraser */
+}
+/* Supprimer le nowrap qui déborde */
+tbody td:first-child {
+  white-space: normal;
+}
+
+/* --- Tablette (sidebar cachée) --- */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  body { display: block; } /* évite les artefacts flex sur iOS */
+
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: min(300px, 85vw);
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 6px 0 40px rgba(0,0,0,0.6);
+  }
+
+  #main { margin-left: 0; }
+
+  #menu-toggle { display: flex !important; }
+
+  .contenu { padding: 2rem 1.5rem 4rem; }
+
+  /* Débat 2 colonnes → 1 colonne */
+  .debat { grid-template-columns: 1fr; }
+
+  /* Note marginale flottante → inline */
+  .note-marge {
+    float: none;
+    width: 100%;
+    margin: 1.2rem 0;
+  }
+
+  /* Timeline */
+  .timeline::before { left: 72px; }
+  .timeline-date { width: 62px; font-size: 0.65rem; }
+
+  /* Navigation bas */
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: stretch;
+  }
+  .nav-btn { justify-content: center; }
+
+  /* Section header : empiler le numéro + titre */
+  .section-header {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .section-numero {
+    align-self: flex-start;
+  }
+}
+
+/* --- Mobile (≤ 600px) --- */
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+
+  /* Hero */
+  .chapter-hero {
+    min-height: 45vh;
+    padding: 4rem 1.2rem 3rem;
+  }
+  .hero-ornement { font-size: 1rem; letter-spacing: 0.3em; }
+  .hero-titre { font-size: clamp(1.7rem, 8vw, 2.6rem) !important; }
+  .hero-sous-titre { font-size: 0.95rem; }
+  .hero-epigraphe { font-size: 0.9rem; }
+
+  /* Contenu */
+  .contenu { padding: 1.5rem 1rem 3rem; }
+
+  /* Synthèse */
+  .synthese { padding: 1.5rem 1rem; }
+
+  /* Blockquote */
+  blockquote {
+    padding: 0.8rem 1rem;
+    margin-left: 0;
+  }
+
+  /* Encadré */
+  .encadre-body { padding: 1rem; }
+
+  /* Timeline : tout sur une colonne */
+  .timeline::before { display: none; }
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid var(--or);
+    margin-bottom: 1rem;
+  }
+  .timeline-date {
+    width: auto;
+    text-align: left;
+    padding-right: 0;
+    font-size: 0.68rem;
+    color: var(--or);
+  }
+  .timeline-dot { display: none; }
+  .timeline-texte { padding-left: 0; }
+
+  /* Tableaux : hint visuel de scroll */
+  .tableau-wrapper {
+    position: relative;
+  }
+  .tableau-wrapper::after {
+    content: '→ scroll';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-family: var(--font-titre);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--or);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Menu toggle : mieux positionné */
+  #menu-toggle {
+    top: 0.7rem;
+    left: 0.7rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  /* Btn top */
+  #btn-top {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* Séparateurs ornementaux */
+  .ornement-sep { letter-spacing: 0.4em; }
+}
+
+/* Overlay sidebar mobile */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 99;
+  cursor: pointer;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Scrollbar sidebar */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Lien retour accueil */
+.sidebar-home {
+  display: block;
+  padding: 0.55rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.6;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="sidebar-overlay"></div>
+
+<button id="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la Cosmogonie à l'État d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="chapitre-01-cosmogonie.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-03-langues-semitiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-05-moise-exode.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-06-israel-tribus.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-07-les-royaumes.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-08-age-prophetique.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-11-palestine-1948.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ═══ CONTENU ═══ -->
+<main id="main">
+
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre II</div>
+    <h1 class="hero-titre">Origines Mythiques</h1>
+    <p class="hero-sous-titre">Noé, Hénoch &amp; le Déluge — mémoire universelle, réécriture théologique</p>
+    <blockquote class="hero-epigraphe">
+      <span class="heb">וַיִּתְהַלֵּךְ חֲנוֹךְ אֶת־הָאֱלֹהִים וְאֵינֶנּוּ כִּי לָקַח אֹתוֹ אֱלֹהִים</span><br>
+      <em>Vayithalekh Hénoch et ha-Elohim ve-einenu ki lakah oto Elohim</em><br>
+      « Hénoch marcha avec Dieu, puis il ne fut plus, car Dieu le prit. »
+      <cite>— Genèse 5, 24</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <article class="contenu">
+
+    <!-- Introduction -->
+    <div class="section">
+      <p>Ce chapitre remonte dans la strate la plus ancienne de la mémoire biblique — l'histoire primordiale de Genèse 1 à 11, que les exégètes allemands ont baptisée <em>Urgeschichte</em>, histoire des origines. Ce n'est pas encore l'histoire d'Israël : c'est l'histoire de l'humanité entière, depuis la Création jusqu'à la dispersion de Babel. Deux figures dominent ce paysage antédiluvien : Noé, le survivant du déluge universel, et Hénoch, le septième patriarche depuis Adam, l'homme que Dieu emporte vivant. L'une et l'autre sont des points de convergence extraordinaire entre la tradition hébraïque et les traditions du Proche-Orient antique — et l'étude de leurs parallèles cunéiformes révèle autant sur le génie propre de la Bible que sur ses racines orientales.</p>
+    </div>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION I -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-numero">I</span>
+        <div>
+          <h2 class="section-titre">La structure narrative de Genèse 1–11</h2>
+          <p class="section-sous-titre">Une spirale descendante — chaque recommencement reproduit la faute</p>
+        </div>
+      </div>
+
+      <p>Avant d'entrer dans le détail du Déluge et des personnages qui lui sont associés, il est indispensable de percevoir l'architecture globale dans laquelle ces récits s'inscrivent. La structure de Genèse 1–11 n'est pas une suite linéaire d'anecdotes — c'est une construction théologique d'une cohérence remarquable, articulée autour d'une logique de dégradation progressive et de recommencements avortés.</p>
+
+      <div class="fleche-schema">
+        <div class="fleche-schema-titre">Architecture de l'Histoire Primordiale — Genèse 1–12</div>
+        <div class="ligne">
+          <span class="fleche-etape">Création<small>Gn 1–2</small></span>
+          <span class="fleche-connex">↓</span>
+          <span class="fleche-etape">Caïn &amp; Abel<small>Gn 4 — violence fratricide</small></span>
+          <span class="fleche-connex">↓</span>
+          <span class="fleche-etape">Géants / Nephilim<small>Gn 6,1–4 — corruption cosmique</small></span>
+        </div>
+        <div class="ligne" style="margin-top:0.5rem;">
+          <span class="fleche-connex">↓</span>
+        </div>
+        <div class="ligne">
+          <span class="fleche-etape" style="background:var(--rouge-antique);">Déluge / Noé<small>Gn 6–9 — destruction &amp; recommencement</small></span>
+          <span class="fleche-connex">↓</span>
+          <span class="fleche-etape">Ivresse de Noé<small>Gn 9,20–27 — rechute immédiate</small></span>
+          <span class="fleche-connex">↓</span>
+          <span class="fleche-etape">Tour de Babel<small>Gn 11 — fragmentation</small></span>
+        </div>
+        <div class="ligne" style="margin-top:0.5rem;">
+          <span class="fleche-connex">↓</span>
+        </div>
+        <div class="ligne">
+          <span class="fleche-etape" style="background:var(--or-encre);">Appel d'Abraham<small>Gn 12 — nouvelle logique : l'élection</small></span>
+        </div>
+      </div>
+
+      <p>Chaque nouveau départ échoue. Chaque recommencement reproduit la faute. Caïn tue Abel — première violence — et la lignée de Caïn produit Lamech, qui se vante de tuer soixante-dix-sept fois pour une blessure (Gn 4,24). Les Nephilim corrompent l'espace entre le divin et l'humain. Noé survit au déluge — et la première chose qu'il fait est de planter une vigne, de se saouler et de se retrouver nu dans sa tente (Gn 9,21). La tour de Babel est l'orgueil collectif de toute l'humanité reconsolidée.</p>
+      <p>La conclusion logique de cette spirale serait le désespoir ou l'abandon. Mais Genèse 12 marque un tournant radical de stratégie divine : plutôt que de détruire et de recommencer à l'échelle cosmique, Dieu choisit un homme, Abraham — pour travailler à la guérison de l'humanité de l'intérieur. <strong>Noé est le dernier grand recommencement cosmique. Abraham est le début d'une tout autre logique — non plus la destruction et la recréation, mais l'élection et la transformation progressive.</strong></p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION II -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-numero">II</span>
+        <div>
+          <h2 class="section-titre">Le Déluge — deux récits entrelacés</h2>
+          <p class="section-sous-titre">La critique des sources appliquée à Genèse 6–9</p>
+        </div>
+      </div>
+
+      <p>Le récit du Déluge dans la Genèse présente une particularité que les lecteurs attentifs ont remarquée depuis l'Antiquité : il contient des doublets — des éléments répétés deux fois, parfois avec des variantes contradictoires. La critique des sources, développée aux XVIIIe et XIXe siècles, a proposé une explication qui fait désormais consensus dans la recherche : le texte actuel est la fusion de deux traditions indépendantes, désignées par la source <em>J</em> (Yahviste, utilisant le nom divin Yahvé) et la source <em>P</em> (Sacerdotale, utilisant Elohim).</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Doublets dans le récit du Déluge — Sources J et P</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Élément</th>
+              <th>Source Yahviste (J)</th>
+              <th>Source Sacerdotale (P)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Nombre d'animaux</td>
+              <td>Sept paires des purs, une paire des impurs (Gn 7,2–3)</td>
+              <td>Deux de chaque espèce (Gn 6,19–20)</td>
+            </tr>
+            <tr>
+              <td>Durée de la pluie</td>
+              <td>Quarante jours et quarante nuits</td>
+              <td>Cent cinquante jours de montée des eaux</td>
+            </tr>
+            <tr>
+              <td>Durée totale</td>
+              <td>Non précisée de manière systématique</td>
+              <td>Un an et dix jours — processus cosmologique complet</td>
+            </tr>
+            <tr>
+              <td>Nom divin</td>
+              <td>Yahvé — le nom personnel du dieu d'Israël</td>
+              <td>Elohim — le nom générique</td>
+            </tr>
+            <tr>
+              <td>Raison du déluge</td>
+              <td>La méchanceté et le repentir de Yahvé (Gn 6,5–7)</td>
+              <td>La corruption (<em>shachat</em>) et la violence (<em>hamas</em>) (Gn 6,11–12)</td>
+            </tr>
+            <tr>
+              <td>Oiseau envoyé</td>
+              <td>Corbeau, puis colombe (à trois reprises)</td>
+              <td>Non mentionné dans P</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Ces doublets ne sont pas des erreurs de compilation. Ils révèlent que deux traditions indépendantes du déluge ont été délibérément préservées et fusionnées par les rédacteurs du texte final. Ce fait est lui-même théologiquement significatif : la mémoire du déluge était si fondamentale dans la tradition hébraïque qu'on ne pouvait pas choisir l'une et effacer l'autre. Il fallait conserver les deux, même au prix de la cohérence narrative apparente.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La cause du Déluge — une lecture en deux couches</h3>
+        <p>La source <em>J</em> offre l'un des passages les plus théologiquement dérangeants de toute la Bible hébraïque :</p>
+        <blockquote>
+          <p>Yahvé vit que la méchanceté de l'homme était grande sur la terre, et que toutes les pensées de son cœur n'étaient que mal à longueur de journée. Yahvé regretta d'avoir fait l'homme sur la terre, et il fut affligé dans son cœur. Il dit : J'effacerai de la face de la terre l'homme que j'ai créé.</p>
+          <cite>— Genèse 6, 5–7 (Yahviste)</cite>
+        </blockquote>
+        <p>Un dieu qui regrette sa propre création. Qui éprouve de la douleur — <em>vayit'atsev el-libbo</em>, littéralement "il fut douloureux en son cœur". Qui décide d'un génocide cosmique. Les théologiens ont longuement commenté ce passage : il dit quelque chose de fondamental sur la nature du dieu biblique. Pas le dieu impassible et parfait de la métaphysique grecque — un dieu qui souffre, qui est affecté par ce qui se passe dans sa création, qui peut reconnaître qu'il s'est trompé.</p>
+        <p>La source <em>P</em> est plus analytique : deux mots techniques définissent la corruption — <em class="terme-cle">shachat</em> (שָׁחַת), la corruption ontologique, la décomposition de la matière morale, et <em class="terme-cle">hamas</em> (חָמָס), la violence structurelle, l'injustice sociale, l'abus de pouvoir des forts sur les faibles. Ce second terme — qui n'a aucun lien étymologique avec le mouvement politique contemporain malgré la similitude phonétique — est précisément celui que les prophètes utiliseront pour dénoncer l'exploitation économique et sociale. La corruption qui appelle le déluge n'est pas un péché particulier : c'est un état général, ontologique — l'humanité est devenue autre chose que ce qu'elle était censée être.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION III -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-numero">III</span>
+        <div>
+          <h2 class="section-titre">L'Épopée de Gilgamesh — le choc de 1872</h2>
+          <p class="section-sous-titre">La généalogie cunéiforme du mythe du déluge</p>
+        </div>
+      </div>
+
+      <div class="note-marge">
+        <strong>Note historique</strong>
+        Le 3 décembre 1872, l'assyriologiste George Smith du British Museum déchiffre la Tablette XI de l'Épopée de Gilgamesh et s'évanouit d'émotion devant ses collègues. Le scandale intellectuel et religieux dans l'Europe victorienne est immense.
+      </div>
+
+      <p>Ce qu'il vient de lire — la Tablette XI de l'Épopée de Gilgamesh — est le parallèle le plus frappant jamais découvert avec un texte biblique. Le héros Utnapishtim raconte à Gilgamesh comment il a survécu à un déluge universel envoyé par les dieux. La similitude avec le récit de Noé dépasse la coïncidence de loin.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Tableau comparatif — Épopée de Gilgamesh / Genèse 6–9</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Élément</th>
+              <th>Gilgamesh — Tablette XI</th>
+              <th>Genèse 6–9</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Héros</td>
+              <td>Utnapishtim / Atrahasis</td>
+              <td>Noé (נֹחַ)</td>
+            </tr>
+            <tr>
+              <td>Décision divine</td>
+              <td>Les dieux décident de détruire l'humanité (trop bruyante)</td>
+              <td>Yahvé/Elohim regrette sa création — corruption morale</td>
+            </tr>
+            <tr>
+              <td>Avertissement</td>
+              <td>Le dieu Ea prévient Utnapishtim en secret, en parlant à travers un mur de roseaux</td>
+              <td>Elohim parle directement à Noé — relation personnelle</td>
+            </tr>
+            <tr>
+              <td>Construction</td>
+              <td>Bateau cubique aux dimensions précises : 60 × 60 × 60 coudées</td>
+              <td>Arche rectangulaire : 300 × 50 × 30 coudées</td>
+            </tr>
+            <tr>
+              <td>Passagers</td>
+              <td>Famille, artisans, semences, animaux de toutes espèces</td>
+              <td>Famille de Noé, animaux de toutes espèces</td>
+            </tr>
+            <tr>
+              <td>Oiseaux envoyés</td>
+              <td>Colombe, hirondelle, corbeau</td>
+              <td>Corbeau, puis colombe (à trois reprises)</td>
+            </tr>
+            <tr>
+              <td>Échouage</td>
+              <td>Mont Nimush (nord de la Mésopotamie)</td>
+              <td>Mont Ararat (Arménie)</td>
+            </tr>
+            <tr>
+              <td>Sacrifice</td>
+              <td>Utnapishtim offre un sacrifice — les dieux "se rassemblent comme des mouches autour de l'odeur"</td>
+              <td>Noé offre un holocauste — "Yahvé huma l'odeur agréable"</td>
+            </tr>
+            <tr>
+              <td>Promesse</td>
+              <td>Les dieux promettent de ne plus détruire l'humanité entière</td>
+              <td>Yahvé promet — l'arc-en-ciel comme signe de l'alliance</td>
+            </tr>
+            <tr>
+              <td>Destinée du héros</td>
+              <td>Utnapishtim reçoit la vie éternelle — établi aux confins du monde</td>
+              <td>Noé reçoit une alliance universelle — continue sa vie terrestre</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>La similarité est trop précise pour être une coïncidence. Mais la relation n'est pas un simple plagiat — c'est une réécriture théologiquement délibérée. La raison du déluge dans Gilgamesh est triviale : les hommes font trop de bruit et troublent le sommeil des dieux. La Bible transforme radicalement cette motivation : c'est la corruption morale, la violence, le mal ontologique de l'humanité. Le passage du caprice divin à la justice divine est une révolution théologique de première importance.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La généalogie du mythe — remonter à la source</h3>
+
+        <div class="fleche-schema">
+          <div class="fleche-schema-titre">Transmission du Mythe du Déluge</div>
+          <div class="ligne">
+            <span class="fleche-etape">Ziusudra<small>Sumérien — fragment de Nippur, ~2000 av. J.-C. ou plus tôt</small></span>
+          </div>
+          <div class="ligne"><span class="fleche-connex">↓</span></div>
+          <div class="ligne">
+            <span class="fleche-etape">Atrahasis<small>Akkadien — ~XVIIe siècle av. J.-C.</small></span>
+          </div>
+          <div class="ligne"><span class="fleche-connex">↓</span></div>
+          <div class="ligne">
+            <span class="fleche-etape">Utnapishtim dans Gilgamesh<small>Akkadien — ~XIIe siècle av. J.-C.</small></span>
+          </div>
+          <div class="ligne"><span class="fleche-connex">↓</span></div>
+          <div class="ligne">
+            <span class="fleche-etape" style="background:var(--rouge-antique);">Noé<small>Hébreu — rédaction ~VIIe–Ve s. av., traditions orales plus anciennes</small></span>
+          </div>
+        </div>
+
+        <p>Ziusudra — "qui a trouvé la vie longue" — est le roi-prêtre sumérien du fragment de Nippur qui survit dans un grand bateau, offre un sacrifice et reçoit la vie éternelle. Le mythe d'Atrahasis, datant du XVIIe siècle en sa forme écrite, est le récit akkadien complet de la création, de la surpopulation humaine, du bruit insupportable pour les dieux, de la décision de détruire et de la survie d'Atrahasis ("l'extrêmement sage"). La Liste Royale Sumérienne, vers 2100 avant notre ère, fait une distinction explicite entre les rois <em>avant le déluge</em> — avec des règnes de dizaines de milliers d'années — et les rois <em>après le déluge</em>. Le déluge y est un événement historique réel qui sépare deux ères cosmiques.</p>
+        <p>La trajectoire est donc indéniable : les traditions hébraïques du déluge s'inscrivent dans un courant narratif mésopotamien très ancien, qu'elles ont transformé, moralisé et réorienté en direction d'une théologie de l'alliance.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IV -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-numero">IV</span>
+        <div>
+          <h2 class="section-titre">Un événement réel ?</h2>
+          <p class="section-sous-titre">Géologie, archéologie et mémoire collective</p>
+        </div>
+      </div>
+
+      <p>La question que tout le monde finit par poser mérite une réponse rigoureuse : y a-t-il un événement réel derrière le mythe ? La réponse est à la fois oui et non.</p>
+
+      <div class="debat">
+        <div class="debat-col">
+          <div class="debat-titre">Théorie du Déluge de la Mer Noire</div>
+          <p>En 1997, les géologues William Ryan et Walter Pitman ont proposé une hypothèse qui a fait sensation : vers 5600 av. J.-C., à la fin de la dernière glaciation, la Méditerranée aurait franchi le Bosphore et inondé catastrophiquement ce qui était alors un lac d'eau douce — la mer Noire actuelle.</p>
+          <p>L'inondation aurait été brutale, massive, et aurait chassé les populations agricoles néolithiques installées sur les rives. Cette mémoire traumatique aurait été préservée dans les traditions des peuples indo-européens et sémitiques qui en descendraient.</p>
+          <p><em>Statut :</em> hypothèse séduisante mais débattue. Certaines études géologiques la soutiennent, d'autres la nuancent. Elle n'est pas encore le consensus scientifique.</p>
+        </div>
+        <div class="debat-col">
+          <div class="debat-titre">Inondations mésopotamiennes</div>
+          <p>Plus solide est l'hypothèse des inondations catastrophiques répétées en Mésopotamie méridionale. La plaine alluviale entre le Tigre et l'Euphrate est naturellement sujette à des crues dévastatrices.</p>
+          <p>Les fouilles à Ur, Kish, Shuruppak et Uruk ont révélé des couches de limon stérile — témoins d'inondations majeures — datées entre ~3000 et ~2900 av. J.-C. Leonard Woolley, fouillant Ur dans les années 1920, trouva une couche de limon de 2,5 mètres et proclama avoir trouvé "le déluge de Noé".</p>
+          <p>Ses collègues furent plus prudents : les couches ne sont pas contemporaines d'un site à l'autre. Ce ne sont probablement pas un seul déluge mais des crues régionales successives, stratifiées dans la mémoire collective.</p>
+        </div>
+      </div>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Conclusion archéologique</span>
+        </div>
+        <div class="encadre-body">
+          <p>Il y a probablement un noyau d'expériences réelles de catastrophes hydrauliques majeures dans la mémoire collective des populations mésopotamiennes et levantines — inondations du Tigre et de l'Euphrate, peut-être événements liés à la montée des eaux marines post-glaciaires. Ces expériences traumatiques ont été mythologisées, amplifiées, universalisées, et sont devenues le récit d'un déluge total — destruction et recréation de l'humanité entière.</p>
+          <p>Le déluge n'est pas le souvenir d'un seul événement. C'est la cristallisation de toutes les catastrophes aquatiques dans un récit unique qui leur donne un sens cosmique. Le mythe n'est pas un mensonge sur l'histoire — c'est une vérité sur l'expérience humaine de la catastrophe, mise en forme narrative.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION V -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-numero">V</span>
+        <div>
+          <h2 class="section-titre">Les fils de Dieu et les Nephilim</h2>
+          <p class="section-sous-titre">Genèse 6,1–4 — le passage le plus mystérieux de l'histoire primordiale</p>
+        </div>
+      </div>
+
+      <p>Immédiatement avant le récit du Déluge, Genèse 6,1–4 contient l'un des passages les plus brefs et les plus explosifs de toute la Bible — quatre versets qui ont généré deux millénaires de commentaires passionnés :</p>
+
+      <blockquote>
+        <p>Quand les hommes eurent commencé à se multiplier sur la face de la terre et que des filles leur furent nées, les fils de Dieu (<em class="translitt">bene ha-Elohim</em>) virent que les filles des hommes étaient belles, et ils prirent pour femmes toutes celles qu'ils choisirent... Les Nephilim étaient sur la terre en ces jours-là — et aussi après — quand les fils de Dieu s'unirent aux filles des hommes et qu'elles leur enfantèrent des fils : ce sont les héros (<em class="translitt">gibborim</em>) qui furent fameux dans l'Antiquité.</p>
+        <cite>— Genèse 6, 1–4</cite>
+      </blockquote>
+
+      <p>Ce passage dit quelque chose de cosmiquement dérangeant : des êtres divins ont eu des relations sexuelles avec des femmes humaines, engendrant une race de géants ou de héros hybrides. Trois interprétations majeures se sont affrontées depuis l'Antiquité.</p>
+
+      <div class="debat debat-3">
+        <div class="debat-col">
+          <div class="debat-titre">1 — Angélologique</div>
+          <p>La plus ancienne, dominante avant l'ère rabbinique. Les <em>bene ha-Elohim</em> sont des anges ou êtres célestes — la même expression apparaît dans Job 1,6 et 2,1 pour désigner la cour céleste de Yahvé.</p>
+          <p>Des êtres du monde divin ont transgressé la frontière entre le céleste et le terrestre. C'est une catastrophe cosmologique — une contamination des catégories que Dieu avait séparées lors de la Création. Cette interprétation génère la littérature hénochique.</p>
+        </div>
+        <div class="debat-col">
+          <div class="debat-titre">2 — Séthite</div>
+          <p>Favorisée par les Pères de l'Église, notamment Augustin. Les <em>bene ha-Elohim</em> sont les descendants de Seth — la lignée pieuse — qui s'unissent aux descendants de Caïn — la lignée corrompue.</p>
+          <p>Ce n'est pas une transgression cosmique mais une compromission religieuse : les justes abandonnent leur séparation sacrée. C'est l'interprétation la plus "rationalisée" — elle élimine le problème théologiquement gênant des anges sexués.</p>
+        </div>
+        <div class="debat-col">
+          <div class="debat-titre">3 — Royale</div>
+          <p>Proposée par certains rabbins et reprise par des exégètes modernes. <em>Elohim</em> peut désigner des puissants humains en hébreu (cf. Psaume 82). Des rois et potentats prennent de force toutes les femmes qu'ils désirent.</p>
+          <p>Interprétation socialement radicale : la corruption qui amène le déluge est le despotisme, l'abus de pouvoir des forts sur les faibles — non pas une transgression surnaturelle mais une injustice politique structurelle.</p>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Qui sont les Nephilim ?</h3>
+        <p>Le mot <em class="translitt">Nephilim</em> (<span class="heb">נְפִילִים</span>) vient probablement de la racine <em class="translitt">naphal</em> — "tomber". Les Nephilim sont "ceux qui sont tombés" ou "ceux qui font tomber" — les renverseurs, les destructeurs. Ils réapparaissent dans Nombres 13,33, quand les espions envoyés en Canaan rapportent avec terreur : "Nous avons vu les Nephilim... nous étions comme des sauterelles à nos propres yeux."</p>
+        <p>Ce sont des géants terrifiants — la mémoire mythologisée de races guerrières antiques. Dans la tradition mésopotamienne, les héros de l'époque antédiluvienne sont effectivement décrits comme des êtres d'une stature et d'une puissance extraordinaires : Gilgamesh lui-même est aux deux tiers divin, au tiers humain — exactement le type d'être hybride que décrit Genèse 6.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VI -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-numero">VI</span>
+        <div>
+          <h2 class="section-titre">Noé — la figure théologique</h2>
+          <p class="section-sous-titre">L'alliance universelle et la justice problématique</p>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La question de la violence divine</h3>
+        <p>Le récit de Noé soulève frontalement la question la plus inconfortable de toute la théologie biblique : Dieu peut-il vouloir la destruction de sa propre création ? La réponse de la Genèse est oui — mais avec une nuance décisive. Yahvé "regrette" (<em class="translitt">vayinnahem</em>) d'avoir créé l'homme, ressent une douleur intérieure, et décide d'effacer. Puis, après le déluge, il "se repent" encore une fois : "Jamais plus je ne maudirai le sol à cause de l'homme... jamais plus je ne frapperai tout être vivant comme je viens de le faire" (Gn 8,21).</p>
+        <p>La structure est étonnante : Dieu décide de tout détruire, puis regrette d'avoir tout détruit. Le déluge révèle autant la limite de Dieu que la limite de l'homme. C'est un dieu qui apprend — ou du moins un dieu que la tradition représente comme apprenant. Cette anthropomorphisation délibérée est une chose radicalement différente de la théologie des dieux mésopotamiens, impassibles et capricieux.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La première alliance cosmique — Berit Noé</h3>
+        <p>Après le déluge, Genèse 9 établit la première <em class="terme-cle">berit</em> (alliance) de la Bible — et elle est universelle et inconditionnelle. Pas seulement avec Noé, pas seulement avec Israël. Avec toute l'humanité, avec tous les animaux, avec toute la terre. L'arc-en-ciel (<em class="translitt">qeshet ba-anan</em>) en est le signe permanent.</p>
+        <blockquote>
+          <p>J'établis mon alliance avec vous et avec vos descendants après vous, et avec tout être vivant qui est avec vous — oiseaux, bétail, toutes les bêtes de la terre — avec tout ce qui est sorti de l'arche, tous les animaux de la terre. J'établis mon alliance avec vous : toute chair ne sera plus exterminée par les eaux du déluge.</p>
+          <cite>— Genèse 9, 9–11</cite>
+        </blockquote>
+        <p>Dans la théologie biblique, cette alliance de Noé est le fondement universel sur lequel les alliances particulières viendront se construire — l'alliance abrahamique, l'alliance mosaïque, l'alliance davidique. La <em>Berit Noé</em> dit que Dieu est engagé envers toute sa création avant d'être le dieu d'un peuple particulier. C'est la déclaration fondatrice du monothéisme universel.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VII -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-numero">VII</span>
+        <div>
+          <h2 class="section-titre">Les âges antédiluviens</h2>
+          <p class="section-sous-titre">Cosmologie temporelle — deux régimes d'existence</p>
+        </div>
+      </div>
+
+      <p>La généalogie des patriarches antédiluviens (Genèse 5) liste des personnages dont les âges défient l'imagination : Adam 930 ans, Seth 912, Énosh 905, Mathusalem 969 — record absolu. Les commentateurs modernes sourient ; les lecteurs antiques comprenaient autre chose.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Généalogie des Patriarches Antédiluviens — Genèse 5</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Patriarche</th>
+              <th>Âge total</th>
+              <th>Position</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Adam</td>
+              <td>930 ans</td>
+              <td>1er depuis Adam</td>
+              <td>Première génération</td>
+            </tr>
+            <tr>
+              <td>Seth</td>
+              <td>912 ans</td>
+              <td>2e</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Énosh</td>
+              <td>905 ans</td>
+              <td>3e</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Qénan</td>
+              <td>910 ans</td>
+              <td>4e</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Mahalaléel</td>
+              <td>895 ans</td>
+              <td>5e</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Yéred</td>
+              <td>962 ans</td>
+              <td>6e</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><strong>Hénoch</strong></td>
+              <td><strong>365 ans</strong></td>
+              <td><strong>7e</strong></td>
+              <td><strong>Cycle solaire — "Dieu le prit"</strong></td>
+            </tr>
+            <tr>
+              <td>Mathusalem</td>
+              <td>969 ans</td>
+              <td>8e</td>
+              <td>Âge maximal connu</td>
+            </tr>
+            <tr>
+              <td>Lamech</td>
+              <td>777 ans</td>
+              <td>9e</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Noé</td>
+              <td>950 ans</td>
+              <td>10e</td>
+              <td>Dernier antédiluvien</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>La Liste Royale Sumérienne fournit un parallèle saisissant : les rois antédiluviens y règnent pendant 18 600 ans, 36 000 ans, parfois davantage. Après le déluge, les durées de règne chutent brutalement — d'abord à quelques siècles, puis à des décennies. C'est exactement la même structure que la Bible : les longues durées antédiluviennes, puis la décroissance progressive vers Abraham (175 ans), Jacob (147 ans), Joseph (110 ans).</p>
+      <p>Les deux traditions partagent la même cosmologie temporelle : le temps primordial est d'une autre nature que le temps historique. Les êtres qui y vivent ne sont pas soumis aux mêmes lois. Leurs âges immenses ne sont pas des mensonges — ils sont l'affirmation que ces personnages appartiennent à un autre régime d'existence, à une époque où le monde était encore saturé de la puissance de la création originelle.</p>
+      <p>L'exception d'Hénoch — 365 ans seulement — est d'autant plus frappante. Il est le plus jeune de la liste, et le seul à ne pas mourir. Son âge est le nombre exact des jours de l'année solaire. Ce n'est pas une coïncidence dans un texte qui calcule tout avec soin.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VIII -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-numero">VIII</span>
+        <div>
+          <h2 class="section-titre">Noé dans les trois traditions abrahamiques</h2>
+          <p class="section-sous-titre">Même personnage, lectures radicalement différentes</p>
+        </div>
+      </div>
+
+      <div class="traditions-grid">
+        <div class="tradition-col">
+          <div class="tradition-label">Judaïsme</div>
+          <p>Noé est une figure <em>ambivalente</em>. Il est "juste dans sa génération" — mais le Talmud débat : était-il vraiment juste, ou seulement juste <em>comparé</em> à ses contemporaires corrompus ?</p>
+          <p>Abraham, lui, aurait négocié avec Dieu pour sauver les habitants de Sodome. Noé ne tente rien pour sauver ses voisins. Sa justice est passive, non prophétique. Le midrash en fait un saint limité — contrairement à Abraham qui aurait peut-être sauvé l'humanité.</p>
+          <p>La Torah noachide — les sept commandements de Noé — est le cadre juridique minimal que le judaïsme rabbinique impose à toute l'humanité (non-juifs inclus) : interdiction d'idolâtrie, de blasphème, de meurtre, de vol, de relations sexuelles illicites, de manger la chair arrachée à un animal vivant — et obligation d'établir des tribunaux.</p>
+        </div>
+        <div class="tradition-col">
+          <div class="tradition-label">Christianisme</div>
+          <p>Noé devient une <em>figure typologique</em> majeure. Son arche préfigure l'Église — enceinte salvifique au milieu du monde qui périt. Le déluge préfigure le baptême — eau destructrice et purificatrice à la fois.</p>
+          <p>L'épître de Pierre l'explicite : "ces eaux qui ont sauvé Noé... sont une figure du baptême qui vous sauve maintenant" (1 Pierre 3,20–21). La colombe revenant avec le rameau d'olivier devient le symbole universel de la paix et, dans le Nouveau Testament, figure de l'Esprit Saint descendant sur Jésus lors de son baptême.</p>
+          <p>L'iconographie chrétienne médiévale représente abondamment l'arche comme ecclesia navigans — l'Église naviguant sur les eaux du monde.</p>
+        </div>
+        <div class="tradition-col">
+          <div class="tradition-label">Islam</div>
+          <p>Nuh (<span class="ar">نُوحٌ</span>) est l'un des grands prophètes de l'islam — membre des <em>ulu l-azm</em>, "ceux dotés de ferme résolution". Le Coran lui consacre la sourate 71 entière.</p>
+          <p>Il prêche pendant 950 ans selon le Coran (sourate 29,14) sans être entendu de son peuple — patience prophétique exemplaire. La tradition islamique en fait le premier prophète envoyé à une humanité corrompue, matrice de tous les prophètes suivants.</p>
+          <p>Son fils qui refuse de monter dans l'arche est une figure de la perdition volontaire — celui qui refuse la grâce prophétique même offerte par son propre père. Les commentateurs coraniques ont longuement médité ce drame familial.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IX -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-numero">IX</span>
+        <div>
+          <h2 class="section-titre">Hénoch — L'homme que Dieu prit</h2>
+          <p class="section-sous-titre">Trois versets — une bibliothèque secrète</p>
+        </div>
+      </div>
+
+      <p>C'est le personnage le plus mystérieux de toute la Bible hébraïque. Il occupe trois versets dans la Genèse canonique — et pourtant il a généré une littérature apocryphe d'une richesse extraordinaire, influencé le christianisme primitif, l'islam, la kabbale, et jusqu'aux traditions ésotériques médiévales et modernes. Tout part de ce fragment :</p>
+
+      <blockquote>
+        <p>Hénoch vécut soixante-cinq ans, puis il engendra Mathusalem. Hénoch marcha avec Dieu pendant trois cents ans après avoir engendré Mathusalem, et il engendra des fils et des filles. Tous les jours d'Hénoch furent trois cent soixante-cinq ans. Hénoch marcha avec Dieu, puis il ne fut plus, car Dieu le prit.</p>
+        <cite>— Genèse 5, 21–24</cite>
+      </blockquote>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Trois anomalies dans un texte qui n'en comporte pas</h3>
+        <p><strong>Première anomalie : l'âge de 365 ans.</strong> Tous les patriarches de la liste vivent entre 777 et 969 ans. Hénoch vit exactement 365 ans — le nombre de jours dans l'année solaire. Ce n'est pas une coïncidence dans un texte qui ne connaît pas les coïncidences numériques. Hénoch est lié au calendrier solaire — cela aura des implications considérables dans la littérature du Second Temple.</p>
+        <p><strong>Deuxième anomalie : "il marcha avec Dieu".</strong> L'expression hébraïque <em class="translitt">hithalekh et ha-Elohim</em> (<span class="heb">הִתְהַלֵּךְ אֶת־הָאֱלֹהִים</span>) est exceptionnelle. Elle n'apparaît que deux fois dans la Genèse — pour Hénoch (deux fois) et pour Noé (6,9). Elle désigne une intimité divine extraordinaire, une communion permanente avec Dieu — pas simplement l'obéissance ou la foi, mais une marche commune, un cheminement côte à côte.</p>
+        <p><strong>Troisième anomalie : "il ne fut plus, car Dieu le prit".</strong> C'est le verset le plus étrange de toute la généalogie. Tous les autres patriarches ont la même formule : "il mourut". Pour Hénoch, pas de mort. <em class="translitt">Ve-einenu ki lakah oto Elohim</em> — "il n'était plus, car Dieu le prit." Le verbe <em class="translitt">lakah</em> — "prendre, emporter" — désigne un transfert divin. En hébreu biblique, ce silence sur la mort est assourdissant.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">L'unique parallèle biblique — Élie</h3>
+        <p>Le seul autre personnage biblique qui ne meurt pas de mort ordinaire est Élie — emporté au ciel dans un char de feu (2 Rois 2,11). La formule est différente mais le motif est identique : un homme extraordinairement proche de Dieu échappe à la mort commune. Ce parallèle crée dans la tradition hébraïque une catégorie particulière — les hommes trop proches de Dieu pour mourir normalement. Et cette catégorie va générer des spéculations théologiques considérables : transformation ? Immortalité ? Mission céleste continue ? La tradition juive tardive associera Hénoch et Élie comme les deux hommes qui n'ont jamais goûté la mort — et les identifiera aux "deux témoins" de l'Apocalypse.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION X -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-numero">X</span>
+        <div>
+          <h2 class="section-titre">Enmeduranki — le parallèle cunéiforme</h2>
+          <p class="section-sous-titre">Le septième roi sumérien et le septième patriarche hébreu</p>
+        </div>
+      </div>
+
+      <p>La comparaison avec les traditions cunéiformes est ici décisive. Dans les listes des rois antédiluviens sumériens, le septième roi — exactement comme Hénoch est le septième patriarche depuis Adam — s'appelle <em class="terme-cle">Enmeduranki</em> (ou Enmeduranna). Son nom signifie approximativement "seigneur des tablettes du ciel et de la terre" ou "maître du lien entre ciel et terre".</p>
+
+      <blockquote>
+        <p>Enmeduranki, roi de Sippar, chéri d'Anu, Enlil et Ea. Shamash et Adad l'introduisirent dans leur assemblée divine... ils lui révélèrent les secrets du ciel et de la terre... ils lui enseignèrent l'observation de l'huile sur l'eau, les tablettes de cèdre, les secrets des dieux.</p>
+        <cite>— Texte cunéiforme d'Enmeduranki, Bibliothèque d'Assurbanipal</cite>
+      </blockquote>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Tableau comparatif — Enmeduranki (sumérien) / Hénoch (hébreu)</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Élément</th>
+              <th>Enmeduranki (sumérien)</th>
+              <th>Hénoch (hébreu)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Position dans la liste</td>
+              <td>7e roi antédiluvien</td>
+              <td>7e patriarche depuis Adam</td>
+            </tr>
+            <tr>
+              <td>Relation divine</td>
+              <td>Introduit dans l'assemblée des dieux — communion directe</td>
+              <td>"Marcha avec Dieu" — intimité permanente</td>
+            </tr>
+            <tr>
+              <td>Connaissance reçue</td>
+              <td>Reçoit les secrets du ciel et de la terre, la divination</td>
+              <td>Révélations cosmiques (dans les apocryphes)</td>
+            </tr>
+            <tr>
+              <td>Ville de rattachement</td>
+              <td>Sippar — ville du dieu solaire Shamash</td>
+              <td>365 ans — chiffre solaire exact</td>
+            </tr>
+            <tr>
+              <td>Destinée</td>
+              <td>Élevé parmi les dieux — translation céleste</td>
+              <td>"Dieu le prit" — pas de mort</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Sippar est la grande ville du culte solaire mésopotamien. Son roi antédiluvien est associé au soleil et à la connaissance divine. Hénoch vit 365 ans — le cycle solaire exact. La connexion est trop précise pour être fortuite : la figure d'Hénoch dans la Bible hébraïque s'est formée en dialogue avec — voire en transformation de — la tradition du roi-sage antédiluvien mésopotamien initié aux mystères célestes.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XI -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-numero">XI</span>
+        <div>
+          <h2 class="section-titre">La littérature hénochique</h2>
+          <p class="section-sous-titre">Trois versets qui ont engendré une bibliothèque</p>
+        </div>
+      </div>
+
+      <p>Entre le IIIe siècle avant notre ère et le Ier siècle de notre ère, plusieurs textes distincts ont été rédigés en araméen, en hébreu, puis en grec et en éthiopien — tous attribués à Hénoch. Ces textes ont été marginalisés par le judaïsme rabbinique après le IIe siècle, mais ils étaient largement lus dans le judaïsme du Second Temple et ont profondément influencé le christianisme primitif.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">1 Hénoch — Le Premier Livre d'Hénoch</h3>
+        <p>C'est une compilation de cinq textes distincts, conservée intégralement en éthiopien classique (<em class="translitt">ge'ez</em>) dans le canon de l'Église orthodoxe éthiopienne. Des fragments araméens ont été retrouvés à Qumrân — preuve de sa circulation active dans les milieux du Second Temple.</p>
+
+        <div class="encadre">
+          <div class="encadre-header">
+            <span class="encadre-icone">📜</span>
+            <span class="encadre-label">Le Livre des Veilleurs (1 Hénoch 1–36) — ~IVe–IIIe s. av. J.-C.</span>
+          </div>
+          <div class="encadre-body">
+            <p>C'est l'expansion narrative de Genèse 6,1–4. Deux cents anges appelés <em class="terme-cle">Veilleurs</em> (<em class="translitt">Irin</em> en araméen) descendent sur le mont Hermon pour s'unir aux femmes humaines. Leur chef Shemyhaza transgresse l'ordre cosmique. Mais le personnage le plus important est <em class="terme-cle">Azazel</em> — l'ange qui enseigne aux hommes la fabrication des épées, des boucliers, des cuirasses, et aux femmes l'art des cosmétiques, des bijoux, des teintures.</p>
+            <p>C'est une théologie de la civilisation extraordinairement originale : la métallurgie, la cosmétique, l'astronomie, la magie — tout ce qui fait la civilisation humaine — est présenté comme un don empoisonné des anges rebelles. La technologie elle-même est une transgression cosmique — un écho de l'arbre de la connaissance en Éden. Les Nephilim géants nés de ces unions dévastent la terre — ils mangent d'abord les animaux, puis les hommes, puis se mangent entre eux. La terre "crie" vers le ciel, et les anges fidèles (Michel, Gabriel, Raphaël, Uriel) portent ses plaintes devant Dieu.</p>
+          </div>
+        </div>
+
+        <div class="encadre">
+          <div class="encadre-header">
+            <span class="encadre-icone">📜</span>
+            <span class="encadre-label">Le Livre des Paraboles (1 Hénoch 37–71)</span>
+          </div>
+          <div class="encadre-body">
+            <p>C'est ici que la figure d'Hénoch devient proprement révolutionnaire. Hénoch monte au ciel et voit — assis à côté de Dieu — une figure désignée comme le <em class="terme-cle">Fils de l'Homme</em> (<em class="translitt">bar enasha</em>), juge eschatologique universel, préexistant à la création, "dont le nom était connu avant que le soleil et les signes fussent créés". Cette figure du Fils de l'Homme préexistant et juge universel est directement à l'arrière-plan de l'usage que Jésus fait de ce titre dans les Évangiles synoptiques. À la fin du Livre des Paraboles, Hénoch lui-même est transformé en ce Fils de l'Homme — élevé devant le trône, transfiguré, devenant l'être céleste qu'il contemplait.</p>
+          </div>
+        </div>
+
+        <div class="encadre">
+          <div class="encadre-header">
+            <span class="encadre-icone">📜</span>
+            <span class="encadre-label">Le Livre de l'Astronomie (1 Hénoch 72–82) — probablement le plus ancien</span>
+          </div>
+          <div class="encadre-body">
+            <p>L'ange Uriel guide Hénoch à travers les portes du ciel et lui révèle le fonctionnement du cosmos. L'enjeu n'est pas purement scientifique — il est <em>liturgique et politique</em>. Ce texte défend un <em class="terme-cle">calendrier solaire de 364 jours</em> (4 × 91 = 364, divisible en quatre saisons parfaites de 13 semaines) contre le calendrier lunaire de 354 jours utilisé par le Temple de Jérusalem.</p>
+            <p>C'est un combat calendaire — et dans l'Antiquité, contrôler le calendrier c'est contrôler le temps sacré, les fêtes, les sacrifices. La communauté de Qumrân utilisait précisément ce calendrier solaire hénochique — c'est l'une des raisons fondamentales de sa rupture avec le Temple. Hénoch n'est pas seulement un mystique — il est la caution d'une réforme liturgique dissidente.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">2 Hénoch (Hénoch slave) — La transformation dans les sept cieux</h3>
+        <p>Conservé en slavon ecclésiastique, probablement rédigé au Ier siècle de notre ère en grec à partir de sources hébraïques. Hénoch monte à travers sept cieux successifs :</p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">1er ciel</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-texte"><strong>Anges gardiens des étoiles et de la neige</strong></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2e ciel</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-texte"><strong>Anges rebelles</strong> en attente de jugement</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">3e ciel</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-texte"><strong>Le Paradis</strong> — jardin d'Éden céleste — et l'enfer</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">4e ciel</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-texte"><strong>Le Soleil et la Lune</strong> avec leurs légions d'anges</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">5e ciel</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-texte"><strong>Les Veilleurs</strong> qui pleurent leurs frères condamnés</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">6e ciel</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-texte"><strong>Anges cosmologiques</strong> gouvernant l'ordre de l'univers</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">7e ciel</div>
+            <div class="timeline-dot important"></div>
+            <div class="timeline-texte"><strong>Le Trône de Dieu — transformation d'Hénoch</strong> : revêtu de vêtements de lumière, oint, rendu indiscernable des anges</div>
+          </div>
+        </div>
+
+        <blockquote>
+          <p>Le Seigneur dit à Michel : Va, ôte Hénoch de ses vêtements terrestres, oins-le de mon huile douce et revêts-le de mes glorieux vêtements. Michel fit ce que le Seigneur lui avait ordonné. Il m'oignit et me revêtit, et l'aspect de cette huile était plus que la grande lumière... Je me regardai moi-même et j'étais comme un des glorieux, et il n'y avait pas de différence visible.</p>
+          <cite>— 2 Hénoch (Hénoch slave), chapitre 22</cite>
+        </blockquote>
+
+        <p>L'homme terrestre est divinisé — transformé en être de lumière, indiscernable des anges. C'est une théologie de la <em class="terme-cle">déification</em> (<em class="translitt">theosis</em>) que le christianisme oriental développera intensivement, et qui anticipe des thèmes mystiques qu'on retrouvera dans la kabbale médiévale.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">3 Hénoch (Hénoch hébreu) — Métatron, le Prince de la Face</h3>
+        <p>Texte hébreu tardif (~Ve–VIe siècle ap. J.-C.) mais préservant des traditions beaucoup plus anciennes. C'est le texte fondateur de la <em class="terme-cle">Merkabah mysticism</em> — la mystique du char céleste. Hénoch transformé reçoit ici un nouveau nom : <em class="terme-cle">Métatron</em> — l'ange le plus élevé du ciel, le "Prince de la Face" qui se tient devant le trône divin, le scribe céleste, celui "dont le nom est comme le nom de son maître".</p>
+        <p>Le rang de Métatron est si élevé qu'un texte talmudique (Hagiga 15a) raconte qu'un mystique — Acher (Élisha ben Avouya) — en voyant Métatron siéger au ciel, dit : "Peut-être y a-t-il deux pouvoirs dans le ciel ?" Cette tentation du binitarisme — deux figures divines — est précisément ce que le judaïsme rabbinique a voulu combattre, et c'est pourquoi les textes hénochiques ont été progressivement marginalisés après le IIe siècle de notre ère.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XII -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <span class="section-numero">XII</span>
+        <div>
+          <h2 class="section-titre">Hénoch dans les trois traditions</h2>
+          <p class="section-sous-titre">Jude, Pierre, Jésus — Idrîs — Métatron</p>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Dans le Nouveau Testament et le christianisme primitif</h3>
+        <p>L'influence de la littérature hénochique sur le christianisme primitif est massive et largement sous-estimée dans les présentations usuelles. L'épître de Jude (versets 14–15) cite explicitement et textuellement 1 Hénoch 1,9 — c'est la seule citation directe d'un apocryphe dans l'ensemble du Nouveau Testament canonique :</p>
+        <blockquote>
+          <p>C'est aussi pour eux qu'Hénoch, le septième depuis Adam, a prophétisé en ces termes : Voici, le Seigneur est venu avec ses saintes myriades pour exercer un jugement contre tous.</p>
+          <cite>— Épître de Jude, 14–15 (citation de 1 Hénoch 1,9)</cite>
+        </blockquote>
+        <p>L'épître de Pierre (1 Pierre 3,19–20 ; 2 Pierre 2,4) fait allusion aux anges emprisonnés — directement issu de la tradition des Veilleurs hénochiques. Le titre "Fils de l'Homme" utilisé par Jésus dans les Évangiles synoptiques — particulièrement dans son usage eschatologique et judiciaire — est directement nourri par le Fils de l'Homme hénochique du Livre des Paraboles.</p>
+        <p>Plus profondément encore : la figure de Satan/Diable telle qu'elle se développe dans le Nouveau Testament — être déchu, prince de ce monde, tentateur — est en grande partie construite à partir de la figure d'Azazel et des Veilleurs hénochiques. <strong>L'Ancien Testament ne connaît pas vraiment Satan comme adversaire cosmique autonome. C'est la littérature du Second Temple, et Hénoch en particulier, qui construit cette figure que le christianisme héritera.</strong></p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Dans l'Islam — Idrîs</h3>
+        <p>Idrîs (<span class="ar">إِدْرِيسُ</span>) est le nom coranique d'Hénoch — mentionné en Coran 19,56–57 et 21,85. Le Coran dit de lui :</p>
+        <blockquote>
+          <p><span class="ar">وَاذْكُرْ فِي الْكِتَابِ إِدْرِيسَ إِنَّهُ كَانَ صِدِّيقًا نَبِيًّا وَرَفَعْنَاهُ مَكَانًا عَلِيًّا</span><br>
+          Et mentionne dans le Livre, Idrîs. C'était un véridique, un prophète. Et Nous l'avons élevé en un lieu sublime.</p>
+          <cite>— Coran 19, 56–57</cite>
+        </blockquote>
+        <p>"Élevé en un lieu sublime" — <em class="translitt">rafa'nahu makanan aliyyan</em> — c'est exactement la translation hénochique. La tradition islamique identifie Idrîs à Hénoch sans ambiguïté et le situe au quatrième ciel selon certains hadîths : Mahomet, lors du Voyage Nocturne (le <em class="terme-cle">Mi'raj</em>), rencontre Idrîs au quatrième ciel. Il est associé à l'invention de l'écriture, des sciences, de l'astronomie et de la couture — écho des savoirs que la tradition hénochique lui attribue.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Dans la kabbale — Métatron et l'interface divine</h3>
+        <p>La figure de Métatron-Hénoch devient centrale dans la kabbale médiévale. Le Zohar (XIIIe siècle) et les textes de la Merkabah lui attribuent un rôle cosmique considérable — scribe céleste qui enregistre les mérites et les fautes des hommes, prince de la Torah, gardien du seuil entre le monde divin et le monde humain. Dans certains textes kabbalistiques, Métatron est la manifestation la plus accessible du divin — le visage que Dieu montre au monde, l'intermédiaire entre l'infini (<em class="terme-cle">Ein Sof</em>) et la création finie. L'homme qui "marcha avec Dieu" est devenu l'interface entre Dieu et l'humanité.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XIII — SYNTHÈSE -->
+    <section class="section" id="s13">
+      <div class="section-header">
+        <span class="section-numero">XIII</span>
+        <div>
+          <h2 class="section-titre">Synthèse — Une anthropologie mystique</h2>
+          <p class="section-sous-titre">La question de fond derrière Noé et Hénoch</p>
+        </div>
+      </div>
+
+      <div class="synthese">
+        <h3>✦ Synthèse du Chapitre II ✦</h3>
+
+        <p>Ce chapitre a traversé deux personnages en apparence opposés : Noé, le survivant ordinaire, père d'une humanité réconciliée avec son Dieu, et Hénoch, le mystique translucide, enlevé vivant dans le monde divin. Ensemble, ils encadrent la grande question de l'histoire primordiale : quelle est la nature de l'être humain, et quel est son rapport possible avec le divin ?</p>
+
+        <p>Noé répond : l'être humain peut vivre justement même dans un monde totalement corrompu — et cette justice, si fragile soit-elle, suffit à Dieu pour recommencer. L'alliance qui suit n'est pas conditionnelle : Dieu s'y engage unilatéralement, sans exiger de perfection en retour. C'est le fondement de toute théologie de la grâce.</p>
+
+        <p>Hénoch répond autre chose : l'être humain n'est pas définitivement fixé dans sa condition mortelle. Une transformation radicale est possible. La frontière entre l'humain et le divin est franchissable — de bas en haut comme de haut en bas. Derrière toute la littérature hénochique, il y a une question théologique fondamentale que les trois versets de la Genèse ont posée sans répondre :</p>
+
+        <p><em>Que se passe-t-il quand un homme devient tellement proche de Dieu qu'il ne peut plus mourir ?</em></p>
+
+        <ul>
+          <li>Le mythe du Déluge n'est pas l'invention d'un peuple — c'est la mémoire collective de l'humanité entière face aux catastrophes aquatiques, cristallisée dans un récit de sens cosmique</li>
+          <li>La Bible ne "copie" pas Gilgamesh — elle transforme délibérément un récit mésopotamien en l'orientant vers une théologie de la justice, de la grâce et de l'alliance universelle</li>
+          <li>Hénoch est le personnage le moins développé de la Bible — trois versets, pas un discours, pas une action — et pourtant le plus fécond littérairement de toute la tradition abrahamique</li>
+          <li>La figure de Satan, le titre "Fils de l'Homme", la théologie de la déification, la mystique du char céleste — autant d'éléments majeurs des trois religions abrahamiques qui trouvent leur matrice dans la littérature hénochique du Second Temple</li>
+          <li>Cette conviction — que l'homme peut être transformé, que la frontière entre humain et divin est poreuse — est l'une des matrices les plus profondes de toute la mystique abrahamique : de la kabbale au soufisme, de la gnose chrétienne à la théologie orthodoxe de la déification</li>
+        </ul>
+
+        <p>Ce qui est peut-être le plus vertigineux dans toute cette histoire : le personnage le moins développé de la Bible — trois versets, pas un seul discours, pas une seule action racontée — est celui qui a généré la littérature la plus abondante, la plus diverse, et la plus influente de toute la tradition abrahamique. Le silence du texte canonique a été plus fécond que sa parole.</p>
+      </div>
+    </section>
+
+    <!-- NAVIGATION -->
+        <nav class="nav-chapitres">
+      <a href="chapitre-01-cosmogonie.html" class="nav-btn">← Chapitre I</a>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <a href="chapitre-03-langues-semitiques.html" class="nav-btn">Chapitre III →</a>
+    </nav>
+
+  </article>
+</main>
+
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+
+  if (scrolled > 400) {
+    btnTop.classList.add('visible');
+  } else {
+    btnTop.classList.remove('visible');
+  }
+
+  highlightActiveSection();
+});
+
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+
+
+// ── Overlay sidebar mobile ──────────────────────────────
+const _overlay = document.getElementById('sidebar-overlay');
+const _sidebar  = document.getElementById('sidebar');
+const _toggle   = document.getElementById('menu-toggle');
+
+function toggleSidebar() {
+  const isOpen = _sidebar.classList.toggle('open');
+  if (_overlay) _overlay.classList.toggle('visible', isOpen);
+}
+
+if (_overlay) {
+  _overlay.addEventListener('click', () => {
+    _sidebar.classList.remove('open');
+    _overlay.classList.remove('visible');
+  });
+}
+// Fermer aussi en cliquant en dehors
+</script>
+
+</body>
+</html>

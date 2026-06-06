@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre VI — Israël &amp; les Tribus · Aux Origines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ BARRE DE PROGRESSION ═══ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav { padding: 1rem 0; flex: 1; }
+
+.chapitre-item {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,237,224,0.55);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.chapitre-item:hover { color: var(--or-pale); background: rgba(200,148,58,0.07); }
+
+.chapitre-item.actif {
+  color: var(--or);
+  background: rgba(200,148,58,0.12);
+  border-left: 2px solid var(--or);
+}
+
+.chap-numero {
+  display: block;
+  font-size: 0.58rem;
+  opacity: 0.55;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.15rem;
+}
+
+.section-item {
+  display: block;
+  padding: 0.3rem 1.5rem 0.3rem 2.4rem;
+  font-family: var(--font-corps);
+  font-size: 0.76rem;
+  color: rgba(245,237,224,0.38);
+  text-decoration: none;
+  transition: color 0.2s;
+  line-height: 1.4;
+  border-left: 1px solid transparent;
+}
+
+.section-item:hover { color: var(--or-pale); }
+.section-item.active-section {
+  color: var(--or);
+  border-left-color: var(--or);
+  background: rgba(200,148,58,0.05);
+}
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.12);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══ BOUTON MENU MOBILE ═══ */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 200;
+  background: var(--encre);
+  border: 1px solid var(--or-encre);
+  color: var(--or);
+  width: 40px; height: 40px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-titre);
+}
+
+/* ═══ CONTENU PRINCIPAL ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.chapter-hero {
+  position: relative;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  padding: 5rem 4rem 4rem;
+  overflow: hidden;
+  text-align: center;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(200,148,58,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(200,148,58,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-ornement {
+  color: var(--or);
+  font-size: 0.85rem;
+  letter-spacing: 0.6em;
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+}
+
+.hero-numero {
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.75;
+  margin-bottom: 0.8rem;
+}
+
+h1.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: var(--or-pale);
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: rgba(245,237,224,0.6);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+}
+
+.hero-epigraphe {
+  max-width: 560px;
+  margin: 0 auto 2rem;
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(245,237,224,0.75);
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-epigraphe .heb {
+  display: block;
+  font-size: 1.7rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--or-pale);
+  margin-bottom: 0.5rem;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-titre);
+  letter-spacing: 0.1em;
+  color: var(--or);
+  opacity: 0.7;
+  margin-top: 0.8rem;
+  font-style: normal;
+}
+
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 300px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--or), transparent);
+  opacity: 0.3;
+}
+
+.deco-ligne-symbole {
+  color: var(--or);
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: var(--parchemin-pale);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* ═══ ARTICLE CONTENU ═══ */
+.contenu {
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  padding: 3rem 2.5rem 6rem;
+}
+
+.section {
+  margin-bottom: 4rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+.section-numero {
+  font-family: var(--font-deco);
+  font-size: 2.2rem;
+  color: var(--or);
+  opacity: 0.35;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: -0.2rem;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--encre);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.92rem;
+  color: var(--brun-clair);
+  font-style: italic;
+}
+
+p {
+  margin-bottom: 1.1rem;
+  text-align: left;
+}
+
+p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-deco);
+  font-size: 3.2rem;
+  line-height: 0.85;
+  margin: 0.05em 0.12em 0 0;
+  color: var(--or);
+}
+
+.section p:first-of-type::first-letter { float: none; font-size: inherit; color: inherit; }
+
+.note-methodo p:first-of-type::first-letter { float: none; font-size: inherit; color: inherit; }
+.synthese-bloc p:first-of-type::first-letter { float: none; font-size: inherit; color: inherit; }
+
+em.terme-cle {
+  font-style: italic;
+  color: var(--brun);
+  font-weight: 500;
+}
+
+em.translitt {
+  font-style: italic;
+  color: var(--brun-clair);
+  letter-spacing: 0.02em;
+}
+
+strong { color: var(--encre); font-weight: 600; }
+
+.heb {
+  font-size: 1.3rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem 1rem 1.8rem;
+  border-left: 3px solid var(--or);
+  background: rgba(200,148,58,0.05);
+  font-style: italic;
+  color: var(--encre-douce);
+  border-radius: 0 3px 3px 0;
+}
+
+blockquote p { margin-bottom: 0.3rem; font-size: 1.02rem; }
+blockquote p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+blockquote cite {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-titre);
+  letter-spacing: 0.08em;
+  color: var(--or);
+  margin-top: 0.6rem;
+  font-style: normal;
+}
+
+/* ═══ NOTE MÉTHODOLOGIQUE ═══ */
+.note-methodo {
+  margin: 0 0 2.5rem 0;
+  padding: 1.3rem 1.6rem;
+  background: rgba(200,148,58,0.07);
+  border: 1px solid rgba(200,148,58,0.22);
+  border-radius: 4px;
+}
+
+.note-methodo-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.7rem;
+  opacity: 0.85;
+}
+
+.note-methodo p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.7;
+  margin-bottom: 0.6rem;
+}
+
+.note-methodo p:last-child { margin-bottom: 0; }
+
+/* ═══ TABLEAUX ═══ */
+.tableau-wrapper {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border-radius: 4px;
+  border: 1px solid rgba(139,94,60,0.2);
+}
+
+.tableau-titre {
+  padding: 0.65rem 1.2rem;
+  background: rgba(26,18,8,0.06);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+thead th {
+  padding: 0.65rem 1rem;
+  background: rgba(26,18,8,0.85);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 400;
+}
+
+tbody tr { border-bottom: 1px solid rgba(139,94,60,0.1); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even) { background: rgba(200,148,58,0.03); }
+
+tbody td {
+  padding: 0.65rem 1rem;
+  color: var(--encre-douce);
+  vertical-align: top;
+}
+
+tbody td:first-child {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+/* ═══ GRILLE TRIBUS ═══ */
+.tribus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.7rem;
+  margin: 2rem 0;
+}
+
+.tribu-card {
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(200,148,58,0.2);
+  border-radius: 3px;
+  background: var(--parchemin-pale);
+  position: relative;
+}
+
+.tribu-mere {
+  font-family: var(--font-titre);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 0.3rem;
+}
+
+.tribu-nom {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--brun);
+  margin-bottom: 0.3rem;
+}
+
+.tribu-heb {
+  font-size: 1.1rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--or);
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.tribu-desc {
+  font-size: 0.84rem;
+  color: var(--encre-douce);
+  line-height: 1.5;
+}
+
+.tribu-statut {
+  display: inline-block;
+  font-family: var(--font-titre);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  margin-top: 0.4rem;
+}
+
+.statut-certain { background: rgba(26,18,8,0.08); color: var(--brun); }
+.statut-incertain { background: rgba(139,26,26,0.08); color: var(--rouge-antique); }
+.statut-sacerdotale { background: rgba(200,148,58,0.15); color: var(--or-vif); }
+
+/* ═══ TIMELINE ═══ */
+.timeline {
+  margin: 2rem 0;
+  padding-left: 2rem;
+  border-left: 2px solid rgba(200,148,58,0.2);
+}
+
+.timeline-item {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.55rem;
+  top: 0.55rem;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--or);
+  opacity: 0.5;
+}
+
+.timeline-epoch {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.3rem;
+}
+
+.timeline-titre {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-corps {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.65;
+}
+
+/* ═══ BOÎTE SYNTHÈSE ═══ */
+.synthese-bloc {
+  margin: 3rem 0;
+  padding: 2rem 2.2rem;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.synthese-bloc::before {
+  content: '✦';
+  position: absolute;
+  top: -1rem; right: 1rem;
+  font-size: 5rem;
+  color: var(--or);
+  opacity: 0.05;
+  font-family: var(--font-titre);
+}
+
+.synthese-label {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.synthese-bloc p {
+  font-size: 0.97rem;
+  line-height: 1.75;
+  color: rgba(245,237,224,0.82);
+  margin-bottom: 0.8rem;
+  text-align: left;
+}
+
+.synthese-bloc p:last-child { margin-bottom: 0; }
+
+/* ═══ BOÎTE ATTENTION ═══ */
+.attention-bloc {
+  margin: 2rem 0;
+  padding: 1.3rem 1.6rem;
+  background: rgba(139,26,26,0.05);
+  border-left: 3px solid var(--rouge-antique);
+  border-radius: 0 3px 3px 0;
+  font-size: 0.93rem;
+  line-height: 1.7;
+}
+
+.attention-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rouge-antique);
+  margin-bottom: 0.6rem;
+  opacity: 0.85;
+}
+
+/* ═══ BOÎTE ENCADRÉ ═══ */
+.encadre {
+  margin: 2rem 0;
+  border: 1px solid rgba(200,148,58,0.25);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encadre-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1.2rem;
+  background: rgba(200,148,58,0.1);
+}
+
+.encadre-icone { color: var(--or); font-size: 0.9rem; }
+
+.encadre-label {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.9;
+}
+
+.encadre-body {
+  padding: 1.2rem 1.4rem;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--encre-douce);
+}
+
+.encadre-body p { margin-bottom: 0.7rem; }
+.encadre-body p:last-child { margin-bottom: 0; }
+.encadre-body p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+/* ═══ SOURCES PRIMAIRES ═══ */
+.sources-boite {
+  margin: 2rem 0;
+  border: 1px solid rgba(200,148,58,0.25);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.sources-header {
+  background: rgba(200,148,58,0.1);
+  padding: 0.65rem 1.2rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.9;
+}
+
+.source-item {
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid rgba(200,148,58,0.1);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.source-item:last-child { border-bottom: none; }
+
+.source-titre {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.source-date {
+  font-size: 0.75rem;
+  color: var(--or);
+  font-style: italic;
+  margin-bottom: 0.25rem;
+}
+
+.source-corps { color: var(--encre-douce); }
+
+/* ═══ BILAN ARCHÉOLOGIQUE ═══ */
+.bilan-arche {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bilan-col { background: var(--parchemin-pale); }
+
+.bilan-col-header {
+  padding: 0.65rem 1rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.bilan-col-header.atteste {
+  background: rgba(26,18,8,0.85);
+  color: var(--or-pale);
+}
+
+.bilan-col-header.absent {
+  background: rgba(139,26,26,0.75);
+  color: rgba(245,237,224,0.9);
+}
+
+.bilan-col-item {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+  font-size: 0.87rem;
+  line-height: 1.5;
+  color: var(--encre-douce);
+}
+
+.bilan-col-item:last-child { border-bottom: none; }
+
+.bilan-col-item strong {
+  display: block;
+  color: var(--brun);
+  font-size: 0.8rem;
+  font-family: var(--font-titre);
+  margin-bottom: 0.1rem;
+}
+
+/* ═══ CARTE IDENTITAIRE ═══ */
+.carte-identite {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.carte-colonne {
+  padding: 1.2rem;
+  background: var(--parchemin-pale);
+  border-right: 1px solid rgba(139,94,60,0.15);
+}
+
+.carte-colonne:last-child { border-right: none; }
+
+.carte-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.carte-valeur {
+  font-family: var(--font-titre);
+  font-size: 0.95rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.carte-note {
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+  line-height: 1.5;
+}
+
+/* ═══ SÉQUENCE ═══ */
+.sequence-bloc {
+  margin: 2rem 0;
+  padding: 1.5rem 1.8rem;
+  background: rgba(26,18,8,0.04);
+  border: 1px solid rgba(139,94,60,0.15);
+  border-radius: 4px;
+  font-family: var(--font-corps);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--encre-douce);
+}
+
+.sequence-bloc .seq-item {
+  padding: 0.2rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+
+.seq-fleche {
+  color: var(--or);
+  opacity: 0.6;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.seq-nom {
+  font-family: var(--font-titre);
+  font-size: 0.85rem;
+  color: var(--brun);
+  font-weight: 600;
+  min-width: 120px;
+}
+
+.seq-date {
+  color: var(--or-vif);
+  font-size: 0.82rem;
+}
+
+.seq-desc {
+  color: var(--encre-douce);
+  font-size: 0.85rem;
+}
+
+/* ═══ ORNEMENT ═══ */
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+/* ═══ BTN RETOUR EN HAUT ═══ */
+#btn-top {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-family: var(--font-titre);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+
+#btn-top.visible { opacity: 0.7; }
+#btn-top:hover { opacity: 1; }
+
+/* ═══ NAV CHAPITRES ═══ */
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.25);
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover { background: rgba(200,148,58,0.08); color: var(--brun); border-color: var(--or); }
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.7rem;
+  color: var(--or);
+  opacity: 0.5;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+
+  #main { margin-left: 0; }
+
+  #menu-toggle { display: flex; }
+
+  .chapter-hero { padding: 4rem 1.5rem 3rem; }
+
+  .contenu { padding: 2rem 1.2rem 4rem; }
+
+  .bilan-arche { grid-template-columns: 1fr; }
+  .bilan-col:first-child { border-bottom: 1px solid rgba(139,94,60,0.2); }
+  .carte-identite { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+  .nav-chapitres { flex-direction: column; gap: 0.8rem; text-align: center; }
+  .tribus-grid { grid-template-columns: 1fr; }
+  .carte-identite { grid-template-columns: 1fr; }
+}
+
+
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — REFONTE COMPLÈTE
+   Cible : tablette (≤900px) + mobile (≤600px)
+═══════════════════════════════════════════ */
+
+/* --- Tableaux : toujours scrollables horizontalement --- */
+.tableau-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  min-width: 480px; /* force scroll sur narrow plutôt que d'écraser */
+}
+/* Supprimer le nowrap qui déborde */
+tbody td:first-child {
+  white-space: normal;
+}
+
+/* --- Tablette (sidebar cachée) --- */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  body { display: block; } /* évite les artefacts flex sur iOS */
+
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: min(300px, 85vw);
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 6px 0 40px rgba(0,0,0,0.6);
+  }
+
+  #main { margin-left: 0; }
+
+  #menu-toggle { display: flex !important; }
+
+  .contenu { padding: 2rem 1.5rem 4rem; }
+
+  /* Débat 2 colonnes → 1 colonne */
+  .debat { grid-template-columns: 1fr; }
+
+  /* Note marginale flottante → inline */
+  .note-marge {
+    float: none;
+    width: 100%;
+    margin: 1.2rem 0;
+  }
+
+  /* Timeline */
+  .timeline::before { left: 72px; }
+  .timeline-date { width: 62px; font-size: 0.65rem; }
+
+  /* Navigation bas */
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: stretch;
+  }
+  .nav-btn { justify-content: center; }
+
+  /* Section header : empiler le numéro + titre */
+  .section-header {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .section-numero {
+    align-self: flex-start;
+  }
+}
+
+/* --- Mobile (≤ 600px) --- */
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+
+  /* Hero */
+  .chapter-hero {
+    min-height: 45vh;
+    padding: 4rem 1.2rem 3rem;
+  }
+  .hero-ornement { font-size: 1rem; letter-spacing: 0.3em; }
+  .hero-titre { font-size: clamp(1.7rem, 8vw, 2.6rem) !important; }
+  .hero-sous-titre { font-size: 0.95rem; }
+  .hero-epigraphe { font-size: 0.9rem; }
+
+  /* Contenu */
+  .contenu { padding: 1.5rem 1rem 3rem; }
+
+  /* Synthèse */
+  .synthese { padding: 1.5rem 1rem; }
+
+  /* Blockquote */
+  blockquote {
+    padding: 0.8rem 1rem;
+    margin-left: 0;
+  }
+
+  /* Encadré */
+  .encadre-body { padding: 1rem; }
+
+  /* Timeline : tout sur une colonne */
+  .timeline::before { display: none; }
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid var(--or);
+    margin-bottom: 1rem;
+  }
+  .timeline-date {
+    width: auto;
+    text-align: left;
+    padding-right: 0;
+    font-size: 0.68rem;
+    color: var(--or);
+  }
+  .timeline-dot { display: none; }
+  .timeline-texte { padding-left: 0; }
+
+  /* Tableaux : hint visuel de scroll */
+  .tableau-wrapper {
+    position: relative;
+  }
+  .tableau-wrapper::after {
+    content: '→ scroll';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-family: var(--font-titre);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--or);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Menu toggle : mieux positionné */
+  #menu-toggle {
+    top: 0.7rem;
+    left: 0.7rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  /* Btn top */
+  #btn-top {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* Séparateurs ornementaux */
+  .ornement-sep { letter-spacing: 0.4em; }
+}
+
+/* Overlay sidebar mobile */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 99;
+  cursor: pointer;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Scrollbar sidebar */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Lien retour accueil */
+.sidebar-home {
+  display: block;
+  padding: 0.55rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.6;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="sidebar-overlay"></div>
+
+<button id="menu-toggle" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<!-- ══════════════════════════════
+     SIDEBAR NAVIGATION
+══════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique interactif</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la cosmogonie à la naissance d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="chapitre-01-cosmogonie.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-02-origines-mythiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-03-langues-semitiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-05-moise-exode.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-07-les-royaumes.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-08-age-prophetique.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-11-palestine-1948.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     CONTENU PRINCIPAL
+══════════════════════════════ -->
+<main id="main">
+
+  <!-- FRONTISPICE -->
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre VI</div>
+    <h1 class="hero-titre">Israël &amp; les Tribus</h1>
+    <p class="hero-sous-titre">Comment un peuple se fait — de la crise de 1200 à la confédération des douze</p>
+    <blockquote class="hero-epigraphe">
+      <span class="heb">וַיֵּאָבֵק אִישׁ עִמּוֹ עַד עֲלוֹת הַשָּׁחַר</span>
+      <em>Vayye'avek ish immo ad alot hashachar</em><br>
+      « Un homme lutta avec lui jusqu'au lever de l'aurore. »<br>
+      Et il lui dit&nbsp;: ton nom ne sera plus Jacob, mais Israël —<br>
+      car tu as lutté avec Dieu et avec des hommes, et tu as prévalu.
+      <cite>— Genèse 32, 25–29</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <!-- CORPS -->
+  <article class="contenu">
+
+    <!-- INTRODUCTION -->
+    <section class="section" id="s0">
+      <div class="note-methodo">
+        <div class="note-methodo-label">⚑ Posture méthodologique — Historien · Anthropologue culturel · Archéologue · Bibliste</div>
+        <p>Ce chapitre aborde la question la plus fondamentale de toute l'historiographie d'Israël&nbsp;: comment un peuple se forme-t-il&nbsp;? Pas comment il croit s'être formé — le récit biblique de la Genèse à Josué — mais comment les données extérieures (archéologie, épigraphie, anthropologie) permettent de reconstituer un processus d'identification collective s'étalant sur trois à quatre siècles, du XIIe au IXe siècle avant notre ère.</p>
+        <p>Quatre disciplines sont ici simultanément actives et doivent être distinguées avec précision. L'<strong>historien</strong> cherche des faits datables et des causalités. L'<strong>anthropologue culturel</strong> modélise les mécanismes de formation des identités collectives. L'<strong>archéologue</strong> lit la culture matérielle des hautes terres de Canaan — céramique, architecture, ossements, inscriptions. Le <strong>bibliste</strong> analyse les strates rédactionnelles du texte et les fonctions rhétoriques et théologiques des récits tribaux. Ces quatre lectures convergent vers un objet commun mais n'y arrivent pas par le même chemin — et leurs conclusions ne sont pas toujours compatibles.</p>
+        <p>Un avertissement épistémologique s'impose&nbsp;: nous parlons d'un peuple dont le nom est apparu pour la première fois dans un bulletin de victoire étranger en 1208 av. J.-C. — et dont la mémoire narrative n'a été fixée par écrit, dans ses grandes lignes, qu'au VIIe–Ve siècle. Entre ces deux dates, six siècles de tradition essentiellement orale. Ce n'est pas une raison d'incrédulité — c'est une invitation à la rigueur.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION I -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-numero">I</span>
+        <div>
+          <h2 class="section-titre">La Stèle de Merneptah — la première mention</h2>
+          <p class="section-sous-titre">~1208 av. J.-C. · Thèbes · Un peuple sans ville ni État</p>
+        </div>
+      </div>
+
+      <p>Il y a un point de départ indiscutable dans toute l'histoire d'Israël, et c'est un document égyptien. En 1896, l'égyptologue britannique Flinders Petrie dégage à Thèbes une stèle de granit noir de 3,18 mètres de haut, gravée sous le règne du pharaon Merneptah, fils de Ramsès II, vers 1208 avant notre ère. Elle est aujourd'hui conservée au Musée égyptien du Caire.</p>
+
+      <p>La stèle célèbre les victoires militaires de Merneptah en Canaan et en Libye. Parmi une liste d'entités cananéennes vaincues, une ligne retient l'attention de tous les historiens depuis sa découverte&nbsp;:</p>
+
+      <blockquote>
+        <p>« Canaan est pillée avec toute sa méchanceté. Ascalon est emportée. Gezer est saisie. Yanoam est rendue comme si elle n'était pas. <strong>Israël est dévasté, sa semence n'est plus.</strong> Khor est devenue veuve pour l'Égypte. »</p>
+        <cite>— Stèle de Merneptah, ~1208 av. J.-C. · Musée égyptien du Caire</cite>
+      </blockquote>
+
+      <p>Ce passage est la plus ancienne mention extrabiblique incontestée du nom «&nbsp;Israël&nbsp;». Mais c'est un détail épigraphique — invisible à la traduction — qui en fait l'argument le plus puissant de tout le débat sur les origines.</p>
+
+      <p>En égyptien ancien, les déterminatifs hiéroglyphiques indiquent la nature de ce dont on parle. Ascalon, Gezer et Yanoam sont écrites avec le déterminatif de la cité-État — un signe représentant une ville fortifiée. «&nbsp;Israël&nbsp;», lui, porte le déterminatif du <em class="terme-cle">peuple</em> — un homme et une femme assis avec trois traits du pluriel. Ce n'est pas une cité. Ce n'est pas un territoire délimité. Ce n'est pas encore un État.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">La lecture épigraphique — ce que dit le déterminatif</span>
+        </div>
+        <div class="encadre-body">
+          <p>En 1208 av. J.-C., «&nbsp;Israël&nbsp;» désigne un groupe humain — une population identifiée ethniquement ou tribalement — présente dans la région de Canaan, suffisamment visible pour figurer dans un bulletin de victoire pharaonique, et suffisamment menaçante pour mériter la mention. Ce n'est pas encore un royaume, ni une cité-État, ni même une confédération clairement structurée. C'est un <em>peuple</em>, au sens le plus élémentaire du terme dans la pensée égyptienne classique&nbsp;: un ensemble d'êtres humains qui se distinguent par un nom commun.</p>
+          <p>La formule «&nbsp;sa semence n'est plus&nbsp;» est une hyperbole militaire conventionnelle dans le genre littéraire de la <em>nisba</em> victorieuse — elle ne signifie pas l'anéantissement réel, mais la défaite en campagne. D'ailleurs, Israël continue d'exister bien après Merneptah.</p>
+          <p>Il existe une hypothèse minoritaire — la <em>Berliner Inschrift</em>, un fragment de socle de statue proposé par l'égyptologue Manfred Görg en 1994, potentiellement daté du règne de Ramsès II (~1279–1213) — mais la lecture reste très contestée et non consensuelle dans la discipline. Pour l'heure, la Stèle de Merneptah demeure la première attestation sûre et incontestée.</p>
+        </div>
+      </div>
+
+      <div class="sources-boite">
+        <div class="sources-header">Sources primaires extrabibliques — attestations du nom Israël</div>
+        <div class="source-item">
+          <div class="source-titre">Stèle de Merneptah (~1208 av. J.-C.)</div>
+          <div class="source-date">Thèbes · Musée égyptien du Caire · Découverte par Flinders Petrie, 1896</div>
+          <div class="source-corps">Première attestation sûre du nom «&nbsp;Israël&nbsp;» avec déterminatif de peuple, non de cité-État. Israël en Canaan, sans capitale ni État identifiable.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Inscription de Tel Dan (~840 av. J.-C.)</div>
+          <div class="source-date">Tel Dan, Galilée nord · Découverte en 1993 · Stèle araméenne — probablement Hazaël de Damas</div>
+          <div class="source-corps">Première mention extrabiblique du «&nbsp;roi d'Israël&nbsp;» et de la «&nbsp;Maison de David&nbsp;» (<em class="translitt">bytdwd</em>). Six siècles après Merneptah, Israël est désormais un royaume monarchique avec une légitimité dynastique reconnue par ses ennemis.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Obélisque Noir de Salmanasar III (~841 av. J.-C.)</div>
+          <div class="source-date">Nimroud · British Museum · Annales assyriennes</div>
+          <div class="source-corps">Représentation de «&nbsp;Jéhu fils d'Omri&nbsp;» — roi d'Israël — se prosternant devant le roi assyrien. Confirmation épigraphique d'un personnage biblique identifiable.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Annales de Sargon II (722 av. J.-C.)</div>
+          <div class="source-date">Archives royales assyriennes</div>
+          <div class="source-corps">Description de la prise de Samarie et déportation de 27 290 habitants du royaume d'Israël du Nord — chiffre précis qui confirme la réalité d'un État constitué, et la fiabilité relative des données démographiques bibliques pour cette période.</div>
+        </div>
+      </div>
+
+      <p>Ce tableau de six siècles — de la mention épigraphique d'un peuple nomade (1208) à la déportation documentée de 27 290 habitants d'un État organisé (722) — est l'une des trajectoires les plus remarquables de toute l'histoire antique. Ce qui s'est passé dans l'intervalle est précisément l'objet de ce chapitre.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION II -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-numero">II</span>
+        <div>
+          <h2 class="section-titre">Qu'est-ce qu'un peuple dans le monde antique&nbsp;?</h2>
+          <p class="section-sous-titre">L'anachronisme de l'État-nation · Identité sans contiguïté géographique</p>
+        </div>
+      </div>
+
+      <p>Avant d'aller plus loin, une mise en garde méthodologique fondamentale s'impose. Notre intuition spontanée de ce qu'est un «&nbsp;peuple&nbsp;» est faussée par notre expérience de l'État-nation moderne — cet objet politique inventé en Europe entre le XVIIe et le XIXe siècle, qui associe territoire continu, frontières stables, administration centrale et identité ethnique homogène. Cette grille de lecture est radicalement anachronique appliquée au Proche-Orient du XIIe siècle avant notre ère.</p>
+
+      <p>La question posée un jour par Daniel dans notre échange mérite qu'on s'y arrête&nbsp;: pourquoi donner un nom à un peuple dont les habitants sont parfois séparés de plusieurs centaines de kilomètres&nbsp;? Quels liens y a-t-il entre eux&nbsp;? La réponse est universelle dans son mécanisme et décisive pour comprendre Israël en particulier.</p>
+
+      <div class="attention-bloc">
+        <div class="attention-label">⚑ Avertissement — Anachronisme identitaire</div>
+        <p>Appliquer les catégories de l'État-nation du XIXe siècle au Proche-Orient du XIIe siècle avant notre ère est la première erreur de méthode à éviter. «&nbsp;Peuple&nbsp;», «&nbsp;nation&nbsp;», «&nbsp;ethnie&nbsp;» ont des significations radicalement différentes selon les contextes historiques. Dans le monde antique, un groupe peut partager une identité forte sans partager ni territoire continu, ni État, ni frontières, ni administration. C'est la règle, non l'exception.</p>
+      </div>
+
+      <p>Benedict Anderson, dans son ouvrage classique <em>L'Imaginaire national</em> (1983), a montré que même les «&nbsp;nations&nbsp;» modernes sont des «&nbsp;communautés imaginées&nbsp;» — des groupes dont les membres ne se connaissent pas personnellement mais partagent une représentation commune d'eux-mêmes. Ce mécanisme est opératoire bien avant l'imprimerie. Jan Assmann, égyptologue et théoricien de la mémoire culturelle, a de son côté distingué la <em class="terme-cle">mémoire communicative</em> — ce que les vivants se transmettent oralement sur trois à quatre générations — et la <em class="terme-cle">mémoire culturelle</em> — ce que les institutions (temples, scribes, fêtes liturgiques) fixent comme fondation immémoriale. La Torah accomplit précisément ce passage&nbsp;: elle transforme une mémoire orale tribale en mémoire culturelle institutionnalisée, créant un peuple unifié là où il y avait des clans dispersés.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION III -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-numero">III</span>
+        <div>
+          <h2 class="section-titre">Les cinq liens qui fondent une identité collective</h2>
+          <p class="section-sous-titre">Généalogie · Culte · Mémoire narrative · Loi · Ennemi commun</p>
+        </div>
+      </div>
+
+      <p>Dans le monde antique, un peuple se définit par des liens d'un autre ordre que le territoire. Pour Israël, cinq mécanismes se combinent et se renforcent mutuellement sur trois siècles pour produire une identité commune à partir de groupes disparates.</p>
+
+      <p><strong>Premier lien&nbsp;: la généalogie — réelle ou construite.</strong> Le lien le plus fondamental dans tout le Proche-Orient antique est la parenté, réelle ou fictive. «&nbsp;Être du même peuple&nbsp;» signifie d'abord «&nbsp;descendre du même ancêtre&nbsp;». Les anthropologues appellent ce mécanisme la <em class="terme-cle">segmentation lignagère</em> — théorisée par Evans-Pritchard chez les Nuer du Soudan, mais opératoire dans tout le Proche-Orient ancien. Deux groupes séparés de deux cents kilomètres sont «&nbsp;frères&nbsp;» parce qu'ils partagent le même ancêtre à quatre générations. Face à un ennemi extérieur, ce lien de fraternité mythique suffit à mobiliser. En temps de paix, ces «&nbsp;frères&nbsp;» peuvent s'ignorer complètement. La Bible illustre ce mécanisme avec une clarté presque naïve&nbsp;: les douze tribus d'Israël sont les douze fils de Jacob. Ce schéma généalogique dit quelque chose de réel — ces groupes se reconnaissent comme cousins — même si certains ne se sont jamais rencontrés et si l'ancêtre commun est une construction symbolique.</p>
+
+      <p><strong>Deuxième lien&nbsp;: le culte partagé.</strong> Dans le monde antique, partager un dieu c'est partager une identité — la religion est l'équivalent fonctionnel de la nationalité moderne. Pour Israël, le culte de Yahvé comme dieu exclusif — même imparfaitement pratiqué au départ — est ce qui distingue progressivement ces populations des Cananéens voisins avec qui elles partagent pourtant la même langue, la même technique, et souvent le même territoire. Le sociologue Max Weber a proposé le concept d'<em class="terme-cle">amphictyonie</em> pour l'Israël pré-monarchique — une confédération de tribus réunies autour d'un sanctuaire central (l'Arche de l'Alliance à Silo, selon Josué 18). Le sanctuaire est le point de convergence des dispersés&nbsp;: on n'a pas besoin d'habiter ensemble si l'on prie ensemble. Ce principe vaut pour les Grecs avec Delphes et Olympie, pour les Arabes préislamiques avec La Mecque, pour les Israélites avec Silo puis Jérusalem. L'identité israélite est d'abord religieuse avant d'être ethnique.</p>
+
+      <p><strong>Troisième lien&nbsp;: la mémoire narrative commune.</strong> Un peuple, c'est un groupe qui raconte la même histoire de lui-même. Pour Israël, ce récit fondateur est le cycle Exode-Alliance-Terre promise. Peu importe si chaque groupe l'a vécu directement ou l'a adopté comme sien après coup — ce qui compte, c'est qu'il devient la mémoire de tous. Le Seder de Pâque le formule encore aujourd'hui à la première personne du pluriel — «&nbsp;nous étions esclaves en Égypte&nbsp;» — deux mille ans après les faits supposés. C'est le fonctionnement même de la mémoire identitaire&nbsp;: elle incorpore les non-présents dans le récit des présents.</p>
+
+      <p><strong>Quatrième lien&nbsp;: la langue et la loi communes.</strong> Les clans reconnus comme israélites parlent des dialectes hébreux très proches — la langue est un marqueur d'appartenance immédiatement perceptible. On reconnaît «&nbsp;les siens&nbsp;» à l'accent avant même de connaître la généalogie de l'interlocuteur. Les codes légaux de la Torah — Décalogue, Code de l'Alliance (Exode 20–23), lois deutéronomiques — définissent une communauté morale&nbsp;: qui peut épouser qui, comment traiter l'étranger, comment régler les litiges entre tribus. Même sans État pour les faire appliquer, ces normes créent un espace juridique commun qui transcende la distance géographique.</p>
+
+      <p><strong>Cinquième lien&nbsp;: l'ennemi commun.</strong> C'est le mécanisme le plus brutal et le plus universel — on sait qui on est parce qu'on sait qui on n'est pas. Les Philistins, installés sur la côte à partir de 1200 av. J.-C. avec une culture matérielle, une langue et une religion radicalement différentes, jouent un rôle paradoxalement fondateur dans la cristallisation de l'identité israélite. Les récits de Samson, de Saül, de David contre Goliath ne sont pas simplement des épopées militaires. Ils sont des récits d'altérité&nbsp;: face à l'Autre clairement défini, le Même se précise. L'archéologie confirme que la frontière entre zones d'habitat «&nbsp;israélite&nbsp;» et «&nbsp;philistin&nbsp;» est nette et stable pendant plusieurs siècles — deux cultures coexistant sans se mélanger, ce qui renforce l'identité des deux côtés.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IV -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-numero">IV</span>
+        <div>
+          <h2 class="section-titre">La crise de 1200 — matrice de l'identité israélite</h2>
+          <p class="section-sous-titre">L'effondrement du Bronze Récent · Le vide de pouvoir · L'explosion des hautes terres</p>
+        </div>
+      </div>
+
+      <p>Retour au concret archéologique. Comment des gens séparés de plusieurs centaines de kilomètres peuvent-ils former un seul peuple en 1208&nbsp;? La réponse exige de comprendre ce qui se passe dans la région vers 1200 avant notre ère — l'une des catastrophes systémiques les plus étendues de toute l'Antiquité.</p>
+
+      <p>La fin du Bronze Récent (~1200 av. J.-C.) est un effondrement simultané sans précédent&nbsp;: palais mycéniens en Grèce détruits, cités hittites rasées, ports phéniciens dévastés, Égypte et Mésopotamie affaiblies simultanément. Les causes sont encore débattues dans la recherche — changement climatique, sécheresse prolongée, Peuples de la Mer, révoltes internes, épuisement des réseaux commerciaux du Bronze Récent. Sans doute une convergence. Le résultat est un vide de pouvoir massif dans tout le Levant.</p>
+
+      <p>Dans ce vide, des populations très diverses se retrouvent à devoir se recomposer sans les structures palatiales et étatiques qui organisaient leur vie. D'anciens serfs de palais, des nomades, des marchands ruinés, des soldats sans maître, des réfugiés de villes détruites — tous convergent vers les hautes terres de Canaan, zone peu urbanisée et donc moins exposée aux destructions.</p>
+
+      <div class="bilan-arche">
+        <div class="bilan-col">
+          <div class="bilan-col-header atteste">Ce que l'archéologie atteste</div>
+          <div class="bilan-col-item">
+            <strong>250+ nouveaux villages</strong>
+            Dans les hautes terres de Cisjordanie centrale, explosion de petits établissements entre ~1200 et ~1000 av. J.-C., dans une zone quasi-déserte auparavant (Finkelstein, Mazar).
+          </div>
+          <div class="bilan-col-item">
+            <strong>Maisons à quatre pièces (<em>beit av</em>)</strong>
+            Architecture domestique spécifique, structurée autour de la cellule familiale élargie, très différente des maisons cananéennes des plaines.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Absence quasi-totale de porc</strong>
+            Les fouilles zooarchéologiques révèlent l'absence presque complète d'ossements porcins — contrairement aux sites philistins côtiers où ils abondent. Marqueur identitaire matériellement mesurable dès l'Âge du Fer I.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Grandes jarres à col (<em>pithos</em>)</strong>
+            Mode de stockage spécifique, lié à une économie agropastorale d'autosubsistance caractéristique des hautes terres.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Absence de monuments palatial</strong>
+            Ces villages sont modestes, sans architecture monumentale, sans palais, sans sceau administratif — une société égalitaire sans État pour l'essentiel du Fer I.
+          </div>
+        </div>
+        <div class="bilan-col">
+          <div class="bilan-col-header absent">Ce que l'archéologie ne confirme pas</div>
+          <div class="bilan-col-item">
+            <strong>Une origine extérieure homogène</strong>
+            Ces populations ne viennent pas toutes d'Égypte. La culture matérielle est trop proche de celle des Cananéens de la plaine pour impliquer un groupe d'origine radicalement différente.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Une conquête militaire rapide</strong>
+            Le modèle de Josué — entrée en Canaan, destruction de Jéricho, Aï, Lachish — est contredit par les fouilles. Jéricho était déshabitée au Bronze Récent (Kenyon, 1952–1958). Aï abandonnée depuis le Bronze Ancien.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Une rupture ethnique nette</strong>
+            La céramique, les pratiques funéraires et la langue de ces villageois sont initialement très proches de celles des Cananéens. La distinction se fait progressivement, par différenciation religieuse et culturelle, non par rupture ethnique tranchée.
+          </div>
+          <div class="bilan-col-item">
+            <strong>L'amphictyonie de Noth</strong>
+            La thèse d'un sanctuaire central autour duquel s'organiseraient les douze tribus dès le XIIe siècle est séduisante mais archéologiquement non démontrée pour cette époque précoce.
+          </div>
+        </div>
+      </div>
+
+      <p>Ce peuplement des hautes terres correspond vraisemblablement à l'émergence d'une population qui deviendra «&nbsp;Israël&nbsp;» — issue en partie de populations cananéennes rurales ayant fui les crises de la fin du Bronze Récent, en partie peut-être de groupes nomades ou semi-nomades se sédentarisant, en partie — pour un noyau difficile à quantifier — de groupes porteurs d'une mémoire de l'Égypte. L'idée d'une identité hébraïque complètement distincte des Cananéens ne tient pas à l'examen archéologique. Ce qui distinguera progressivement Israël, c'est une différenciation <em>religieuse</em> — le culte de Yahvé, le refus du porc, la mémoire narrative — plutôt qu'une rupture ethnique tranchée.</p>
+
+      <p>«&nbsp;Israël&nbsp;» est donc moins une réalité ethnique préexistante qu'une identité forgée dans la crise, un projet collectif de survie qui se consolide en se racontant.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION V -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-numero">V</span>
+        <div>
+          <h2 class="section-titre">Hébreu, Israélite, Juif — la séquence des trois noms</h2>
+          <p class="section-sous-titre">Étymologies · Habiru/Apiru · Le nom comme mémoire stratifiée</p>
+        </div>
+      </div>
+
+      <p>Trois noms désignent successivement — et parfois simultanément — ce peuple dans les sources historiques. Chacun encode une mémoire différente, une couche chronologique distincte, un regard différent sur soi ou posé de l'extérieur. Les comprendre, c'est comprendre comment une identité se sédimente au fil du temps.</p>
+
+      <div class="carte-identite">
+        <div class="carte-colonne">
+          <div class="carte-label">Premier nom</div>
+          <div class="carte-valeur">Hébreu — <span class="heb">עִבְרִי</span></div>
+          <div class="carte-note"><em>Ivri</em> · Terme le plus archaïque · Probablement extérieur au groupe. Deux étymologies en débat&nbsp;: (1) lien avec les <em>Habiru/Apiru</em> — populations apatrides, semi-serviles, attestées dès le IIIe millénaire dans les archives mésopotamiennes. Terme social, pas ethnique. (2) De la racine <em>avar</em> (עָבַר), «&nbsp;traverser, passer de l'autre côté&nbsp;» — ceux qui viennent de l'autre rive du fleuve. Utilisé par les Égyptiens et les Philistins pour désigner ces groupes avant qu'ils ne s'en emparent eux-mêmes.</div>
+        </div>
+        <div class="carte-colonne">
+          <div class="carte-label">Deuxième nom</div>
+          <div class="carte-valeur">Israélite — <span class="heb">יִשְׂרְאֵלִי</span></div>
+          <div class="carte-note"><em>Bene Yisrael</em>, «&nbsp;fils d'Israël&nbsp;» · Auto-désignation interne · De <em>yisra-El</em> — «&nbsp;qui lutte avec El&nbsp;» ou «&nbsp;qu'El domine&nbsp;» · Le nom contient le nom du dieu <em>El</em>, pas encore <em>Yahvé</em> — fossile d'une couche religieuse pré-yahviste. Attesté vers 1208 av. J.-C. (Merneptah). Désigne la confédération des douze tribus (XIIe–Xe s.). Survit comme nom du royaume du Nord après la scission (931–722 av.).</div>
+        </div>
+        <div class="carte-colonne">
+          <div class="carte-label">Troisième nom</div>
+          <div class="carte-valeur">Juif — <span class="heb">יְהוּדִי</span></div>
+          <div class="carte-note"><em>Yehudi</em>, «&nbsp;de Juda&nbsp;» · Post-exilique · Après la chute du royaume du Nord (722 av.), seul le royaume de Juda (<em>Yehudah</em>) survit. À l'époque perse (Ve s. av.), «&nbsp;Judéen&nbsp;» (<em>Yehudi</em>) devient progressivement un terme religieux et identitaire global désignant tout héritier de la tradition de la Torah — qu'il soit d'origine judéenne ou non. C'est l'identité diasporique par excellence.</div>
+        </div>
+      </div>
+
+      <div class="sequence-bloc">
+        <div class="seq-item">
+          <span class="seq-fleche">▸</span>
+          <span class="seq-nom">Habiru/Apiru</span>
+          <span class="seq-date">XXIIe–XIIe s. av.</span>
+          <span class="seq-desc">Condition sociale diffuse — marginaux, apatrides, semi-serviles</span>
+        </div>
+        <div class="seq-item">
+          <span class="seq-fleche">↓</span>
+          <span class="seq-nom">Hébreu (<em>Ivri</em>)</span>
+          <span class="seq-date">XIVe–XIe s. av.</span>
+          <span class="seq-desc">Terme externe imposé par les autres — marqueur d'altérité</span>
+        </div>
+        <div class="seq-item">
+          <span class="seq-fleche">↓</span>
+          <span class="seq-nom">Israélite (<em>Bene Yisrael</em>)</span>
+          <span class="seq-date">XIIe–Xe s. av.</span>
+          <span class="seq-desc">Auto-désignation interne — confédération des douze tribus</span>
+        </div>
+        <div class="seq-item">
+          <span class="seq-fleche">↓</span>
+          <span class="seq-nom">Israël / Juda</span>
+          <span class="seq-date">Xe–VIIIe s. av.</span>
+          <span class="seq-desc">Deux royaumes distincts — identités politiques séparées</span>
+        </div>
+        <div class="seq-item">
+          <span class="seq-fleche">↓</span>
+          <span class="seq-nom">Juif (<em>Yehudi</em>)</span>
+          <span class="seq-date">Ve s. av. et après</span>
+          <span class="seq-desc">Identité post-exilique religieuse — la diaspora comme identité</span>
+        </div>
+      </div>
+
+      <p>Ce n'est pas une ligne droite — c'est une spirale où chaque nom encode une mémoire différente de ce que ce peuple a été, et où tous ces noms continuent d'être utilisés simultanément dans les textes sacrés lus par les générations suivantes. Ce qui est peut-être le plus frappant&nbsp;: le terme «&nbsp;Hébreu&nbsp;» que la Bible utilise pour désigner les ancêtres les plus lointains — Abraham, Joseph, Moïse — est précisément celui qui dit leur condition de déracinés, de gens entre deux mondes, sans territoire fixe. Comme si le texte avait voulu inscrire dans le nom originel non pas une gloire nationale, mais une vulnérabilité fondatrice.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VI -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-numero">VI</span>
+        <div>
+          <h2 class="section-titre">Les douze tribus — construction progressive ou réalité originelle&nbsp;?</h2>
+          <p class="section-sous-titre">Genèse 29–35 · Genèse 49 · Deutéronome 33 · Trois couches narratives</p>
+        </div>
+      </div>
+
+      <p>Le système des douze tribus est l'une des questions les plus complexes de toute l'histoire biblique, précisément parce que le chiffre douze est trop parfait pour être naïvement historique — et pourtant trop persistant pour être purement fictif. La réponse honnête est que ni l'une ni l'autre de ces positions extrêmes n'est correcte.</p>
+
+      <p>Le système des douze tribus ne s'impose pas en un seul texte ni en un seul acte. Il se construit en trois couches narratives distinctes, rédigées à des époques différentes et préservant des réalités politiques différentes — ce que la critique documentaire permet de lire directement dans la structure du texte canonique.</p>
+
+      <p><strong>Couche 1 — Les fils de Jacob (Genèse 29–30 et 35).</strong> Jacob a douze fils de quatre femmes différentes. Ce schéma est d'une symétrie narrative trop parfaite — six fils de l'épouse principale (Léa), deux de l'épouse aimée (Rachel), deux de chaque servante (Bilha, Zilpa). La répartition reflète une hiérarchie sociale soigneusement construite, pas nécessairement une réalité biologique.</p>
+
+      <p><strong>Couche 2 — La bénédiction de Jacob mourant (Genèse 49).</strong> Ce texte est considéré par la quasi-totalité des spécialistes comme l'un des plus anciens de la Bible — probablement un poème tribal du XIIe–XIe siècle av. J.-C. réutilisé et encadré narrativement plus tard. Chaque «&nbsp;bénédiction&nbsp;» décrit en réalité le caractère géographique et politique de chaque tribu — ce sont des descriptions de territoires et de fonctions tribales projetées dans la bouche d'un ancêtre mourant, procédé littéraire classique pour légitimer des réalités existantes.</p>
+
+      <p><strong>Couche 3 — La bénédiction de Moïse (Deutéronome 33).</strong> Même structure, mais avec des variations significatives&nbsp;: Siméon a disparu de la liste. Lévi n'a plus de territoire mais une fonction sacerdotale. Joseph est divisé en Éphraïm et Manassé. Ces variations ne sont pas des erreurs de rédaction — elles reflètent des réalités politiques différentes à des époques différentes, et révèlent que ces listes ont été actualisées au fil du temps pour coller à une réalité changeante.</p>
+
+      <p>Le mécanisme d'absorption est lui-même révélateur. L'Exode 12,38 mentionne qu'une «&nbsp;foule composite&nbsp;» (<em class="terme-cle">erev rav</em>) sort d'Égypte avec les Hébreux. Rahab la Cananéenne de Jéricho est intégrée à Israël (Josué 6). Ruth la Moabite — arrière-grand-mère de David — est l'étrangère par excellence qui choisit son peuple d'adoption. Ces récits indiquent que l'appartenance à Israël n'a jamais été purement biologique. Elle a toujours comporté une dimension d'adhésion — à un récit, à une loi, à un dieu.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VII -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-numero">VII</span>
+        <div>
+          <h2 class="section-titre">Le problème du chiffre douze — trop parfait pour être innocent</h2>
+          <p class="section-sous-titre">Amphictyonie de Noth · Variations textuelles · Contrainte symbolique</p>
+        </div>
+      </div>
+
+      <p>Dans tout le Proche-Orient antique, le chiffre douze a une valeur symbolique et organisationnelle puissante — douze mois de l'année lunaire, douze signes du zodiaque babylonien, douze dieux olympiens grecs. Ce n'est pas une coïncidence. Mais le problème biblique est plus précis&nbsp;: la liste des douze tribus n'est jamais identique d'un texte à l'autre.</p>
+
+      <p>Le chiffre douze est maintenu constant par ajustement — quand une tribu disparaît, une autre est scindée pour maintenir le total. Ce mécanisme révèle que le nombre douze est une <em class="terme-cle">contrainte symbolique</em> que les rédacteurs respectent scrupuleusement, indépendamment de la réalité des entités tribales sur le terrain.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Variations de la liste des douze tribus selon les contextes bibliques</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Contexte</th>
+              <th>Tribu absente</th>
+              <th>Présente à la place</th>
+              <th>Raison historico-politique</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Genèse 49 — Bénédiction de Jacob</td>
+              <td>—</td>
+              <td>Les 12 fils de Jacob (liste de base)</td>
+              <td>Strate narrative fondatrice — liste sans contrainte politique</td>
+            </tr>
+            <tr>
+              <td>Nombres 1 — Recensement militaire</td>
+              <td>Lévi (tribu sacerdotale, exemptée)</td>
+              <td>Joseph divisé en Éphraïm + Manassé</td>
+              <td>Lévi = non-combattant ; Éphraïm et Manassé = entités militaires distinctes</td>
+            </tr>
+            <tr>
+              <td>Deutéronome 33 — Bénédiction de Moïse</td>
+              <td>Siméon</td>
+              <td>Lévi présent avec fonction sacerdotale</td>
+              <td>Siméon absorbé par Juda ; Lévi réhabilité comme tribu cultuelle</td>
+            </tr>
+            <tr>
+              <td>Attribution des territoires (Josué)</td>
+              <td>Lévi (pas de territoire)</td>
+              <td>Éphraïm + Manassé séparés</td>
+              <td>Lévi dispersé en villes lévitiques — il n'a pas de territoire mais une présence partout</td>
+            </tr>
+            <tr>
+              <td>Juges 5 — Cantique de Déborah (texte le plus ancien)</td>
+              <td>Juda + Siméon</td>
+              <td>Dix tribus seulement</td>
+              <td>Confédération encore incomplète ; Juda trop au sud pour participer à cette bataille en Jezréel</td>
+            </tr>
+            <tr>
+              <td>Apocalypse 7 (Nouveau Testament)</td>
+              <td>Dan</td>
+              <td>Manassé + Lévi</td>
+              <td>Dan associé au culte des idoles (Juges 18) ; exclusion symbolique eschatologique</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>En 1930, l'exégète allemand Martin Noth a proposé le modèle de l'<em class="terme-cle">amphictyonie</em> — une confédération sacrée de douze membres organisée autour d'un sanctuaire central, sur le modèle des amphictyonies grecques (Delphes). Chaque tribu assumait à tour de rôle l'entretien du sanctuaire pendant un mois de l'année — d'où les douze. Ce modèle a été partiellement révisé depuis (la démonstration directe d'un sanctuaire central pour l'époque des Juges est archéologiquement difficile), mais l'idée d'une organisation religieuse fédérale autour d'un lieu de culte partagé reste intellectuellement solide et n'a pas été définitivement réfutée.</p>
+
+      <p>Le Cantique de Déborah (Juges 5) constitue l'argument le plus fort contre une confédération originelle des douze&nbsp;: considéré par la quasi-totalité des spécialistes comme l'un des textes hébreux les plus anciens — peut-être du XIIe siècle — il ne mentionne que dix tribus. Juda et Siméon sont absents. La confédération est <em>encore incomplète</em> à ce stade. C'est la preuve que le système des douze n'est pas une réalité originelle simultanée — il s'est construit progressivement, par agrégation successive.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VIII -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-numero">VIII</span>
+        <div>
+          <h2 class="section-titre">Ce que l'archéologie dit des tribus</h2>
+          <p class="section-sous-titre">Âge du Fer I · Hautes terres · Tribus archéologiquement visibles et invisibles</p>
+        </div>
+      </div>
+
+      <p>L'archéologie des hautes terres de Canaan à l'Âge du Fer I (~1200–1000 av. J.-C.) révèle une colonisation progressive et géographiquement distincte. Les zones de peuplement correspondent grossièrement aux territoires tribaux — mais pas à douze entités simultanées et équivalentes.</p>
+
+      <div class="tribus-grid">
+        <div class="tribu-card">
+          <div class="tribu-mere">Léa — épouse principale</div>
+          <div class="tribu-nom">Ruben</div>
+          <div class="tribu-heb">רְאוּבֵן</div>
+          <div class="tribu-desc">Transjordanie nord ; disparaît très tôt, absorbé par des groupes araméens. Archéologiquement quasi-invisible après le XIe siècle.</div>
+          <span class="tribu-statut statut-incertain">trace faible</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Léa</div>
+          <div class="tribu-nom">Siméon</div>
+          <div class="tribu-heb">שִׁמְעוֹן</div>
+          <div class="tribu-desc">Absorbé par Juda ; disparaît de la liste de Deutéronome 33. Aucune trace archéologique indépendante.</div>
+          <span class="tribu-statut statut-incertain">absorbé</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Léa</div>
+          <div class="tribu-nom">Lévi</div>
+          <div class="tribu-heb">לֵוִי</div>
+          <div class="tribu-desc">Tribu sacerdotale sans territoire — dispersée en villes lévitiques. Omniprésente dans le culte. Sa transformation en corps sacerdotal est l'une des évolutions institutionnelles les plus importantes de tout Israël.</div>
+          <span class="tribu-statut statut-sacerdotale">sacerdotale</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Léa</div>
+          <div class="tribu-nom">Juda</div>
+          <div class="tribu-heb">יְהוּדָה</div>
+          <div class="tribu-desc">Tribu royale de David. «&nbsp;Le sceptre ne s'éloignera pas de Juda&nbsp;» (Gn 49,10). Absorbe Siméon, les Calébites, les Kénites. Moins une tribu qu'une fédération méridionale. Archéologiquement très bien attestée.</div>
+          <span class="tribu-statut statut-certain">bien attestée</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Léa</div>
+          <div class="tribu-nom">Issachar</div>
+          <div class="tribu-heb">יִשָּׂשכָר</div>
+          <div class="tribu-desc">Plaine de Jezréel — «&nbsp;âne robuste couché entre deux bâts&nbsp;» (Gn 49,14). Zone fertile, population agricole. Bien localisable archéologiquement.</div>
+          <span class="tribu-statut statut-certain">attestée</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Léa</div>
+          <div class="tribu-nom">Zabulon</div>
+          <div class="tribu-heb">זְבוּלֻן</div>
+          <div class="tribu-desc">«&nbsp;Habitera sur le bord des mers&nbsp;» — accès maritime au nord. Galilée basse. Mentionne dans le Cantique de Déborah parmi les tribus mobilisées.</div>
+          <span class="tribu-statut statut-certain">attestée</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Rachel — épouse aimée</div>
+          <div class="tribu-nom">Joseph</div>
+          <div class="tribu-heb">יוֹסֵף</div>
+          <div class="tribu-desc">Divisé en Éphraïm et Manassé pour maintenir le chiffre douze quand Lévi devient sacerdotal. Les deux entités des hautes terres centrales sont réelles et distinctes — Joseph est un nom parapluie symbolique.</div>
+          <span class="tribu-statut statut-certain">divisée en deux</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Rachel</div>
+          <div class="tribu-nom">Benjamin</div>
+          <div class="tribu-heb">בִּנְיָמִין</div>
+          <div class="tribu-desc">La plus petite tribu — «&nbsp;fils de la main droite&nbsp;» ou «&nbsp;fils du Sud&nbsp;». Territoire entre Juda et Éphraïm. Tribu de Saül, premier roi d'Israël. Rôle tampon géopolitique entre les deux grandes entités.</div>
+          <span class="tribu-statut statut-certain">attestée</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Bilha — servante de Rachel</div>
+          <div class="tribu-nom">Dan</div>
+          <div class="tribu-heb">דָּן</div>
+          <div class="tribu-desc">Migration réelle attestée par deux localisations différentes dans les textes&nbsp;: côte méditerranéenne (Josué 19), puis extrême nord après une migration documentée (Juges 18). Absente de l'Apocalypse 7 — associée aux idoles.</div>
+          <span class="tribu-statut statut-certain">migration réelle</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Bilha</div>
+          <div class="tribu-nom">Nephtali</div>
+          <div class="tribu-heb">נַפְתָּלִי</div>
+          <div class="tribu-desc">Galilée nord. Parmi les premières à chanter dans le Cantique de Déborah. «&nbsp;Naphtali est une biche lâchée, qui dit de belles paroles&nbsp;» (Gn 49,21).</div>
+          <span class="tribu-statut statut-certain">attestée</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Zilpa — servante de Léa</div>
+          <div class="tribu-nom">Gad</div>
+          <div class="tribu-heb">גָּד</div>
+          <div class="tribu-desc">Transjordanie centrale — groupe guerrier. «&nbsp;Gad — des pillards le pilleront mais lui pillera leurs talons&nbsp;» (Gn 49,19). Frontalier avec les Ammonites et les Araméens.</div>
+          <span class="tribu-statut statut-certain">attestée</span>
+        </div>
+        <div class="tribu-card">
+          <div class="tribu-mere">Zilpa</div>
+          <div class="tribu-nom">Asher</div>
+          <div class="tribu-heb">אָשֵׁר</div>
+          <div class="tribu-desc">Côte phénicienne nord — zone très fertile. «&nbsp;Son pain sera riche, il fournira des délices royaux&nbsp;» (Gn 49,20). Contacts intenses avec la Phénicie.</div>
+          <span class="tribu-statut statut-certain">attestée</span>
+        </div>
+      </div>
+
+      <p>Cette carte tribale révèle une géographie cohérente — les tribus occupent des zones écologiques distinctes (plaine, hautes terres centrales, Galilée, Transjordanie, côte) qui correspondent à des économies différentes (agriculture intensive, pastoralisme de hautes terres, pêche, élevage). La structure des douze tribus est en partie une cartographie de ces réalités géographiques, encodée dans un langage généalogique.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IX -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-numero">IX</span>
+        <div>
+          <h2 class="section-titre">Origines multiples — la Bible dit plus qu'elle ne semble dire</h2>
+          <p class="section-sous-titre">Calébites · Kénites · Fils des servantes · L'intégration des étrangers</p>
+        </div>
+      </div>
+
+      <p>En lisant attentivement la Genèse et Josué, on découvre que plusieurs entités identifiées comme «&nbsp;tribus d'Israël&nbsp;» ont des origines qui ne sont pas hébraïques au sens strict. Le texte ne cache pas ces altérités — il les encode dans sa structure même.</p>
+
+      <p>Les fils des servantes (Dan, Nephtali, Gad, Asher) ont un statut inférieur dans la hiérarchie narrative — ils ne sont pas nés de l'épouse principale. Cette infériorité symbolique reflète probablement une intégration plus tardive ou plus marginale dans la confédération. Ces groupes ont rejoint la coalition israélite, mais leur intégration est présentée comme moins centrale que celle des fils de Léa ou de Rachel.</p>
+
+      <p>La tribu de Juda absorbe explicitement plusieurs groupes non-israélites. Les <em class="terme-cle">Calébites</em> — descendants de Caleb, lui-même Kénizzite (Gn 15,19), donc d'origine non-israélite — sont pleinement intégrés au territoire de Juda. Les <em class="terme-cle">Kénites</em> — peuple de forgerons nomades du désert, famille du beau-père de Moïse Jéthro — s'installent dans le Néguev parmi les fils de Juda (Juges 1,16). Juda est moins une tribu pure qu'une fédération méridionale de plusieurs groupes distincts réunis sous un patronyme commun.</p>
+
+      <p>Joseph/Éphraïm-Manassé illustre un autre mécanisme&nbsp;: la division d'un nom en deux entités pour maintenir le chiffre douze quand Lévi devient sacerdotal. Éphraïm et Manassé sont deux entités réelles dans les hautes terres centrales, unifiées symboliquement sous le nom de Joseph mais géographiquement et politiquement séparées depuis les origines de leur attestation archéologique.</p>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">◈ Point décisif — L'appartenance à Israël n'a jamais été purement biologique</div>
+        <p>Ces récits d'intégration ne sont pas anodins. Rahab la Cananéenne de Jéricho est sauvée et intégrée à Israël (Josué 6). Ruth la Moabite choisit son peuple d'adoption et devient l'arrière-grand-mère de David — roi modèle par excellence. L'Exode 12,38 mentionne une «&nbsp;foule composite&nbsp;» (<em>erev rav</em>) sortant d'Égypte avec les Hébreux.</p>
+        <p>Ce qui fait un Israélite n'est pas seulement la naissance, c'est l'allégeance — à un récit, à une loi, à un dieu. Ce mécanisme explique comment une identité peut se former à partir de populations géographiquement dispersées et d'origines diverses&nbsp;: ce qui les unit n'est pas le sang mais le choix de se raconter la même histoire. C'est la matrice de la conversion dans les trois traditions abrahamiques.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION X -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-numero">X</span>
+        <div>
+          <h2 class="section-titre">La cristallisation — quand les douze deviennent un</h2>
+          <p class="section-sous-titre">Salomon · 1 Rois 4 · La rédaction deutéronomiste · Josias</p>
+        </div>
+      </div>
+
+      <p>Si la liste des douze tribus n'est pas une réalité originelle mais une construction progressive, quand et pourquoi s'est-elle fixée dans sa forme canonique&nbsp;? La réponse la plus probable désigne deux moments distincts, l'un administratif et l'un idéologique.</p>
+
+      <p>Le premier moment pointe vers le règne de Salomon (~970–930 av. J.-C.). Le texte de 1 Rois 4 décrit l'organisation administrative du royaume en douze districts avec douze préfets chargés de ravitailler la cour royale chacun un mois par an. Ces districts ne correspondent pas exactement aux territoires tribaux traditionnels — certains chevauchent plusieurs tribus, d'autres ignorent les frontières tribales. C'est une organisation bureaucratique royale qui utilise le cadre tribal symbolique sans s'y soumettre entièrement. Ce texte révèle deux choses simultanément&nbsp;: le cadre des douze tribus existait comme référence symbolique assez forte pour structurer une administration royale, et la réalité politique débordait déjà ce cadre.</p>
+
+      <p>Le second moment, déterminant pour la forme canonique, est la grande rédaction deutéronomiste du VIIe siècle, sous le roi Josias (~640–609 av. J.-C.). La «&nbsp;découverte&nbsp;» du livre de la Loi dans le Temple (2 Rois 22 — très probablement un premier Deutéronome) déclenche une réforme religieuse massive. Josias, dont l'ambition est de reconstituer un royaume unifié sur les ruines du royaume du Nord (tombé sous les Assyriens en 722), mobilise la mémoire des douze tribus comme fondation idéologique de cette réunification. La liste des douze tribus devient alors instrument politique autant que mémoire religieuse — une constitution symbolique destinée à légitimer l'unité perdue.</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-epoch">~XIIe–XIe s. av. J.-C. · Âge du Fer I</div>
+          <div class="timeline-titre">Émergence des clans dans les hautes terres</div>
+          <div class="timeline-corps">Explosion de 250+ nouveaux villages dans la Cisjordanie centrale. Premiers contacts inter-tribaux face aux Philistins et aux Cananéens. Les récits généalogiques commencent à circuler oralement. Le Cantique de Déborah (Juges 5) atteste une confédération de dix tribus — pas encore douze.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~XIe–Xe s. av. J.-C. · Transition vers la monarchie</div>
+          <div class="timeline-titre">Pression philistine et demande d'un roi</div>
+          <div class="timeline-corps">La menace philistine accélère la cohésion tribale et crée la demande d'un commandement militaire unifié. Samuel, Saül, puis David cristallisent cette demande. Le cadre tribal est maintenu comme référence symbolique même quand la réalité militaire le dépasse.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~970–930 av. J.-C. · Règne de Salomon</div>
+          <div class="timeline-titre">Cristallisation administrative des douze districts</div>
+          <div class="timeline-corps">1 Rois 4 — organisation en douze districts correspondant grossièrement aux territoires tribaux. Le chiffre douze devient référence administrative officielle, mais les districts ne coïncident pas exactement avec les territoires des tribus.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">931 av. J.-C. · Scission</div>
+          <div class="timeline-titre">Division en deux royaumes — l'unité perdue</div>
+          <div class="timeline-corps">Après la mort de Salomon, le Nord se révolte sous Jéroboam — le chef du travail forcé de la maison de Joseph. La réforme du joug imposé par Salomon échoue. Dix tribus forment le royaume d'Israël (Nord, capitale Samarie), deux restent avec la maison de David (Juda + Benjamin, capitale Jérusalem).</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">722 av. J.-C. · Chute du Nord</div>
+          <div class="timeline-titre">Sargon II détruit Samarie — les «&nbsp;dix tribus perdues&nbsp;»</div>
+          <div class="timeline-corps">Le royaume d'Israël du Nord est détruit par les Assyriens. 27 290 habitants déportés en Mésopotamie selon les annales de Sargon II. Des populations mésopotamiennes sont installées à leur place — elles se mêleront aux Israélites restants pour former les Samaritains.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~640–609 av. J.-C. · Réforme de Josias</div>
+          <div class="timeline-titre">Fixation canonique de la liste — idéologie politique</div>
+          <div class="timeline-corps">La rédaction deutéronomiste fixe le système des douze tribus dans sa forme définitive comme fondation idéologique d'un royaume réunifié que Josias cherche à bâtir sur les ruines du Nord. La liste des douze devient à la fois mémoire religieuse, programme politique et constitution symbolique.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~550–450 av. J.-C. · Exil et retour</div>
+          <div class="timeline-titre">Source sacerdotale (P) — théologie de la révélation progressive</div>
+          <div class="timeline-corps">En exil babylonien, la source P systématise et finalise le système des tribus dans sa dimension liturgique. Le retour sous Cyrus (538) ramène un groupe qui n'est plus Israël au sens tribal mais déjà «&nbsp;Juda&nbsp;» (<em>Yehudi</em>) au sens religieux. La mémoire des douze tribus reste vivante comme horizon eschatologique — l'unité à restaurer à la fin des temps.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XI -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-numero">XI</span>
+        <div>
+          <h2 class="section-titre">El et Yahvé — la fusion des deux dieux d'Israël</h2>
+          <p class="section-sous-titre">Polythéisme cananéen · Monolatrie progressive · Le texte contre lui-même</p>
+        </div>
+      </div>
+
+      <p>La question religieuse est indissociable de la question identitaire. Comment une confédération de clans dont certains adoraient El — le dieu suprême du panthéon cananéen — et d'autres Yahvé — un dieu du désert méridional d'origine midianique ou kénite (voir chapitre V) — est-elle devenue le peuple d'un dieu unique&nbsp;? Ce processus est l'un des plus fascinants de toute l'histoire des religions.</p>
+
+      <p>Le nom «&nbsp;Israël&nbsp;» lui-même encode la réponse. <em class="translitt">Yisra-El</em> — «&nbsp;qui lutte avec El&nbsp;» ou «&nbsp;qu'El domine&nbsp;» — contient le nom du dieu <em>El</em>, pas encore <em>Yahvé</em>. C'est la trace linguistique d'une couche pré-yahviste dans la mémoire du groupe. Le dieu des patriarches — El Shaddaï, El Elyon, El Roi, El Olam — est le dieu cananéen El sous ses diverses épithètes locales, pas encore Yahvé. La source sacerdotale (P) le reconnaît elle-même en Exode 6,2–3&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;Dieu parla à Moïse et lui dit&nbsp;: Je suis Yahvé. Je me suis manifesté à Abraham, à Isaac et à Jacob comme El Shaddaï, mais sous mon nom de Yahvé je ne me suis pas fait connaître d'eux.&nbsp;»</p>
+        <cite>— Exode 6, 2–3 · Source Sacerdotale (P)</cite>
+      </blockquote>
+
+      <p>Cette déclaration est d'une honnêteté remarquable — elle reconnaît explicitement une révélation progressive du nom divin&nbsp;: El Shaddaï pour les patriarches, Yahvé révélé seulement à Moïse. La source J refuse cette discontinuité et utilise Yahvé depuis Adam, ce qui est anachronique par rapport à la théologie de P. Le rédacteur final a cousu les deux ensemble sans harmoniser — acte de fidélité à la pluralité des mémoires.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">El et Yahvé — profil comparatif avant la fusion</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>El (cananéen)</th>
+              <th>Yahvé (midianique / kénite)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Attestation externe</td>
+              <td>Très bien attesté à Ugarit (XIVe–XIIe s.) et dans tout le Proche-Orient sémitique</td>
+              <td>Textes égyptiens de Soleb / Amarah-Ouest (~XIVe s.) — «&nbsp;Shasu de YHW&nbsp;»</td>
+            </tr>
+            <tr>
+              <td>Géographie</td>
+              <td>Partout en Canaan — dieu suprême de l'assemblée divine</td>
+              <td>Sud et sud-est — Sinaï, Édom, Séir, Paran, Téman</td>
+            </tr>
+            <tr>
+              <td>Caractère</td>
+              <td>Patriarcal, serein, père des dieux et des hommes — siège dans son conseil</td>
+              <td>Guerrier, de feu et de tempête, mobile, lié à la libération des opprimés</td>
+            </tr>
+            <tr>
+              <td>Relation aux patriarches</td>
+              <td>El Shaddaï, El Elyon, El Roi, El Olam — épithètes utilisées par Abraham, Isaac, Jacob</td>
+              <td>Non utilisé par les patriarches selon la source P (Ex 6,3)</td>
+            </tr>
+            <tr>
+              <td>Population porteuse</td>
+              <td>Cananéens sédentaires et semi-nomades des hautes terres</td>
+              <td>Kénites / Midianites — forgerons et nomades du désert méridional</td>
+            </tr>
+            <tr>
+              <td>Fusion dans la Bible hébraïque</td>
+              <td colspan="2" style="text-align:center;font-style:italic;color:var(--brun);">Progressive, du XIe au VIe siècle av. J.-C. · Traces de la fusion conservées dans les tensions irrésolues du texte canonique</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Le processus historique le plus probable est le suivant&nbsp;: des populations cananéennes adoraient El sous ses formes locales dans les hautes terres. Un groupe associé à Moïse — peut-être un noyau de tribus qui avaient connu l'Égypte et le désert — apporte du sud le culte de Yahvé. Les deux traditions entrent en contact lors de la constitution de la confédération israélite. Progressivement — sur plusieurs siècles — El et Yahvé sont identifiés, leurs attributs fusionnent, et le tétragramme prend le dessus comme nom personnel du dieu unique. La trace de cette fusion subsiste dans le texte canonique sous forme de tensions que seule la critique documentaire permet de lire&nbsp;: le combat de Yahvé contre le dragon des eaux primordiales (Job 41, Isaïe 27) — hérité de Baal combattant Yam à Ugarit — s'est métamorphosé en expression de la toute-puissance divine plutôt qu'en conflit au sein d'un panthéon.</p>
+
+      <p>Cette question touche directement au nom «&nbsp;Israël&nbsp;» lui-même — et la réponse révèle quelque chose de remarquable. Au moment où ce nom s'est fixé, le dieu de ces clans était probablement El, pas encore Yahvé — ou Yahvé était encore identifié à El dans la conscience religieuse des groupes qui porteront ce nom. Le nom «&nbsp;Israël&nbsp;» fossilise une couche <em>pré-yahviste</em> — il est la trace linguistique de la religion des ancêtres avant la révélation mosaïque telle que la Bible la comprend elle-même.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XII -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <span class="section-numero">XII</span>
+        <div>
+          <h2 class="section-titre">Fonctions politiques et théologiques du système tribal</h2>
+          <p class="section-sous-titre">Égalité symbolique · Intégration des étrangers · Sacralisation du territoire · Mémoire de l'unité</p>
+        </div>
+      </div>
+
+      <p>Au-delà de la question historique de l'origine du système des douze tribus, ce système accomplit plusieurs fonctions décisives qui expliquent sa persistance extraordinaire — dans le texte, dans la liturgie, et même dans le messianisme juif et chrétien.</p>
+
+      <p><strong>Il crée une égalité de principe entre des groupes inégaux en réalité.</strong> Juda domine politiquement, Éphraïm démographiquement — mais dans le récit, chaque tribu est un fils de Jacob, donc également héritière de la promesse. C'est une constitution symbolique qui contient les conflits de pouvoir en les encodant dans un langage généalogique sacré. Aucune tribu ne peut revendiquer une supériorité absolue sans s'exclure du cadre narratif commun.</p>
+
+      <p><strong>Il intègre les étrangers sous couverture généalogique.</strong> Les groupes absorbés — Calébites, Kénites, populations cananéennes sédentarisées — deviennent des «&nbsp;fils de Jacob&nbsp;» par adoption narrative. Le mythe généalogique est une machine à intégration sociale. On n'entre pas dans Israël par la conquête — on entre par le récit.</p>
+
+      <p><strong>Il distribue le territoire de manière sacrée.</strong> L'attribution des terres par tirage au sort devant Yahvé (Josué 18–19) fait de chaque portion territoriale un don divin, non une conquête humaine. Cela sacralise le territoire et interdit théoriquement sa vente perpétuelle — ce que la loi du jubilé (Lévitique 25) institutionnalisera en prescrivant la restitution de toute terre vendue tous les cinquante ans.</p>
+
+      <p><strong>Il maintient la mémoire de l'unité dans la division.</strong> Même après la scission en deux royaumes (931 av.), même après la disparition des dix tribus du Nord (722 av.), la référence aux douze tribus reste vivante — comme horizon idéal d'une unité perdue à restaurer. Elle résonne dans le Nouveau Testament (Jésus choisit délibérément douze apôtres — pas onze, pas treize) et dans l'apocalyptique juive (les douze tribus scellées en Apocalypse 7). Le chiffre douze est un programme eschatologique autant qu'une mémoire historique.</p>
+
+      <p><strong>Il fonde une identité sans territoire obligatoire.</strong> Peut-être le plus remarquable — les Juifs de la diaspora maintiennent leur identité pendant deux mille ans sans territoire fixe, sans État, sans temple depuis 70 ap. J.-C. La mémoire des douze tribus, encodée dans la liturgie (le Grand Hallel, les prières pour la réunification des tribus dans la dix-huitième bénédiction de l'Amida), prouve que l'identité peut survivre indéfiniment sans les supports matériels qu'on croit ordinairement nécessaires. Le territoire est le moins essentiel des liens identitaires dans la tradition israélite.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XIII — SYNTHÈSE -->
+    <section class="section" id="s13">
+      <div class="section-header">
+        <span class="section-numero">XIII</span>
+        <div>
+          <h2 class="section-titre">Synthèse — la séquence des identités</h2>
+          <p class="section-sous-titre">De la crise de 1200 à la confédération · Un peuple qui se fait en se racontant</p>
+        </div>
+      </div>
+
+      <p>Au terme de ce parcours, il est possible de proposer une synthèse de la formation de l'identité israélite qui évite les deux écueils symétriques&nbsp;: le concordisme naïf (chaque récit biblique comme rapport d'événements) et le scepticisme gratuit (tout est invention tardive sans substrat réel).</p>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">◈ Synthèse — La formation de l'identité israélite en cinq étapes</div>
+        <p><strong>1. La crise (XIIe s.).</strong> L'effondrement du Bronze Récent (~1200) crée un vide de pouvoir dans le Levant. Des groupes hétérogènes — anciens paysans cananéens, nomades se sédentarisant, peut-être un noyau porteur d'une mémoire de l'Égypte — convergent vers les hautes terres de Canaan. Ils sont différenciés de leurs voisins par un marqueur matériel (absence de porc) et progressivement par un marqueur cultuel (Yahvé). La Stèle de Merneptah (1208) atteste que l'un de ces groupes est déjà connu sous le nom d'«&nbsp;Israël&nbsp;».</p>
+        <p><strong>2. La confédération (XIe–Xe s.).</strong> Face à la pression philistine et à d'autres menaces extérieures, les clans des hautes terres développent des alliances militaires inter-tribales. Le Cantique de Déborah atteste une confédération de dix tribus. La mémoire narrative commune — le cycle Exode-Alliance-Terre promise — circule oralement et crée un sentiment d'appartenance trans-tribal. Le culte de Yahvé à des sanctuaires partagés (Silo, Béthel) cimente la cohésion.</p>
+        <p><strong>3. La monarchie (Xe s.).</strong> La pression philistine accélère la demande d'un commandement unique. Saül, puis David, puis Salomon unifient temporairement les clans sous une autorité royale. La liste des douze tribus est cristallisée administrativement sous Salomon (1 Rois 4). Mais l'unité politique est fragile — la scission de 931 révèle la profondeur des tensions entre Nord et Sud.</p>
+        <p><strong>4. La division et la fixation littéraire (IXe–VIIe s.).</strong> Les deux royaumes développent des traditions parallèles (source J dans le Sud, source E dans le Nord). La chute du Nord (722) force le Sud à absorber les traditions nordistes. La réforme de Josias (~621) produit la grande rédaction deutéronomiste qui fixe la liste des douze tribus dans sa forme canonique comme programme politique de réunification.</p>
+        <p><strong>5. La diaspora et la survie (VIe s. et après).</strong> La destruction du Temple (587) et l'exil babylonien contraignent le groupe à repenser son identité sans temple ni territoire. La réponse — développée au cours des siècles suivants — est d'encoder l'identité dans le texte, dans la pratique quotidienne, dans la mémoire liturgique. C'est la naissance du judaïsme rabbinique, qui survit à travers deux mille ans de diaspora en portant la mémoire des douze tribus comme horizon eschatologique.</p>
+      </div>
+
+      <p>Ce qu'on nomme «&nbsp;Israël&nbsp;» n'est pas une donnée de la nature — c'est une construction historique étalée sur plusieurs siècles, une identité forgée dans la crise et consolidée dans la mémoire. Mais ce n'est pas non plus une fiction politique tardive sans substrat réel — c'est une réalité vivante dès le XIIe siècle, ancrée dans des pratiques matériellement observables (l'absence de porc vaut n'importe quel traité d'identité), portée par des groupes humains qui ont choisi, progressivement, de se raconter la même histoire.</p>
+
+      <p>Cette double vérité — construction et réalité, invention et mémoire, mythe fondateur et substrat historique — est précisément ce qui donne à ce peuple sa singularité dans l'histoire universelle. Peu de groupes humains ont maintenu une identité aussi cohérente sur une durée aussi longue avec aussi peu d'infrastructure étatique continue. La mémoire des douze tribus, portée dans un texte que chaque génération relit, est l'architecture invisible de cette durée extraordinaire.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Question en suspens — vers le chapitre VII</span>
+        </div>
+        <div class="encadre-body">
+          <p>Une tension fondamentale traverse tout ce chapitre et ouvre directement sur le suivant&nbsp;: le passage de la confédération tribale à la monarchie est présenté dans la Bible comme une demande du peuple («&nbsp;donne-nous un roi comme les autres nations&nbsp;» — 1 Samuel 8,5) que Yahvé accorde à contrecœur, en avertissant des dangers du pouvoir royal. Ce récit est d'une honnêteté politique remarquable pour un texte dynastique — et soulève une question cruciale. Comment la structure tribale — fondée sur l'égalité symbolique des fils de Jacob — a-t-elle survécu à la centralisation monarchique&nbsp;? Et que signifie l'échec de Saül, le premier roi, pour la dynamique entre les tribus et la maison de David qui lui succède&nbsp;?</p>
+          <p>Ces questions seront l'objet du chapitre VII — les royaumes de Saül, David et Salomon, au carrefour de la critique historique la plus vive de toute l'archéologie biblique contemporaine.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION CHAPITRES -->
+        <nav class="nav-chapitres">
+      <a href="chapitre-05-moise-exode.html" class="nav-btn">← Chapitre V</a>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <a href="chapitre-07-les-royaumes.html" class="nav-btn">Chapitre VII →</a>
+    </nav>
+
+  </article>
+</main>
+
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+
+  if (scrolled > 400) {
+    btnTop.classList.add('visible');
+  } else {
+    btnTop.classList.remove('visible');
+  }
+
+  highlightActiveSection();
+});
+
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+
+
+// ── Overlay sidebar mobile ──────────────────────────────
+const _overlay = document.getElementById('sidebar-overlay');
+const _sidebar  = document.getElementById('sidebar');
+const _toggle   = document.getElementById('menu-toggle');
+
+function toggleSidebar() {
+  const isOpen = _sidebar.classList.toggle('open');
+  if (_overlay) _overlay.classList.toggle('visible', isOpen);
+}
+
+if (_overlay) {
+  _overlay.addEventListener('click', () => {
+    _sidebar.classList.remove('open');
+    _overlay.classList.remove('visible');
+  });
+}
+// Fermer aussi en cliquant en dehors
+</script>
+
+</body>
+</html>

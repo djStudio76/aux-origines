@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre VII — Les Royaumes · Aux Origines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ BARRE DE PROGRESSION ═══ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav { padding: 1rem 0; flex: 1; }
+
+.chapitre-item {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,237,224,0.55);
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1.4;
+}
+
+.chapitre-item:hover { color: var(--or-pale); background: rgba(200,148,58,0.06); }
+
+.chapitre-item.actif {
+  color: var(--or-pale);
+  background: rgba(200,148,58,0.1);
+  border-left: 2px solid var(--or);
+}
+
+.chap-numero {
+  display: block;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--or);
+  opacity: 0.6;
+  margin-bottom: 0.15rem;
+}
+
+.section-item {
+  display: block;
+  padding: 0.3rem 1.5rem 0.3rem 2.2rem;
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.38);
+  text-decoration: none;
+  transition: color 0.2s;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.section-item:hover { color: rgba(245,237,224,0.7); }
+.section-item.active-section { color: var(--or-pale); }
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.1);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══ BOUTON MENU MOBILE ═══ */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 200;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 3px;
+  width: 40px; height: 40px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══ ZONE PRINCIPALE ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══ FRONTISPICE ═══ */
+.chapter-hero {
+  position: relative;
+  padding: 5rem 3rem 4rem;
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-ornement {
+  font-family: var(--font-titre);
+  color: var(--or);
+  opacity: 0.3;
+  letter-spacing: 1.2em;
+  font-size: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.hero-numero {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 1.2rem;
+}
+
+.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 400;
+  color: var(--encre);
+  line-height: 1.15;
+  margin-bottom: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-epigraphe {
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  padding: 1.5rem 2rem;
+  border: 1px solid rgba(200,148,58,0.25);
+  background: rgba(200,148,58,0.04);
+  border-radius: 3px;
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--encre-douce);
+  line-height: 1.7;
+  text-align: left;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  margin-top: 0.8rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+  font-style: normal;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto 1rem;
+  max-width: 300px;
+}
+
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--or), transparent);
+  opacity: 0.35;
+}
+
+.deco-ligne-symbole {
+  color: var(--or);
+  opacity: 0.5;
+  font-size: 0.8rem;
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--or) 30%, var(--or-vif) 50%, var(--or) 70%, transparent);
+  opacity: 0.2;
+}
+
+/* ═══ CONTENU ═══ */
+.contenu {
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  padding: 3rem 2.5rem 6rem;
+}
+
+/* ═══ SECTIONS ═══ */
+.section {
+  margin-bottom: 3.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+.section-numero {
+  font-family: var(--font-titre);
+  font-size: 2.2rem;
+  color: var(--or);
+  opacity: 0.18;
+  line-height: 1;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--encre);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.88rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ═══ PARAGRAPHES ═══ */
+p {
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  hyphens: auto;
+  text-align: justify;
+}
+
+p:last-child { margin-bottom: 0; }
+
+p::first-letter {
+  float: left;
+  font-family: var(--font-titre);
+  font-size: 3.2rem;
+  line-height: 0.75;
+  margin-right: 0.12em;
+  margin-top: 0.12em;
+  color: var(--or);
+  font-weight: 700;
+}
+
+.section p + p::first-letter { float: none; font-size: inherit; color: inherit; line-height: inherit; margin: 0; }
+
+h3 {
+  font-family: var(--font-titre);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brun);
+  margin: 2.2rem 0 0.9rem;
+}
+
+h4 {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--encre-douce);
+  margin: 1.8rem 0 0.7rem;
+}
+
+strong { color: var(--encre); font-weight: 600; }
+
+.heb {
+  font-size: 1.3rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem 1rem 1.8rem;
+  border-left: 3px solid var(--or);
+  background: rgba(200,148,58,0.05);
+  font-style: italic;
+  color: var(--encre-douce);
+  border-radius: 0 3px 3px 0;
+}
+
+blockquote p { margin-bottom: 0.3rem; font-size: 1.02rem; }
+blockquote p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+blockquote cite {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-titre);
+  letter-spacing: 0.08em;
+  color: var(--or);
+  margin-top: 0.6rem;
+  font-style: normal;
+}
+
+/* ═══ NOTE MÉTHODOLOGIQUE ═══ */
+.note-methodo {
+  margin: 0 0 2.5rem 0;
+  padding: 1.3rem 1.6rem;
+  background: rgba(200,148,58,0.07);
+  border: 1px solid rgba(200,148,58,0.22);
+  border-radius: 4px;
+}
+
+.note-methodo-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.7rem;
+  opacity: 0.85;
+}
+
+.note-methodo p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.7;
+  margin-bottom: 0.6rem;
+}
+
+.note-methodo p:last-child { margin-bottom: 0; }
+
+/* ═══ TABLEAUX ═══ */
+.tableau-wrapper {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border-radius: 4px;
+  border: 1px solid rgba(139,94,60,0.2);
+}
+
+.tableau-titre {
+  padding: 0.65rem 1.2rem;
+  background: rgba(26,18,8,0.06);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+thead th {
+  padding: 0.65rem 1rem;
+  background: rgba(26,18,8,0.85);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 400;
+}
+
+tbody tr { border-bottom: 1px solid rgba(139,94,60,0.1); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even) { background: rgba(200,148,58,0.03); }
+
+tbody td {
+  padding: 0.65rem 1rem;
+  color: var(--encre-douce);
+  vertical-align: top;
+}
+
+tbody td:first-child {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+/* ═══ TIMELINE ═══ */
+.timeline {
+  margin: 2rem 0;
+  padding-left: 2rem;
+  border-left: 2px solid rgba(200,148,58,0.2);
+}
+
+.timeline-item {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.55rem;
+  top: 0.55rem;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--or);
+  opacity: 0.5;
+}
+
+.timeline-epoch {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.3rem;
+}
+
+.timeline-titre {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-corps {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.65;
+}
+
+/* ═══ BOÎTE SYNTHÈSE ═══ */
+.synthese-bloc {
+  margin: 3rem 0;
+  padding: 2rem 2.2rem;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.synthese-bloc::before {
+  content: '✦';
+  position: absolute;
+  top: -1rem; right: 1rem;
+  font-size: 5rem;
+  color: var(--or);
+  opacity: 0.05;
+  font-family: var(--font-titre);
+}
+
+.synthese-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.synthese-bloc p {
+  color: var(--parchemin-fonce);
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  text-align: left;
+}
+
+.synthese-bloc p::first-letter { float: none; font-size: inherit; color: inherit; }
+.synthese-bloc strong { color: var(--or-pale); }
+
+/* ═══ ENCADRÉS ═══ */
+.encadre {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(200,148,58,0.22);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encadre-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1.3rem;
+  background: rgba(200,148,58,0.08);
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+}
+
+.encadre-icone {
+  color: var(--or);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.encadre-label {
+  font-family: var(--font-titre);
+  font-size: 0.63rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+.encadre-body {
+  padding: 1.2rem 1.5rem;
+}
+
+.encadre-body p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  margin-bottom: 0.7rem;
+  text-align: left;
+}
+
+.encadre-body p::first-letter { float: none; font-size: inherit; color: inherit; }
+.encadre-body p:last-child { margin-bottom: 0; }
+
+/* ═══ GRILLE DEUX ROYAUMES ═══ */
+.deux-royaumes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin: 2rem 0;
+}
+
+.royaume-card {
+  padding: 1.4rem 1.5rem;
+  border: 1px solid rgba(200,148,58,0.2);
+  border-radius: 4px;
+  background: var(--parchemin-pale);
+}
+
+.royaume-card.nord { border-top: 3px solid #7a3b1a; }
+.royaume-card.sud  { border-top: 3px solid var(--or); }
+
+.royaume-nom {
+  font-family: var(--font-titre);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--brun);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.royaume-detail {
+  font-size: 0.86rem;
+  color: var(--encre-douce);
+  line-height: 1.6;
+  margin-bottom: 0.35rem;
+}
+
+.royaume-detail strong {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--or);
+  font-weight: 600;
+  display: inline-block;
+  min-width: 85px;
+}
+
+/* ═══ GRILLE ROIS ═══ */
+.rois-sequence {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.roi-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.5rem 0.8rem;
+  border-left: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.roi-item:hover { border-left-color: var(--or); background: rgba(200,148,58,0.03); }
+
+.roi-dates {
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--or);
+  opacity: 0.7;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.roi-nom {
+  font-family: var(--font-titre);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--brun);
+  min-width: 130px;
+  flex-shrink: 0;
+}
+
+.roi-note {
+  font-size: 0.86rem;
+  color: var(--encre-douce);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ═══ SOURCES ARCHÉOLOGIQUES ═══ */
+.source-arche {
+  margin: 0.8rem 0;
+  padding: 0.9rem 1.2rem;
+  background: rgba(26,18,8,0.04);
+  border-radius: 3px;
+  border: 1px solid rgba(139,94,60,0.12);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.source-icone {
+  font-size: 1.1rem;
+  color: var(--or);
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.source-corps {
+  flex: 1;
+}
+
+.source-titre {
+  font-family: var(--font-titre);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--brun);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
+.source-texte {
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+  line-height: 1.55;
+}
+
+/* ═══ ORNEMENT ═══ */
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+/* ═══ BTN RETOUR EN HAUT ═══ */
+#btn-top {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-family: var(--font-titre);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+
+#btn-top.visible { opacity: 0.7; }
+#btn-top:hover { opacity: 1; }
+
+/* ═══ NAV CHAPITRES ═══ */
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.25);
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover { background: rgba(200,148,58,0.08); color: var(--brun); border-color: var(--or); }
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.7rem;
+  color: var(--or);
+  opacity: 0.5;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+
+  #main { margin-left: 0; }
+
+  #menu-toggle { display: flex; }
+
+  .chapter-hero { padding: 4rem 1.5rem 3rem; }
+
+  .contenu { padding: 2rem 1.2rem 4rem; }
+
+  .deux-royaumes { grid-template-columns: 1fr; }
+
+  .roi-item { flex-wrap: wrap; }
+
+  #btn-top { bottom: 1.2rem; right: 1.2rem; }
+}
+
+
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — REFONTE COMPLÈTE
+   Cible : tablette (≤900px) + mobile (≤600px)
+═══════════════════════════════════════════ */
+
+/* --- Tableaux : toujours scrollables horizontalement --- */
+.tableau-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  min-width: 480px; /* force scroll sur narrow plutôt que d'écraser */
+}
+/* Supprimer le nowrap qui déborde */
+tbody td:first-child {
+  white-space: normal;
+}
+
+/* --- Tablette (sidebar cachée) --- */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  body { display: block; } /* évite les artefacts flex sur iOS */
+
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: min(300px, 85vw);
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 6px 0 40px rgba(0,0,0,0.6);
+  }
+
+  #main { margin-left: 0; }
+
+  #menu-toggle { display: flex !important; }
+
+  .contenu { padding: 2rem 1.5rem 4rem; }
+
+  /* Débat 2 colonnes → 1 colonne */
+  .debat { grid-template-columns: 1fr; }
+
+  /* Note marginale flottante → inline */
+  .note-marge {
+    float: none;
+    width: 100%;
+    margin: 1.2rem 0;
+  }
+
+  /* Timeline */
+  .timeline::before { left: 72px; }
+  .timeline-date { width: 62px; font-size: 0.65rem; }
+
+  /* Navigation bas */
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: stretch;
+  }
+  .nav-btn { justify-content: center; }
+
+  /* Section header : empiler le numéro + titre */
+  .section-header {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .section-numero {
+    align-self: flex-start;
+  }
+}
+
+/* --- Mobile (≤ 600px) --- */
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+
+  /* Hero */
+  .chapter-hero {
+    min-height: 45vh;
+    padding: 4rem 1.2rem 3rem;
+  }
+  .hero-ornement { font-size: 1rem; letter-spacing: 0.3em; }
+  .hero-titre { font-size: clamp(1.7rem, 8vw, 2.6rem) !important; }
+  .hero-sous-titre { font-size: 0.95rem; }
+  .hero-epigraphe { font-size: 0.9rem; }
+
+  /* Contenu */
+  .contenu { padding: 1.5rem 1rem 3rem; }
+
+  /* Synthèse */
+  .synthese { padding: 1.5rem 1rem; }
+
+  /* Blockquote */
+  blockquote {
+    padding: 0.8rem 1rem;
+    margin-left: 0;
+  }
+
+  /* Encadré */
+  .encadre-body { padding: 1rem; }
+
+  /* Timeline : tout sur une colonne */
+  .timeline::before { display: none; }
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid var(--or);
+    margin-bottom: 1rem;
+  }
+  .timeline-date {
+    width: auto;
+    text-align: left;
+    padding-right: 0;
+    font-size: 0.68rem;
+    color: var(--or);
+  }
+  .timeline-dot { display: none; }
+  .timeline-texte { padding-left: 0; }
+
+  /* Tableaux : hint visuel de scroll */
+  .tableau-wrapper {
+    position: relative;
+  }
+  .tableau-wrapper::after {
+    content: '→ scroll';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-family: var(--font-titre);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--or);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Menu toggle : mieux positionné */
+  #menu-toggle {
+    top: 0.7rem;
+    left: 0.7rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  /* Btn top */
+  #btn-top {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* Séparateurs ornementaux */
+  .ornement-sep { letter-spacing: 0.4em; }
+}
+
+/* Overlay sidebar mobile */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 99;
+  cursor: pointer;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Scrollbar sidebar */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Lien retour accueil */
+.sidebar-home {
+  display: block;
+  padding: 0.55rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.6;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="sidebar-overlay"></div>
+
+<button id="menu-toggle" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<!-- ══════════════════════════════
+     SIDEBAR NAVIGATION
+══════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique interactif</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la cosmogonie à la naissance d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="chapitre-01-cosmogonie.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-02-origines-mythiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-03-langues-semitiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-05-moise-exode.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-06-israel-tribus.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-08-age-prophetique.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-11-palestine-1948.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     CONTENU PRINCIPAL
+══════════════════════════════ -->
+<main id="main">
+
+  <!-- FRONTISPICE -->
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre VII</div>
+    <h1 class="hero-titre">Les Royaumes</h1>
+    <p class="hero-sous-titre">Saül, David, Salomon — de la monarchie unifiée à la catastrophe de 587</p>
+    <blockquote class="hero-epigraphe">
+      <span class="heb">וַיֹּאמֶר הַמֶּלֶךְ בָּנָה בָנִיתִי בֵּית זְבֻל לְךָ מָכוֹן לְשִׁבְתְּךָ עוֹלָמִים</span><br>
+      <em>Vayomer ha-melekh bano vaniti beit zevul lekha makhon leshivtekha olamim</em><br>
+      « Le roi dit&nbsp;: J'ai bâti pour toi une maison princière, un lieu d'où tu régneras pour les siècles. »<br>
+      Pourtant les cieux et les cieux des cieux ne peuvent te contenir —<br>
+      combien moins cette maison que j'ai bâtie.
+      <cite>— 1 Rois 8, 13 &amp; 27</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <!-- CORPS -->
+  <article class="contenu">
+
+    <!-- INTRODUCTION MÉTHODOLOGIQUE -->
+    <section class="section" id="s0">
+      <div class="note-methodo">
+        <div class="note-methodo-label">⚑ Posture méthodologique — Historien · Bibliste · Archéologue · Théologien</div>
+        <p>Ce chapitre est le carrefour de l'archéologie biblique contemporaine. Nulle autre période de l'histoire d'Israël ne suscite autant de débats savants, avec des enjeux qui débordent largement l'académie&nbsp;: la question de la taille réelle de l'«&nbsp;empire&nbsp;» davidico-salomonien touche directement aux revendications territoriales, aux identités nationales, aux légitimités politiques du Proche-Orient actuel. Il faut donc procéder avec une rigueur particulière.</p>
+        <p>Quatre postures sont ici simultanément requises. L'<strong>historien</strong> corrèle les récits bibliques avec les sources extra-bibliques assyriennes, babyloniennes, égyptiennes. L'<strong>bibliste</strong> distingue les strates rédactionnelles des livres de Samuel et des Rois — textes compilés au plus tôt au IXe siècle, dans leur forme deutéronomiste définitive au VIIe–VIe siècle, soit deux à quatre siècles après les événements qu'ils rapportent. L'<strong>archéologue</strong> lit les tells, les céramiques, les inscriptions — et rappelle que les données matérielles ne parlent pas d'elles-mêmes&nbsp;: elles s'interprètent, dans un contexte de débat scientifique intense entre maximalistes et minimalistes. Le <strong>théologien</strong> identifie ce que les récits monarchiques cherchent à signifier au-delà de l'événementiel — la théologie davidique, la symbolique du Temple, la signification de la scission et de la catastrophe finale.</p>
+        <p>Trois questions structurent ce chapitre&nbsp;: Qu'était réellement la monarchie unifiée de David et Salomon&nbsp;? Pourquoi la division était-elle inévitable&nbsp;? Et comment la destruction de 587 av. J.-C. a-t-elle produit, paradoxalement, la naissance du judaïsme.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION I — SAÜL -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-numero">I</span>
+        <div>
+          <h2 class="section-titre">Saül — le roi par défaut</h2>
+          <p class="section-sous-titre">La demande du peuple · Benjamin comme compromis tribal · Archéologie de Guibeah</p>
+        </div>
+      </div>
+
+      <p>Le passage de la confédération tribale à la monarchie est présenté dans la Bible avec une franchise politique remarquable pour un texte dynastique. La demande émane du peuple lui-même — «&nbsp;donne-nous un roi comme les autres nations&nbsp;» — que Samuel transmet à Yahvé avec répugnance, et que Yahvé accorde à contrecœur, en avertissant des conséquences&nbsp;: le roi prendra vos fils, vos filles, vos champs, votre dîme. Ce texte (1 Samuel 8) est probablement une réflexion deutéronomiste rétrospective sur l'échec final de la monarchie — mais il préserve aussi quelque chose d'historiquement vraisemblable&nbsp;: la monarchie naissante est une réponse de crise à la pression philistine, pas un idéal institutionnel.</p>
+
+      <h3>Le choix de Benjamin — une logique tribale</h3>
+
+      <p>Saül fils de Qish appartient à la tribu de Benjamin — la plus petite de la confédération, coincée entre les deux grandes puissances tribales, Éphraïm au nord et Juda au sud. Ce choix n'est pas accidentel. Choisir un Benjaminite comme premier roi est un compromis politiquement lisible&nbsp;: ni Éphraïm, qui domine les hautes terres centrales, ni Juda, dont la tribu contrôlera Jérusalem, ne peut tolérer que l'autre prenne la tête de la confédération. Benjamin est la solution neutre, une entité suffisamment petite pour ne menacer personne, suffisamment centrale pour être acceptable de tous. On retrouve cette logique dans toutes les monarchies naissantes de l'Antiquité.</p>
+
+      <p>L'onction de Saül est double dans la tradition — une onction privée par Samuel (1 Samuel 10,1) et une désignation publique par le sort à Mitspah (10,20–24), scène qui révèle le futur roi caché parmi les bagages, «&nbsp;il dépassait tout le peuple de l'épaule en haut&nbsp;». La description physique est programmatique&nbsp;: le chef charismatique se reconnaît d'abord à sa stature.</p>
+
+      <h3>Ce que l'archéologie dit de Saül</h3>
+
+      <p>Contrairement à David, pour lequel l'inscription de Tel Dan fournit une attestation externe, Saül n'est mentionné dans aucune source extra-biblique. Son règne est archéologiquement quasi-invisible. Les fouilles de Guibeah — Tell el-Ful, près de Jérusalem actuelle, identifiée comme la capitale de Saül — ont révélé une forteresse modeste du XIe siècle. Pas un palais, pas une administration complexe. C'est cohérent avec le portrait biblique d'un chef de guerre tribal plutôt que d'un monarque institutionnel. Israel Finkelstein et d'autres estiment que Saül régnait sur un territoire limité — essentiellement les hautes terres de Benjamin et de la Samarie centrale — avec peut-être quelques milliers de guerriers, très loin des armées décrites dans les textes tardifs.</p>
+
+      <h3>La tension prophète-roi — le péché structurel de Saül</h3>
+
+      <p>Le règne de Saül est scandé par ses conflits avec Samuel — et ces conflits révèlent une tension structurelle fondamentale que la monarchie israélite ne résoudra jamais complètement&nbsp;: le roi n'a pas le droit de faire ce que fait le prophète. Lors du sacrifice de Guilgal (1 Samuel 13), Saül attend Samuel avant une bataille imminente, son armée se disperse, Samuel ne vient pas au terme prévu. Saül offre lui-même le sacrifice — décision pragmatique et militairement rationnelle. Samuel arrive immédiatement après et prononce une condamnation qui semble disproportionnée&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;Tu as agi stupidement. Tu n'as pas gardé le commandement que Yahvé ton Dieu t'avait prescrit... Maintenant ton règne ne durera pas. Yahvé s'est cherché un homme selon son cœur.&nbsp;»</p>
+        <cite>— 1 Samuel 13, 13–14</cite>
+      </blockquote>
+
+      <p>C'est précisément le point&nbsp;: le roi n'a pas le droit de cumuler le sacerdoce et la royauté. La séparation des fonctions — roi et prêtre, roi et prophète — est un principe fondamental de la théologie yahviste, qui distingue Israël des monarchies mésopotamiennes où le roi est grand prêtre. La punition de Saül n'est pas une réaction disproportionnée à une erreur tactique — c'est l'affirmation d'un principe théologico-politique sur la limite du pouvoir royal.</p>
+
+      <p>La seconde rupture — l'affaire Agag et les Amalécites (1 Samuel 15) — confirme la même logique. Saül est chargé d'exterminer totalement les Amalécites selon la loi du <em>hérem</em> (consécration à la destruction). Il épargne le roi Agag et le meilleur du bétail. Samuel exécute Agag lui-même, et prononce l'arrêt de mort dynastique&nbsp;: «&nbsp;Parce que tu as rejeté la parole de Yahvé, il t'a rejeté comme roi.&nbsp;» Saül n'a pas transgressé une loi morale — il a transgressé une loi de guerre sacrée. Les implications théologiques de cet épisode — le génocide commandé par Dieu — ont profondément perturbé la réflexion éthique ultérieure, de l'Antiquité aux philosophes des Lumières.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">La mort de Saül à Guilboa — un récit de défaite d'une dignité rare</span>
+        </div>
+        <div class="encadre-body">
+          <p>La mort de Saül à la bataille de Guilboa (1 Samuel 31) est l'un des passages les plus poignants de la Bible hébraïque. Blessé grièvement, abandonné de ses alliés, ses fils morts à ses côtés, il demande à son écuyer de l'achever pour qu'il ne tombe pas aux mains des Philistins. L'écuyer refuse. Saül se jette sur son épée.</p>
+          <p>Les Philistins trouvent les corps, exposent la tête de Saül dans le temple de Dagon et clouent ses dépouilles aux murs de Bet-Shéan. Les habitants de Yabesh de Galaad — ville que Saül avait sauvée en début de règne — marchent toute la nuit pour décrocher les corps et leur donner une sépulture décente. Ce geste de fidélité posthume, au cœur de la défaite la plus totale, est l'un des rares moments où la solidarité tribale dépasse tous les calculs politiques. David lui-même, en apprenant la mort de Saül et de Jonathan, ne se réjouit pas — il déchire ses vêtements et compose la Qinah (lamentation) la plus célèbre de la Bible hébraïque&nbsp;: <em>«&nbsp;Comment les héros sont-ils tombés&nbsp;!&nbsp;»</em> (2 Samuel 1,19–27).</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION II — DAVID ASCENSION -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-numero">II</span>
+        <div>
+          <h2 class="section-titre">David — une ascension de vingt ans</h2>
+          <p class="section-sous-titre">Hébron · Mahanaïm · Guerre civile · La troisième onction</p>
+        </div>
+      </div>
+
+      <p>David ne remplace pas simplement Saül. Il accède au pouvoir par un chemin tortueux, violent et politiquement ambigu que la Bible raconte avec une franchise narrative remarquable — sans chercher à embellir les zones d'ombre. C'est l'une des histoires politiques les plus réalistes de toute l'Antiquité, et paradoxalement, cette franchise narrative est l'un des arguments les plus forts en faveur de son substrat historique. Les textes construits pour glorifier un fondateur n'en font généralement pas un fugitif mercenaire au service des ennemis de son peuple.</p>
+
+      <h3>La fracture immédiate après Guilboa</h3>
+
+      <p>La mort de Saül crée instantanément une division. Au Nord, le général Abner, cousin de Saül et chef de son armée, traverse le Jourdain et installe à Mahanaïm en Transjordanie — hors de portée des Philistins — un quatrième fils de Saül que les récits précédents n'avaient jamais mentionné&nbsp;: Ishbaal (ou Ishboshet dans la version massorétique, qui remplace le nom «&nbsp;Baal&nbsp;» par <em>boshet</em>, «&nbsp;honte&nbsp;», pour éviter toute référence à la divinité cananéenne). Ishbaal est roi nominal sur les tribus du Nord — mais c'est Abner qui détient le pouvoir réel.</p>
+
+      <p>Au Sud, David, qui était en exil chez les Philistins pendant les dernières années du règne de Saül, remonte à Hébron en Judée. Il y est oint roi sur la seule tribu de Juda — sa tribu d'origine. Deux rois simultanés. Deux royaumes distincts. Une guerre civile inévitable.</p>
+
+      <h3>Sept ans et demi de guerre civile</h3>
+
+      <p>2 Samuel 3 décrit les escarmouches entre les partisans de David et ceux d'Ishbaal avec une formule qui dit tout&nbsp;: «&nbsp;La guerre fut longue entre la maison de Saül et la maison de David&nbsp;; mais David allait s'affermissant et la maison de Saül allait s'affaiblissant.&nbsp;» Le récit enregistre des morts suspectes qui profitent toutes à David — et prend soin à chaque fois de noter que David n'en était pas responsable, ou qu'il a puni les coupables. Qu'on cède à cette explication ou qu'on la tienne pour une construction rhétorique, la série reste frappante.</p>
+
+      <p>Abner se brouille avec Ishbaal pour une raison de harem royal — il prend une concubine de Saül, geste qui équivaut à une revendication du pouvoir royal. Il engage des négociations avec David pour livrer tout le Nord. Joab, le général de David, l'assassine en vengeance personnelle avant que la transaction soit complète. David pleure publiquement Abner et maudit Joab — mais ne le sanctionne pas. Ishbaal, privé de son soutien militaire, est assassiné dans son lit par deux de ses officiers qui apportent sa tête à David. David fait exécuter les meurtriers — et est le bénéficiaire direct de l'assassinat.</p>
+
+      <p>Les anciens d'Israël viennent alors à Hébron, concluent une alliance avec David, et l'oignent pour la troisième fois — cette fois roi sur tout Israël. Vingt ans se sont écoulés depuis la première onction secrète par Samuel.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Les trois onctions de David — séquence politique et théologique</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Onction</th>
+              <th>Lieu</th>
+              <th>Officiant</th>
+              <th>Portée</th>
+              <th>Signification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1ère — ~1010 av.</td>
+              <td>Bethléem</td>
+              <td>Samuel le prophète</td>
+              <td>Secrète — devant la famille de Jessé</td>
+              <td>Élection divine — pas encore royauté effective</td>
+            </tr>
+            <tr>
+              <td>2e — ~1003 av.</td>
+              <td>Hébron</td>
+              <td>Hommes de Juda</td>
+              <td>Roi de Juda seulement</td>
+              <td>Légitimité tribale méridionale</td>
+            </tr>
+            <tr>
+              <td>3e — ~1000 av.</td>
+              <td>Hébron</td>
+              <td>Anciens d'Israël</td>
+              <td>Roi de tout Israël — par alliance contractuelle</td>
+              <td>Légitimité pan-tribale fondée sur un pacte, pas sur la naissance</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Ce tableau révèle quelque chose de fondamental sur la nature de la monarchie davidique&nbsp;: elle n'est pas simplement héréditaire, elle est contractuelle. David devient roi d'Israël non par droit dynastique — il n'y a pas de droit davidique au moment où il prend le pouvoir sur le Nord — mais parce que les anciens des tribus concluent avec lui une alliance (<em>brit</em>). Cette alliance contractuelle entre le roi et les représentants du peuple est un principe constitutionnel implicite que les successeurs de David oublieront à leurs dépens — Roboam le premier.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION III — DAVID ROI -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-numero">III</span>
+        <div>
+          <h2 class="section-titre">David roi — Jérusalem, l'empire et ses ombres</h2>
+          <p class="section-sous-titre">La capture de la Ville de David · Bathshéba · Absalom · Les limites de l'empire</p>
+        </div>
+      </div>
+
+      <p>Le premier acte politique de David roi de tout Israël est d'une intelligence remarquable&nbsp;: il s'empare de Jérusalem, ville jébusienne encore indépendante, n'appartenant à aucune tribu, coincée entre Juda et Benjamin. C'est le geste de neutralité politique fondateur. En choisissant une ville neuve — sa propre ville, acquise par conquête militaire personnelle, sans histoire tribale — David crée une capitale dynastique qui n'appartient à aucune tribu et offense donc toutes les jalousies de la même manière.</p>
+
+      <h3>Jérusalem — la capitale d'un roi sans territoire tribal</h3>
+
+      <p>La capture de Jérusalem (2 Samuel 5,6–9) est décrite brièvement et avec une obscurité textuelle notable. Les Jébusiens provoquent David en disant que les aveugles et les boiteux suffiraient à défendre la ville. David prend la citadelle de Sion «&nbsp;par le tsinor&nbsp;» — terme hébreu traduit tantôt par «&nbsp;conduit d'eau&nbsp;» ou «&nbsp;grappin&nbsp;», dont le sens exact est débattu. L'archéologue Kathleen Kenyon a fouillé la Cité de David dans les années 1960–1970 et identifié une occupation significative au XIe–Xe siècle. Les fouilles ultérieures d'Eilat Mazar (2005–2008) ont mis au jour ce qu'elle interprète comme une «&nbsp;Grande Structure&nbsp;» pouvant être le palais de David — interprétation que d'autres archéologues, dont Israel Finkelstein, contestent.</p>
+
+      <p>L'installation de l'Arche de l'Alliance à Jérusalem (2 Samuel 6) est un acte religieux chargé d'une signification politique considérable. L'Arche — symbole de la présence divine et de l'alliance mosaïque — est ainsi associée à la nouvelle capitale. David danse devant l'Arche «&nbsp;de toutes ses forces&nbsp;», vêtu d'un simple éphod. Sa femme Mikal, fille de Saül, le méprise pour cette démonstration peu royale. David lui répond avec une fierté qui sonne comme un manifeste théologique&nbsp;: «&nbsp;C'est devant Yahvé que j'ai dansé... je m'abaisserai encore plus que cela.&nbsp;» Mikal mourra stérile — sentence narrative qui signifie l'extinction de la ligne de Saül.</p>
+
+      <h3>Les ombres du règne — Bathshéba et Absalom</h3>
+
+      <p>Le récit du règne de David dans 2 Samuel est unique dans la littérature monarchique ancienne par sa volonté de montrer les défaillances du roi. L'affaire Bathshéba (2 Samuel 11–12) est narrée sans atténuation&nbsp;: David voit Bathshéba se baigner, la fait amener, couche avec elle. Elle est enceinte. Il fait rappeler son mari Urie le Hittite du front, pour lui faire couvrir la grossesse. Urie, homme d'honneur, refuse de dormir dans sa maison pendant que ses camarades campent. David l'envoie à la mort en plaçant sa lettre à Joab dans sa propre main — «&nbsp;Mettez Urie en première ligne, devant le plus fort du combat, puis retirez-vous derrière lui pour qu'il soit frappé et qu'il meure.&nbsp;» Urie meurt. David épouse Bathshéba.</p>
+
+      <p>Le prophète Nathan vient trouver David et lui raconte la parabole du riche qui a volé la brebis du pauvre. David s'indigne. Nathan dit&nbsp;: «&nbsp;Tu es cet homme.&nbsp;» C'est l'une des scènes les plus puissantes de toute la Bible hébraïque — la confrontation entre le pouvoir royal absolu et la parole prophétique qui dit non. Elle pose le principe fondamental que le roi d'Israël n'est pas au-dessus de la loi divine, qu'aucun pouvoir ne peut faire taire le prophète.</p>
+
+      <p>La révolte d'Absalom (2 Samuel 15–18) est l'autre grande ombre du règne. Le fils préféré — «&nbsp;il n'y avait pas dans tout Israël d'homme aussi beau&nbsp;» — passe quatre ans à séduire le peuple à la porte de Jérusalem, interceptant les plaideurs et leur disant «&nbsp;si j'étais juge, tout homme qui viendrait avec un litige obtiendrait justice&nbsp;». Quand il se révolte, David fuit Jérusalem pieds nus, pleurant. La ville lui est reprise, mais David ordonne à Joab d'épargner Absalom. Joab plante trois javelots dans le cœur d'Absalom accroché par les cheveux dans un arbre. La mort d'Absalom arrache à David le cri de deuil le plus déchirant de la Bible hébraïque&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;Mon fils Absalom&nbsp;! Mon fils, mon fils Absalom&nbsp;! Que ne suis-je mort à ta place&nbsp;! Absalom, mon fils, mon fils&nbsp;!&nbsp;»</p>
+        <cite>— 2 Samuel 19, 1</cite>
+      </blockquote>
+
+      <h3>L'empire — réalité ou amplification ?</h3>
+
+      <p>La Bible décrit un empire davidique s'étendant «&nbsp;de l'Euphrate au torrent d'Égypte&nbsp;» (2 Samuel 8,3 ; 1 Rois 4,21). Les archéologues sont divisés. Israel Finkelstein, principal représentant de la position dite «&nbsp;minimaliste&nbsp;», soutient que Jérusalem au Xe siècle était un village de quelques hectares, pas une capitale impériale, et que l'«&nbsp;empire de David&nbsp;» est une projection rétrospective rédigée au VIIe siècle pour glorifier Josias. William Dever et Eilat Mazar, représentants de la position «&nbsp;maximaliste&nbsp;», maintiennent que les structures monumentales de la Cité de David attestent un État organisé dès le Xe siècle. Le débat porte sur des interprétations de séquences céramiques et des datations au carbone 14 — donc sur des marges d'incertitude techniquement mesurables mais politiquement très chargées.</p>
+
+      <p>Ce qui est raisonnable de conclure&nbsp;: David a très probablement existé — fondateur d'une lignée dynastique à Jérusalem au Xe siècle, chef de guerre ayant étendu le contrôle israélite sur les hautes terres de Canaan et peut-être au-delà. L'empire tel que le décrit la Bible est vraisemblablement amplifié par les rédacteurs deutéronomistes — mais un État centré sur Jérusalem et régnant sur les hautes terres de Judée et de Samarie, avec des positions en Transjordanie, est historiquement plausible.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IV — TEL DAN -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-numero">IV</span>
+        <div>
+          <h2 class="section-titre">L'inscription de Tel Dan — la première attestation extra-biblique</h2>
+          <p class="section-sous-titre">1993 · <em>bytdwd</em> — «&nbsp;maison de David&nbsp;» · Ce que confirme l'épigraphie · Ce qu'elle ne confirme pas</p>
+        </div>
+      </div>
+
+      <p>En 1993, lors des fouilles de Tel Dan dans le nord d'Israël, une stèle araméenne fragmentaire est découverte dans un contexte de réemploi secondaire (les fragments ont été utilisés comme matériaux de construction). Elle est datée du IXe siècle av. J.-C. et mentionne, en araméen, une victoire d'un roi araméen sur des ennemis dont l'un appartient à la «&nbsp;<em>bytdwd</em>&nbsp;» — <em>bet David</em>, «&nbsp;maison de David&nbsp;».</p>
+
+      <div class="source-arche">
+        <div class="source-icone">𓂀</div>
+        <div class="source-corps">
+          <div class="source-titre">Stèle de Tel Dan · ~840–820 av. J.-C. · Musée d'Israël, Jérusalem</div>
+          <div class="source-texte">Fragment araméen en basalte, découvert en 1993 (fragment A) et 1994 (fragments B1 et B2). La ligne 9 du fragment A contient <strong>bytdwd</strong> — «&nbsp;maison de David&nbsp;». La stèle semble commémorer une victoire du roi araméen de Damas (probablement Hazaël) contre une coalition comprenant le roi d'Israël et le roi de la «&nbsp;maison de David&nbsp;» — désignant le royaume de Juda. Première mention extra-biblique certifiée du nom de David.</div>
+        </div>
+      </div>
+
+      <p>L'importance de cette inscription est considérable&nbsp;: elle confirme que le nom «&nbsp;David&nbsp;» était utilisé au IXe siècle pour désigner la dynastie judéenne, qu'il s'agissait donc d'un fondateur historique réel dont la mémoire était vivante un ou deux siècles après son règne présumé, et que son nom servait à désigner l'État de Juda par métonymie dynastique — tout comme les Assyriens désignaient Israël comme «&nbsp;Bit Humri&nbsp;» (maison d'Omri) longtemps après la mort d'Omri.</p>
+
+      <p>Ce que l'inscription ne confirme pas&nbsp;: ni l'étendue de l'empire davidique, ni aucun des récits spécifiques des livres de Samuel. Elle atteste l'existence du personnage historique et de sa portée dynastique — rien de plus, rien de moins. C'est déjà considérable dans un domaine où les attestations externes de personnages bibliques du Xe siècle sont rarissimes.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Autres sources extra-bibliques attestant les rois d'Israël et de Juda</span>
+        </div>
+        <div class="encadre-body">
+          <p><strong>Obélisque Noir de Salmanasar III (~841 av.)&nbsp;:</strong> représente Jéhu d'Israël se prosternant devant le roi assyrien et payant tribut. Première représentation figurée d'un roi biblique. British Museum, Londres.</p>
+          <p><strong>Annales de Tiglath-Pileser III (~734–732 av.)&nbsp;:</strong> mentionnent le tribut de Menahem d'Israël (2 Rois 15,19) et la déportation de populations d'Israël — confirmation des récits de 2 Rois 15–16.</p>
+          <p><strong>Annales de Sargon II (~722 av.)&nbsp;:</strong> «&nbsp;J'ai assiégé et pris Samarie, j'ai emmené 27 290 de ses habitants.&nbsp;» Correspondance directe avec 2 Rois 17. Musée de Berlin.</p>
+          <p><strong>Prisme de Sennachérib (~701 av.)&nbsp;:</strong> «&nbsp;J'enfermai Ézéchias dans Jérusalem comme un oiseau en cage.&nbsp;» Récit parallèle à 2 Rois 18–19. British Museum, Londres.</p>
+          <p><strong>Chroniques babyloniennes (BM 21946) — 597 av.&nbsp;:</strong> donnent la date exacte de la première prise de Jérusalem — 2 Adar, 7e année de Nabuchodonosor — soit le 16 mars 597 av. J.-C. Correspondance parfaite avec 2 Rois 24,12.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION V — SALOMON SUCCESSION ET TEMPLE -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-numero">V</span>
+        <div>
+          <h2 class="section-titre">Salomon — le coup de palais et le Temple</h2>
+          <p class="section-sous-titre">La succession conflictuelle · Architecture du Temple · Théologie de la dédicace</p>
+        </div>
+      </div>
+
+      <p>Salomon est peut-être le personnage biblique pour lequel l'écart entre le récit biblique et la réalité historique reconstructible est le plus vertigineux. D'un côté — un empire d'une richesse fabuleuse, la sagesse universelle, le Temple d'or, la reine de Saba. De l'autre — une archéologie qui peine à trouver des traces significatives de tout cela à Jérusalem au Xe siècle. Entre ces deux extrêmes, une vérité historique partielle et fascinante se dessine.</p>
+
+      <h3>Le coup de palais</h3>
+
+      <p>David a de nombreux fils de femmes différentes. La question de la succession n'est pas réglée et provoque une crise dynastique. Amnon, fils aîné, est mort — tué par son demi-frère Absalom pour avoir violé Tamar. Absalom est mort lui-même dans la révolte. Adonias, le fils suivant, prend l'initiative quand David vieillit et s'affaiblit — il s'autoproclame roi avec le soutien de Joab le général et du prêtre Abiathar, organisant un banquet de couronnement de facto à En-Rôguel.</p>
+
+      <p>1 Rois 1 est un récit de coup de palais d'une précision politique remarquable. Pendant qu'Adonias festoie, Nathan le prophète et Bathshéba manœuvrent auprès du vieux David. Nathan vient d'abord trouver Bathshéba&nbsp;: «&nbsp;Tu n'as pas entendu qu'Adonias règne&nbsp;? Viens, laisse-moi te donner un conseil pour sauver ta vie et la vie de ton fils Salomon.&nbsp;» Ils entrent ensemble chez David mourant, lui rappellent une promesse (dont le texte antérieur ne fait pas état), et obtiennent l'ordre d'onction immédiate de Salomon. Salomon est conduit à la source de Guilhon sur la mule royale de David, oint par le prêtre Tsadoq et le prophète Nathan au son des trompettes. Quand le bruit de la fête parvient à Adonias et ses partisans, Joab comprend immédiatement&nbsp;: c'est fini. Adonias se réfugie à l'autel. Salomon lui promet la vie — provisoirement.</p>
+
+      <p>Le règne de Salomon s'ouvrira par la liquidation méthodique de tous ses adversaires potentiels&nbsp;: Adonias est exécuté sur un prétexte (il demande à épouser Abishag, la dernière concubine de David — geste qui pouvait être interprété comme une revendication dynastique). Abiathar est banni. Joab est exécuté, réfugié à l'autel, dans une scène d'une brutalité froide. La consolidation du pouvoir est complète.</p>
+
+      <h3>Le Temple — architecture sacrée et cosmologie</h3>
+
+      <p>La construction du Temple (1 Rois 6–7) est l'acte central du règne de Salomon et de toute la théologie monarchique d'Israël. La description architecturale occupe deux chapitres entiers avec une précision qui a fasciné architectes, théologiens et archéologues pendant des millénaires. Les dimensions en coudées (~45–50 cm)&nbsp;: longueur 60 coudées (≈ 27–30 m), largeur 20 coudées (≈ 9–10 m), hauteur 30 coudées (≈ 13–15 m). C'est un bâtiment modeste à l'échelle humaine — l'idée d'un Temple colossal est une projection de l'imaginaire postérieur — mais extraordinairement richement orné&nbsp;: murs lambrissés de bois de cèdre et plaqués d'or, chérubins d'olivier recouverts d'or dont les ailes déployées se rejoignent au centre du sanctuaire.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Structure tripartite du Temple de Salomon — et parallèles proche-orientaux</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Espace</th>
+              <th>Hébreu</th>
+              <th>Dimension approx.</th>
+              <th>Contenu / Fonction</th>
+              <th>Parallèle architectural</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vestibule</td>
+              <td><span class="heb">אוּלָם</span> <em>oulam</em></td>
+              <td>10 × 20 × 30 coudées</td>
+              <td>Entrée. Colonnes Yakhin et Boaz à l'entrée</td>
+              <td>Temple de Tell Tayinat (Syrie, IXe s.) ; temples de Hazor</td>
+            </tr>
+            <tr>
+              <td>Salle principale</td>
+              <td><span class="heb">הֵיכָל</span> <em>heikhal</em></td>
+              <td>20 × 40 coudées</td>
+              <td>Le «&nbsp;Saint&nbsp;» — chandelier d'or, table des pains de proposition, autel d'encens</td>
+              <td>Plan standard des temples levantin du Fer I–II</td>
+            </tr>
+            <tr>
+              <td>Saint des Saints</td>
+              <td><span class="heb">דְּבִיר</span> <em>devir</em></td>
+              <td>Cube de 20 coudées de côté</td>
+              <td>Obscurité totale — Arche de l'Alliance sous les chérubins. Accès du Grand Prêtre une fois l'an (Yom Kippour)</td>
+              <td>Cella de nombreux temples sémitiques — présence divine concentrée</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Ce plan tripartite — vestibule, salle principale, sanctuaire intérieur — est identique au plan de temples cananéens et syriens de la même époque retrouvés archéologiquement. Salomon ne révolutionne pas l'architecture religieuse proche-orientale — il l'adapte au culte de Yahvé. Pour les artisans, il fait appel à Hiram, roi de Tyr, qui envoie du bois de cèdre du Liban et surtout Hiram l'artisan (Huram-Abi) — fils d'une Naphtalie et d'un Tyrien — qui réalise les deux colonnes monumentales Yakhin et Boaz, la <em>yam</em> (mer d'airain — immense bassin reposant sur douze bœufs de bronze), et les dix chariots de bronze avec leurs bassins. La collaboration phénicienne est historiquement plausible&nbsp;: les Phéniciens sont les grands artisans et architectes de la région, l'alphabet hébreu lui-même dérive de l'alphabet phénicien.</p>
+
+      <h3>La théologie de la dédicace — une autocritique intégrée</h3>
+
+      <p>La prière de dédicace du Temple (1 Rois 8) est l'un des textes théologiquement les plus importants de toute la Bible hébraïque. Salomon y formule quelque chose de révolutionnaire, intégré à la dédicace de l'édifice lui-même&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;Mais Dieu habitera-t-il vraiment sur la terre&nbsp;? Voici, les cieux et les cieux des cieux ne peuvent te contenir — combien moins cette maison que j'ai bâtie&nbsp;!&nbsp;»</p>
+        <cite>— 1 Rois 8, 27</cite>
+      </blockquote>
+
+      <p>C'est une théologie critique du Temple intégrée à sa propre dédicace. Le bâtisseur du Temple dit&nbsp;: Dieu ne peut pas être contenu dans un bâtiment. Le Temple n'est pas la maison de Dieu — c'est le lieu où les hommes <em>prient vers</em> Dieu. Cette tension — le Temple comme demeure divine ET comme direction de prière — traversera toute la théologie postérieure. Elle permettra au judaïsme de survivre à la destruction du Temple en substituant la prière orientée (<em>kivun</em>) à la présence physique.</p>
+
+      <p>Theologically, le Temple n'est pas seulement un lieu de culte — c'est une cosmologie architecturale. Sa structure reproduit l'ordre cosmique&nbsp;: l'intérieur plaqué d'or représente le ciel lumineux, les palmiers et les fleurs sculptés sur les lambris représentent le jardin d'Éden, les chérubins gardiens du <em>devir</em> gardent la présence divine comme ils gardaient l'entrée d'Éden (Genèse 3,24). Quand l'Arche est installée dans le Saint des Saints et que les prêtres sortent, la théophanie de dédicace reprend la phénoménologie du Sinaï et du Tabernacle&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;La nuée remplit la maison de Yahvé, et les prêtres ne purent pas se tenir debout pour officier à cause de la nuée — car la gloire de Yahvé remplissait la maison de Yahvé.&nbsp;»</p>
+        <cite>— 1 Rois 8, 10–11</cite>
+      </blockquote>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VI — COMMERCE, SAGESSE, SCISSION -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-numero">VI</span>
+        <div>
+          <h2 class="section-titre">La sagesse, la reine de Saba et la scission</h2>
+          <p class="section-sous-titre">Commerce maritime · Kébra Nagast · Districts administratifs · Le travail forcé · Roboam et Jéroboam</p>
+        </div>
+      </div>
+
+      <p>Le règne de Salomon est structuré dans le récit biblique autour de trois thèmes entrelacés&nbsp;: la sagesse (<em>hokhmah</em>), le commerce international, et la construction. Ces trois dimensions convergent vers une image de sophistication étatique maximale — qui porte en elle les germes de son propre effondrement.</p>
+
+      <h3>La sagesse salomonienne</h3>
+
+      <p>Salomon est le sage par excellence de la Bible hébraïque. Son jugement entre les deux femmes disputant le même enfant (1 Rois 3,16–28) est la scène archétypique de la sagesse royale — dont des parallèles ont été retrouvés dans des textes juridiques mésopotamiens antérieurs, ce qui ne diminue pas la virtuosité narrative biblique mais suggère que le motif appartient à un répertoire international de la sagesse royale. La tradition lui attribue le Livre des Proverbes, le Cantique des Cantiques, l'Ecclésiaste — et une partie des Psaumes. La critique biblique est unanime&nbsp;: ces attributions sont des gestes d'autorité littéraire, non des données biographiques. Le Cantique est probablement une anthologie de poésie érotique populaire. L'Ecclésiaste date du IIIe siècle av. J.-C. — cinq cents ans après Salomon. On place un texte sous le patronage d'un grand nom pour lui donner autorité et légitimité — comme les Psaumes attribués à David ou le Pentateuque à Moïse.</p>
+
+      <h3>La reine de Saba — politique et légende</h3>
+
+      <p>La visite de la reine de Saba (1 Rois 10) est l'épisode le plus séduisant du cycle salomonien. Elle vient «&nbsp;éprouver Salomon par des énigmes&nbsp;» et repart comblée de cadeaux après avoir confessé que la réalité dépasse la réputation. Saba est généralement identifiée au royaume de Saba en Arabie du Sud — l'actuel Yémen. Les Sabéens contrôlaient la route du commerce des épices et de l'encens, vitale pour tout le monde méditerranéen. Sa visite est probablement une mission commerciale et diplomatique autant qu'une curiosité intellectuelle.</p>
+
+      <p>La tradition éthiopienne, conservée dans le <em>Kébra Nagast</em> («&nbsp;Gloire des Rois&nbsp;», rédigé au XIVe s. mais reflétant des traditions beaucoup plus anciennes), dit que la reine de Saba — Makéda en éthiopien — eut un fils de Salomon&nbsp;: Ménélik I, fondateur de la dynasty salomonide d'Éthiopie qui régnera jusqu'à Hailé Sélassié en 1974. Ménélik aurait rapporté l'Arche de l'Alliance à Aksoum — où elle serait encore aujourd'hui selon la tradition éthiopienne orthodoxe. Cette tradition n'a aucun substrat archéologique vérifiable — mais elle illustre la portée extraordinaire du rayonnement symbolique de Salomon dans les traditions religieuses abrahamiques et africaines.</p>
+
+      <h3>L'organisation administrative — et ses contradictions</h3>
+
+      <p>1 Rois 4 décrit l'organisation du royaume salomonien en douze districts administratifs, chacun chargé de ravitailler la cour royale pendant un mois de l'année. Ce qui est révélateur dans cette liste&nbsp;: les districts ne correspondent pas exactement aux territoires tribaux. Certains combinent plusieurs tribus, d'autres ignorent les frontières tribales. C'est une rationalisation bureaucratique qui brise délibérément la structure tribale traditionnelle — et qui explique en partie la révolte du Nord après la mort de Salomon.</p>
+
+      <p>Pour financer ses constructions colossales — le Temple (sept ans), son propre palais (treize ans&nbsp;!), les villes fortifiées de Hatsor, Megiddo, Gézer — Salomon impose un travail forcé (<em>mas</em>). 1 Rois 5 comptabilise 30 000 hommes envoyés au Liban par rotation, 70 000 porteurs, 80 000 carriers de pierre. La tradition prend soin de préciser que ce travail ne touche que les non-Israélites descendants des Cananéens — mais 1 Rois 12 révèle que le Nord perçoit les choses différemment. Jéroboam, futur roi du Nord, est précisément le chef du travail forcé de la maison de Joseph — celui qui en a subi directement la contrainte.</p>
+
+      <h3>La scission de 931 — une révolte fiscale, pas théologique</h3>
+
+      <p>À la mort de Salomon, son fils Roboam se rend à Sichem — l'ancienne capitale de la confédération, en territoire d'Éphraïm — pour y être reconnu roi par les tribus du Nord. Jéroboam, revenu d'Égypte où il avait fui l'ire de Salomon, vient en délégation avec les anciens du Nord poser la question décisive&nbsp;: «&nbsp;Ton père a rendu pesant notre joug — allège le service dur de ton père et le joug pesant qu'il nous a imposé, et nous te servirons.&nbsp;» (1 Rois 12,4)</p>
+
+      <p>Roboam consulte deux groupes. Les anciens de la cour de Salomon lui conseillent de céder — «&nbsp;Si tu fléchis devant ce peuple et leur accordes cette faveur, ils seront tes serviteurs pour toujours.&nbsp;» Les jeunes conseillers, ses contemporains, lui disent d'être ferme&nbsp;: «&nbsp;Mon petit doigt est plus épais que la taille de mon père... mon père vous a châtiés avec des fouets, mais moi je vous châtierai avec des scorpions.&nbsp;» Roboam choisit l'intransigeance. Le Nord répond par une formule de rupture irrévocable&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;Quelle part avons-nous avec David&nbsp;? Nous n'avons pas d'héritage avec le fils de Jessé&nbsp;! À tes tentes, Israël&nbsp;! Maintenant vois à ta propre maison, David&nbsp;!&nbsp;»</p>
+        <cite>— 1 Rois 12, 16</cite>
+      </blockquote>
+
+      <p>Le royaume se brise&nbsp;: dix tribus au Nord sous Jéroboam, deux au Sud sous Roboam. Ce que ce récit révèle est fondamental&nbsp;: la fracture n'est pas théologique ni militaire au départ — elle est fiscale et sociale. L'État salomonien a pesé trop lourd. C'est une révolte contre la bureaucratie et la centralisation, pas contre la personne du roi. La Bible théologise ensuite la rupture — Yahvé punit Salomon pour ses épouses étrangères et ses dieux étrangers — mais elle préserve aussi la cause sociale et politique concrète, et les deux lectures ne sont pas incompatibles.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VII — ARCHÉOLOGIE SALOMONIENNE -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-numero">VII</span>
+        <div>
+          <h2 class="section-titre">L'archéologie de Salomon — le grand débat</h2>
+          <p class="section-sous-titre">Yigaël Yadin vs. Israel Finkelstein · Les portes à six chambres · Le vide de Jérusalem</p>
+        </div>
+      </div>
+
+      <p>C'est le terrain où la tension entre récit biblique et données archéologiques est maximale — et où les enjeux dépassent les frontières de l'académie.</p>
+
+      <h3>La position maximaliste — les portes à six chambres</h3>
+
+      <p>Pendant longtemps, la découverte de portes à six chambres identiques à Megiddo, Hazor et Gézer — précisément les trois villes mentionnées en 1 Rois 9,15 comme constructions de Salomon — semblait confirmer magistralement le récit biblique. Yigaël Yadin, lors de ses fouilles dans les années 1950–1960, triomphait avec une formule devenue célèbre&nbsp;: «&nbsp;J'ai ouvert ma Bible à la page de 1 Rois 9,15 et j'ai fouillé.&nbsp;» Ces portes monumentales à six chambres (trois de chaque côté du passage) sont d'une architecture identique dans les trois sites — signe d'un programme de construction unifié, correspondant à un État centralisé capable d'imposer des standards architecturaux sur l'ensemble de son territoire.</p>
+
+      <h3>La révision de Finkelstein — la controverse des datations</h3>
+
+      <p>Israel Finkelstein a proposé dans les années 1990–2000 une redatation de ces structures — les attribuant non pas au Xe siècle (Salomon) mais au IXe siècle (Achab et la dynasty omride). Cette révision repose sur une réinterprétation de la séquence céramique et des datations au carbone 14. Si Finkelstein a raison, les fameuses portes ne sont pas de Salomon — elles sont un siècle plus tardives, construites par la dynasty omride bien plus documentée archéologiquement. La position d'Amihai Mazar est médiane — il maintient une datation au Xe siècle pour certaines structures tout en reconnaissant les incertitudes. La question n'est pas définitivement tranchée.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Le vide archéologique du Mont du Temple</span>
+        </div>
+        <div class="encadre-body">
+          <p>L'emplacement du Temple de Salomon — le Mont du Temple (<em>Har HaBayit</em>), la plateforme monumentale sur laquelle se trouve aujourd'hui la Mosquée al-Aqsa et le Dôme du Rocher — constitue le plus grand vide archéologique de toute la région. Il ne peut pas être fouillé en raison de son statut religieux et politique, jalousement gardé par le Waqf islamique depuis 1967.</p>
+          <p>Les fouilles dans la «&nbsp;Cité de David&nbsp;» — la colline au sud du Mont du Temple, identifiée comme le noyau de la Jérusalem davidico-salomonienne — montrent une occupation significative de l'Âge du Fer II (Xe–VIIIe s.), mais les structures monumentales du Xe siècle sont rares et leur identification est débattue. Eilat Mazar a interprété une «&nbsp;Grande Structure&nbsp;» (Large Stone Structure) découverte en 2005 comme le palais de David — interprétation que Finkelstein conteste vigoureusement, y voyant des structures beaucoup plus tardives.</p>
+          <p>Ce vide irréductible n'est pas un argument en faveur d'une non-existence du Temple — le Temple d'Hérode, dont l'existence est parfaitement attestée, n'a lui-même jamais été fouillé en son emplacement précis. C'est un rappel que l'absence de preuve n'est pas une preuve d'absence, particulièrement quand le site ne peut pas être investigué.</p>
+        </div>
+      </div>
+
+      <p>Ce qu'on peut dire avec une certitude raisonnable&nbsp;: le commerce maritime en Mer Rouge et les contacts avec l'Arabie du Sud sont archéologiquement plausibles pour le Xe siècle. Des traces de contacts avec les milieux phéniciens sont attestées. Un État organisé en hautes terres de Canaan au Xe siècle est très probable. L'étendue impériale décrite en 1 Rois est vraisemblablement amplifiée par la rédaction deutéronomiste tardive. Et le Temple, dans ses dimensions telles que décrites — un bâtiment d'environ 27 × 9 m — n'était pas un édifice colossal mais un sanctuaire dynastique de taille modeste, comparable à d'autres temples levantin du même type dont les archéologues ont retrouvé les plans.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VIII — LES ROYAUMES DIVISÉS -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-numero">VIII</span>
+        <div>
+          <h2 class="section-titre">Les Royaumes divisés — géographie d'une fracture</h2>
+          <p class="section-sous-titre">931–722 (Nord) · 931–587 (Sud) · L'asymétrie dynastique · La théologie davidique</p>
+        </div>
+      </div>
+
+      <p>La division crée deux entités profondément inégales, dont les destins divergeront pendant deux siècles avant que la puissance assyrienne n'emporte le Nord et que la puissance babylonienne n'emporte le Sud.</p>
+
+      <div class="deux-royaumes">
+        <div class="royaume-card nord">
+          <div class="royaume-nom">Royaume du Nord — Israël</div>
+          <div class="royaume-detail"><strong>Capitale</strong> Sichem, puis Tirsta, puis Samarie (fondée par Omri ~880 av.)</div>
+          <div class="royaume-detail"><strong>Territoire</strong> Hautes terres centrales, Galilée, plaine de Jezréel, Transjordanie du Nord</div>
+          <div class="royaume-detail"><strong>Population</strong> ≈ 2/3 du total — environ 350 000 hab. au VIIIe s.</div>
+          <div class="royaume-detail"><strong>Tribus</strong> Dix tribus (l'histoire désignera cette entité «&nbsp;Israël&nbsp;» — nom paradoxal pour le royaume qui disparaîtra)</div>
+          <div class="royaume-detail"><strong>Durée</strong> 931–722 av. J.-C. — deux siècles</div>
+          <div class="royaume-detail"><strong>Dynasties</strong> 19 rois sur 9 dynasties différentes — aucune lignée stable, succession par coups d'État</div>
+          <div class="royaume-detail"><strong>Fin</strong> Sargon II d'Assyrie prend Samarie en 722 — déporte 27 290 habitants</div>
+        </div>
+        <div class="royaume-card sud">
+          <div class="royaume-nom">Royaume du Sud — Juda</div>
+          <div class="royaume-detail"><strong>Capitale</strong> Jérusalem (inchangée)</div>
+          <div class="royaume-detail"><strong>Territoire</strong> Hautes terres de Judée, le Néguev, contrôle intermittent de l'Édom</div>
+          <div class="royaume-detail"><strong>Population</strong> ≈ 1/3 du total — environ 150 000 hab. au VIIIe s.</div>
+          <div class="royaume-detail"><strong>Tribus</strong> Juda et Benjamin (+ Lévi incorporé dans la structure sacerdotale)</div>
+          <div class="royaume-detail"><strong>Durée</strong> 931–587 av. J.-C. — trois siècles et demi</div>
+          <div class="royaume-detail"><strong>Dynasties</strong> 20 rois sur 1 seule dynasty — la lignée davidique sans interruption</div>
+          <div class="royaume-detail"><strong>Fin</strong> Nabuchodonosor II détruit Jérusalem en 587 — déporte l'élite à Babylone</div>
+        </div>
+      </div>
+
+      <h3>Pourquoi cette asymétrie dynastique &nbsp;?</h3>
+
+      <p>La différence de stabilité dynastique est l'une des questions les plus instructives de cette période. Le Nord change de rois par coups d'État, assassinats, révoltes militaires — neuf dynasties différentes en deux siècles. Le Sud maintient la lignée de David pendant trois cent cinquante ans sans interruption dynastique — un record remarquable dans le monde antique de l'époque.</p>
+
+      <p>La réponse est théologique avant d'être politique&nbsp;: l'alliance de Yahvé avec David (2 Samuel 7 — l'oracle de Nathan qui promet que la lignée de David régnera à jamais) donne à la monarchie judéenne une légitimité théologique que le Nord n'a jamais possédée. Chaque roi de Juda, si corrompu soit-il, bénéficie de ce capital symbolique inépuisable. Chaque roi du Nord est un usurpateur potentiel — sans légitimité divine établie, vulnérable à la prochaine révolte. La <em>théologie davidique</em> est une innovation politique d'une efficacité remarquable — elle transforme une accident dynastique en providence divine, et fait de la continuité du sang une garantie de l'alliance.</p>
+
+      <p>Paradoxe fondamental pour la suite de l'histoire&nbsp;: «&nbsp;Israël&nbsp;» comme nom d'État désigne d'abord le Royaume du Nord — celui qui disparaîtra en 722, dont les populations seront fondues dans l'empire assyrien. Le Royaume de Juda — dont descendent directement les Juifs (<em>Yehudim</em>) — ne s'appelle pas «&nbsp;Israël&nbsp;» politiquement. C'est le Sud, petit, pauvre, survivant — qui portera et transmettra la mémoire de la totalité.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IX — OMRIDES ET PROPHÈTES -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-numero">IX</span>
+        <div>
+          <h2 class="section-titre">Les Omrides, Élie et les prophètes du VIIIe siècle</h2>
+          <p class="section-sous-titre">La dynasty la plus puissante et la plus condamnée · Élie à Horeb · Amos, Osée — la révolution éthique</p>
+        </div>
+      </div>
+
+      <p>Le Nord connaît sa période la plus puissante politique et militairement avec la dynasty omride — et c'est précisément celle que la Bible condamne le plus violemment. Ce paradoxe est l'une des clés de compréhension de la pensée prophétique hébraïque.</p>
+
+      <h3>La dynasty omride — puissance politique et condamnation biblique</h3>
+
+      <p>Omri (~885–874 av.) est mentionné dans les sources assyriennes comme fondateur d'un État puissant — les Assyriens appelleront Israël «&nbsp;la maison d'Omri&nbsp;» (<em>Bit Humri</em>) pendant un siècle après sa mort, preuve de son impact durable. Il fonde Samarie sur une colline vierge achetée à un certain Shémer — ville royale sans histoire tribale, équivalent de la Jérusalem de David pour le Nord. Son fils Achab (~874–853) est présenté par la Bible comme le pire roi d'Israël. Pourtant les sources assyriennes montrent qu'Achab commandait la coalition anti-assyrienne la plus puissante du Levant&nbsp;: lors de la bataille de Qarqar (853 av.), il engage 2 000 chars — plus que tout autre allié, plus que les Araméens de Damas.</p>
+
+      <p>L'épouse d'Achab — Jézabel, fille du roi de Sidon — impose le culte de Baal dans le royaume, finance 450 prophètes de Baal et 400 prophètes d'Ashérah à la table royale, fait massacrer les prophètes de Yahvé, confisque la vigne de Nabot en faisant organiser un faux procès pour le tuer. Face à ce programme d'hellénisation phénicienne du Nord se dresse Élie le Tishbite.</p>
+
+      <h3>Élie — le prophète de feu et la voix du silence</h3>
+
+      <p>Élie surgit dans le texte sans introduction, sans généalogie, sans préambule — 1 Rois 17,1&nbsp;: «&nbsp;Élie le Tishbite, de Tishbé en Galaad, dit à Achab&nbsp;: Yahvé, le Dieu d'Israël, est vivant... il n'y aura ces années-ci ni rosée ni pluie, sinon à ma parole.&nbsp;» Ce surgissement brutal, sans transition narrative, est la marque du prophète par excellence — celui qui arrive de nulle part et dont la parole seule compte.</p>
+
+      <p>Le défi du Carmel (1 Rois 18) est la scène la plus dramatique de tous ses récits&nbsp;: 450 prophètes de Baal contre Élie seul. Deux taureaux sur deux autels. Chaque camp invoque son dieu pour enflammer le sacrifice. Les prophètes de Baal dansent, se lacèrent de coups d'épées et de lances, crient de l'aube jusqu'au milieu de l'après-midi. Rien. Élie les raille avec une ironie mordante — «&nbsp;Criez plus fort&nbsp;! Car il est dieu — peut-être qu'il est absorbé, ou en voyage, ou en chemin, ou peut-être dort-il et se réveillera-t-il&nbsp;»&nbsp;! — puis arrose copieusement son propre autel d'eau, invoque Yahvé, et le feu descend et consume tout. Les prophètes de Baal sont massacrés au torrent du Qishon.</p>
+
+      <blockquote>
+        <p>«&nbsp;Après le feu — une voix de fin silence.&nbsp;»</p>
+        <cite>— <span class="heb">קוֹל דְּמָמָה דַקָּה</span> · <em>Qol demamah daqah</em> · 1 Rois 19, 12</cite>
+      </blockquote>
+
+      <p>Immédiatement après ce triomphe, Jézabel menace de le tuer. Élie s'effondre sous un genévrier dans le désert et demande la mort&nbsp;: «&nbsp;C'est assez. Maintenant, Yahvé, prends mon âme.&nbsp;» Un ange le touche, lui fait manger une galette et boire de l'eau, et il marche quarante jours jusqu'à Horeb — le Sinaï — où Yahvé lui parle. Le paradoxe théologique est d'une beauté saisissante&nbsp;: après le feu du Carmel, après la violence et le triomphe spectaculaire, Yahvé se manifeste dans «&nbsp;une voix de fin silence&nbsp;» (<em>qol demamah daqah</em>). La présence divine se retire du fracas pour habiter le silence. C'est l'une des formulations théologiques les plus profondes de toute la Bible hébraïque.</p>
+
+      <p>Élie ne mourra pas — un char de feu et des chevaux de feu l'emportent dans un tourbillon (2 Rois 2). Il deviendra dans la tradition juive le précurseur du Messie — celui qui reviendra avant le grand Jour de Yahvé (Malachie 3,23–24). Dans le Nouveau Testament il apparaît à la Transfiguration aux côtés de Moïse. Dans la tradition islamique, Ilyâs est un prophète nommé dans le Coran.</p>
+
+      <h3>Amos et Osée — la révolution éthique du VIIIe siècle</h3>
+
+      <p>C'est au VIIIe siècle — sous la pression assyrienne croissante — que surgissent les prophètes classiques, ceux dont les paroles ont été collectées et mises par écrit. Cette émergence n'est pas accidentelle&nbsp;: la crise géopolitique, la corruption sociale et la prospérité inégale des règnes d'Achab puis de Jéroboam II produisent un discours prophétique d'une violence rhétorique sans précédent.</p>
+
+      <p>Amos (~760 av.) est berger de Teqoa en Juda mais prophétise dans le Nord. Ses oracles contre Israël sont d'une précision sociologique étonnante — il décrit les classes aisées de Samarie écrasant les pauvres, vendant «&nbsp;le juste pour de l'argent et le pauvre pour une paire de sandales&nbsp;», se couchant sur des lits d'ivoire, buvant les vins des premiers pressoirs. Mais sa révolution théologique est plus profonde encore — il annonce que le culte sans éthique est une abomination, que Yahvé juge son propre peuple aussi sévèrement que ses ennemis&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;Je hais, je méprise vos fêtes... Ôtez loin de moi le bruit de vos cantiques... Mais que la justice coule comme l'eau, et la droiture comme un torrent qui ne tarit pas.&nbsp;»</p>
+        <cite>— Amos 5, 21–24</cite>
+      </blockquote>
+
+      <p>C'est une révolution théologique qui redéfinit la relation à Dieu — non plus par le rite et le sacrifice, mais par la justice sociale. Yahvé n'est pas un dieu tribal qui protège son peuple quoi qu'il fasse — il est le Dieu de la justice universelle qui juge son propre peuple en premier.</p>
+
+      <p>Osée (~750–720 av.) prophétise dans le Nord jusqu'à sa chute. Sa métaphore centrale est conjugale&nbsp;: il épouse Gomer, femme infidèle, la reprend après ses infidélités — et la relation personnelle devient figure théologique. Israël est comme Gomer, épouse infidèle qui court après les Baals. Mais au cœur des oracles de jugement les plus violents, Osée introduit une théologie de la miséricorde divine qui influencera toute la théologie postérieure&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;Comment te livrerais-je, Éphraïm&nbsp;? Comment t'abandonnerais-je, Israël&nbsp;?... Mon cœur est bouleversé en moi, mes entrailles frémissent d'émoi. Je n'agirai pas selon l'ardeur de ma colère... Car je suis El et non un homme — le Saint au milieu de toi.&nbsp;»</p>
+        <cite>— Osée 11, 8–9</cite>
+      </blockquote>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION X — CHUTE DU NORD -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-numero">X</span>
+        <div>
+          <h2 class="section-titre">La chute du Royaume du Nord — 722 av. J.-C.</h2>
+          <p class="section-sous-titre">Sargon II · 27 290 déportés · Les «&nbsp;dix tribus perdues&nbsp;» · Les Samaritains</p>
+        </div>
+      </div>
+
+      <p>La chute du Royaume du Nord est l'une des catastrophes les mieux documentées de l'histoire biblique — et l'une des rares où la corrélation entre source biblique et source extra-biblique est quasiment parfaite.</p>
+
+      <div class="source-arche">
+        <div class="source-icone">𓂀</div>
+        <div class="source-corps">
+          <div class="source-titre">Annales de Sargon II d'Assyrie · ~720 av. J.-C. · Khorsabad (Dur-Sharrukin)</div>
+          <div class="source-texte">«&nbsp;J'ai assiégé et pris la ville de Samarie, j'ai emmené en captivité 27 290 de ses habitants&nbsp;; j'ai prélevé sur eux 50 chars pour mon armée royale... Le reste d'entre eux j'ai fait résider en Assyrie.&nbsp;» Correspondance directe avec 2 Rois 17,6.</div>
+        </div>
+      </div>
+
+      <p>Le processus est en réalité plus lent que le récit biblique ne le laisse entendre. La pression assyrienne sur le Nord commence sous Tiglath-Pileser III (~745–727), qui démembre progressivement le territoire israélite et déporte des populations de Galilée et de Transjordanie dès 732–733. C'est son successeur Salmanasar V qui met le siège devant Samarie (~724), et Sargon II qui prend la ville (~722) après un siège de trois ans. La déportation de 27 290 habitants — chiffre précis des annales de Sargon — représente l'élite politique, militaire et artisanale du Royaume du Nord. Des populations d'autres parties de l'empire assyrien sont installées à leur place — elles se mêleront aux Israélites restants pour former progressivement la population qu'on appellera les Samaritains (<em>Shomronim</em>).</p>
+
+      <h3>Les dix tribus perdues — une tradition persistante</h3>
+
+      <p>Les dix tribus du Nord disparaissent de l'histoire comme entité politique identifiable — donnant naissance à l'une des traditions légendaires les plus persistantes de l'histoire juive. Où sont les dix tribus perdues&nbsp;? On les cherchera dans les siècles suivants en Éthiopie (les Falachas, aujourd'hui reconnus comme Juifs par les autorités rabbiniques israéliennes, se réclament de la tribu de Dan), en Inde (les Bene Israël de Bombay), en Afghanistan, en Chine, au Japon. Les Mormons au XIXe siècle identifieront les Amérindiens aux descendants des tribus perdues — l'une des origines du <em>Livre de Mormon</em>. Ces traditions témoignent de la force symbolique extraordinaire du chiffre douze et du sentiment d'une incomplétude irrésolue dans l'histoire d'Israël.</p>
+
+      <p>Historiquement, les déportés assyriens se sont probablement intégrés dans les populations locales de l'empire assyrien au bout de quelques générations — perdant leur identité spécifique. Le «&nbsp;retour des dix tribus&nbsp;» reste une espérance eschatologique, pas une réalité historique documentée.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XI — ÉZÉCHIAS ET JOSIAS -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-numero">XI</span>
+        <div>
+          <h2 class="section-titre">Ézéchias, le siège de Sennachérib et la réforme de Josias</h2>
+          <p class="section-sous-titre">701 av. J.-C. · Le tunnel de Siloé · La découverte du Deutéronome · La mort de Josias à Megiddo</p>
+        </div>
+      </div>
+
+      <p>Après la chute du Nord, le Royaume de Juda entre dans une période de tension maximale entre sa survie politique et son identité religieuse. Deux rois reformateurs — Ézéchias et Josias — vont tenter de répondre à la double menace assyrienne et culturelle par une centralisation du culte et une révolution théologique.</p>
+
+      <h3>Ézéchias et le siège de 701 — un miracle ou une retraite tactique ?</h3>
+
+      <p>Ézéchias (~727–698 av.) est présenté par la Bible comme le meilleur roi de Juda depuis David. Il mène une réforme religieuse significative — élimination des hauts-lieux, destruction du serpent de bronze de Moïse (la <em>nehushtân</em> devenue objet de culte). Politiquement, il se révolte contre l'Assyrie — erreur ou calcul risqué que Sennachérib va sanctionner sévèrement en 701.</p>
+
+      <p>Sennachérib envahit Juda, s'empare de 46 villes fortifiées dont Lachish (dont l'assaut est représenté en détail dans les reliefs du palais de Sennachérib à Ninive, aujourd'hui au British Museum), déporte d'importantes populations, et encercle Jérusalem. Le Prisme de Sennachérib dit&nbsp;: «&nbsp;J'enfermai Ézéchias dans Jérusalem comme un oiseau en cage.&nbsp;» La Bible (2 Rois 18–19, Isaïe 36–37) raconte le même siège avec un dénouement miraculeux — une nuit, l'ange de Yahvé frappe 185 000 soldats assyriens, Sennachérib rentre à Ninive. Les Assyriens interprètent le résultat comme une victoire (ils ont tout dévasté sauf Jérusalem, reçu tribut d'Ézéchias). Les Judéens l'interprètent comme une délivrance divine.</p>
+
+      <p>Historiquement, la plus probable des hypothèses est qu'une épidémie — peut-être de typhus ou de dysenterie, fléaux classiques des armées en campagne — a frappé l'armée assyrienne, ou qu'une nouvelle d'Égypte ou de Babylonie a forcé Sennachérib à lever le siège prématurément. Ce qui est certain&nbsp;: Jérusalem n'est pas prise en 701, et ce fait extraordinaire — la seule grande ville du Proche-Orient à résister à Sennachérib — aura des conséquences théologiques considérables. Il nourrira la doctrine de l'inviolabilité de Sion — «&nbsp;Yahvé protège sa ville&nbsp;» — que Jérémie devra combattre furieusement un siècle plus tard.</p>
+
+      <div class="source-arche">
+        <div class="source-icone">𓂀</div>
+        <div class="source-corps">
+          <div class="source-titre">Tunnel de Siloé · Inscription de Siloé · ~700 av. J.-C. · Jérusalem</div>
+          <div class="source-texte">En vue du siège assyrien, Ézéchias fait creuser un tunnel de 533 mètres sous la Cité de David pour amener les eaux de la source de Guihon dans la piscine de Siloé, à l'intérieur des murailles. L'inscription paléo-hébraïque retrouvée in situ en 1880 décrit la jonction des deux équipes de carriers avançant des deux côtés — «&nbsp;et les eaux coulèrent de la source au bassin&nbsp;». C'est l'une des inscriptions hébraïques les plus anciennes retrouvées à Jérusalem, et un témoignage archéologique direct de 2 Rois 20,20. Istanbul, Musée archéologique.</div>
+        </div>
+      </div>
+
+      <h3>Josias et la «&nbsp;découverte&nbsp;» du Deutéronome</h3>
+
+      <p>Josias (~640–609 av.) est le roi le plus important pour l'histoire de la rédaction biblique. En 622, lors de travaux de rénovation du Temple, le grand prêtre Hilqiya «&nbsp;découvre&nbsp;» un livre de la Loi (2 Rois 22). La réaction de Josias — il déchire ses vêtements, consulte la prophétesse Houlda, lance une réforme totale — suggère que ce texte contient quelque chose de nouveau et d'urgent. La critique biblique depuis Wilhelm de Wette (1805) et Wellhausen identifie ce livre comme une proto-version du Deutéronome — probablement rédigé par des cercles réformateurs, peut-être «&nbsp;trouvé&nbsp;» au sens d'<em>officiellement révélé</em> plutôt que littéralement découvert.</p>
+
+      <p>Sur cette base, Josias mène la réforme la plus totale de l'histoire de Juda&nbsp;: destruction systématique de tous les hauts-lieux y compris à Béthel en territoire qui était le Nord, centralisation absolue du culte à Jérusalem seul, suppression des astrologues et nécromanciens, célébration d'une Pâque «&nbsp;comme il n'y en avait pas eu depuis les jours des Juges&nbsp;». Politiquement, il profite de l'effondrement assyrien pour étendre son contrôle vers le Nord — tentant de reconstituer symboliquement l'empire davidique. Le Deutéronome avec son programme de centralisation du culte et sa vision d'un Israël uni peut être lu comme la constitution idéologique de ce projet politique.</p>
+
+      <p>La mort de Josias est un choc brutal et théologiquement inexplicable. Il rencontre le pharaon Néchao II à Megiddo en 609 — probablement pour l'arrêter dans sa marche vers l'Euphrate soutenir les derniers Assyriens — et est tué. Comment le roi le plus juste depuis David peut-il mourir ainsi&nbsp;? Cette mort traumatisante provoquera une crise théologique qui alimentera la composition des Lamentations et nourrira toute la réflexion prophétique sur la souffrance du juste.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XII — NABUCHODONOSOR ET LA DESTRUCTION -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <span class="section-numero">XII</span>
+        <div>
+          <h2 class="section-titre">Nabuchodonosor et la destruction de Jérusalem</h2>
+          <p class="section-sous-titre">597 · 587 · Les Lettres de Lachish · La réponse théologique · Le 9 Av comme date du deuil universel</p>
+        </div>
+      </div>
+
+      <p>La destruction de Jérusalem est l'événement le plus solidement documenté de toute l'histoire biblique — confirmé par des sources extérieures de première main avec une précision chronologique remarquable. C'est aussi la plus grande catastrophe de l'histoire d'Israël, le traumatisme fondateur qui produira paradoxalement la naissance du judaïsme.</p>
+
+      <h3>Nabuchodonosor II — le contexte</h3>
+
+      <p>Nabuchodonosor II (Nabu-kudurri-ussur — «&nbsp;Nabû protège l'héritier&nbsp;») règne de 605 à 562 av. J.-C. — quarante-trois ans. C'est le plus grand roi de l'Empire néo-babylonien. La bataille de Karkémish en 605 av. — où il écrase l'Égypte de Néchao II — bascule définitivement le Proche-Orient sous domination babylonienne. Juda, coincé entre les deux puissances, n'a plus aucune marge de manœuvre réelle.</p>
+
+      <h3>La première déportation — 597 av. J.-C. — une date exacte</h3>
+
+      <p>Les Chroniques babyloniennes (tablette BM 21946 au British Museum) donnent la date exacte de la première prise de Jérusalem&nbsp;: le 2 Adar de la 7e année de Nabuchodonosor — soit le 16 mars 597 av. J.-C. Ce même événement est décrit en 2 Rois 24,12. C'est l'une des dates les plus exactement attestées à la fois par la Bible et par une source externe contemporaine — un point de synchronisme parfait entre les deux traditions documentaires.</p>
+
+      <p>Joïakîn — jeune roi de dix-huit ans, règne de trois mois — est emmené à Babylone avec sa famille. Des tablettes de ration babyloniennes (~595 av.) retrouvées à Babylone et aujourd'hui au Musée de Berlin mentionnent «&nbsp;Yaukin roi du pays de Yahudu&nbsp;» — Joïakîn roi de Juda — recevant des rations d'huile et d'orge. Un roi déporté dans les archives administratives de son geôlier. Nabuchodonosor installe comme roi-vassal Mattanyahu, oncle de Joïakîn, qu'il rebaptise Tsidqiyahou (Sédécias).</p>
+
+      <h3>Le siège final — 588–587 av. J.-C.</h3>
+
+      <p>Sédécias — malgré les avertissements répétés de Jérémie — se révolte en comptant sur l'Égypte. En janvier 588 av., Nabuchodonosor met le siège devant Jérusalem. Il durera dix-huit mois — durée extraordinaire qui témoigne de la résistance de la ville.</p>
+
+      <div class="source-arche">
+        <div class="source-icone">𓂀</div>
+        <div class="source-corps">
+          <div class="source-titre">Lettres de Lachish (Ostraca de Lachish) · ~588 av. J.-C. · Musée d'Israël, Jérusalem</div>
+          <div class="source-texte">Ostraca (tessons de poterie inscrits en hébreu) retrouvés dans les cendres de la porte de Lachish — brûlée lors du siège babylonien. La Lettre n° 4 dit&nbsp;: «&nbsp;Nous regardons les signaux de feu de Lachish... car nous ne voyons plus Azéqa.&nbsp;» Azéqa vient de tomber. Jérusalem est seule. Ces inscriptions sont datables avec précision de la période du siège de 588 — témoignage direct d'un commandant de poste militaire judéen écrivant à son supérieur pendant les dernières semaines avant la catastrophe.</div>
+        </div>
+      </div>
+
+      <p>À l'intérieur de la ville assiégée, la famine s'installe. Jérémie décrit l'horreur avec des images insoutenables — Lamentations 4,10 est l'un des textes les plus noirs de toute la littérature hébraïque. Le 9 Tamouz, une brèche est ouverte dans les murailles. Sédécias tente de fuir de nuit avec ses soldats. Il est rattrapé dans les plaines de Jéricho et conduit à Nabuchodonosor à Riblah en Syrie. Le jugement est d'une cruauté calculée&nbsp;:</p>
+
+      <blockquote>
+        <p>«&nbsp;On égorgea les fils de Sédécias sous ses yeux, puis on creva les yeux de Sédécias, on le lia avec des chaînes d'airain et on l'emmena à Babylone.&nbsp;»</p>
+        <cite>— 2 Rois 25, 7</cite>
+      </blockquote>
+
+      <p>La dernière chose que Sédécias voit de ses yeux — c'est la mort de ses fils.</p>
+
+      <h3>La destruction — le 9 Av, 587 av. J.-C.</h3>
+
+      <p>Un mois après la brèche, Nebuzaradan — chef des gardes de Nabuchodonosor — arrive à Jérusalem avec l'ordre de destruction totale. Le Temple est brûlé, ses colonnes de bronze brisées, le métal fondu et transporté à Babylone. Le palais royal est brûlé. Les murailles sont démolies pierre par pierre. La population est déportée à l'exception des plus pauvres laissés pour cultiver la terre.</p>
+
+      <p>La date traditionnelle — le 9 Av (<em>Tisha BeAv</em>) — deviendra la date de deuil par excellence du calendrier juif. Et par une coïncidence troublante que la tradition a toujours interprétée comme un signe de la cohérence tragique de l'histoire, le Second Temple sera détruit par les Romains lui aussi un 9 Av de l'an 70 ap. J.-C. L'expulsion des Juifs d'Espagne en 1492 est traditionnellement datée du même jour. Les rabbin du Talmud ont vu dans cette récurrence une <em>midda keneged midda</em> — une mesure pour mesure — non pas cruelle, mais cohérente&nbsp;: la même faute structurelle du peuple, le même rappel de Yahvé, la même date.</p>
+
+      <h3>La réponse théologique — comment survivre à l'inconcevable</h3>
+
+      <p>La destruction de Jérusalem pose le problème théologique le plus grave de toute l'histoire d'Israël. Jérusalem n'était pas censée pouvoir tomber — c'était la ville de Yahvé, le Temple sa demeure. Si Jérusalem est détruite, soit Yahvé est impuissant face à Nabuchodonosor, soit Yahvé a voulu cette destruction. La première option est théologiquement inadmissible. Il reste la seconde — et ses implications sont vertigineuses.</p>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">◈ Les quatre réponses théologiques à la catastrophe de 587</div>
+        <p><strong>La réponse deutéronomiste</strong> — déjà préparée avant la catastrophe par les rédacteurs des livres des Rois&nbsp;: l'histoire est une équation simple. Fidélité à Yahvé = prospérité. Infidélité = catastrophe. Israël a été infidèle depuis Jéroboam, Juda depuis Manassé. La destruction est méritée, juste, prévisible — et donc réversible si la repentance est réelle. C'est une théologie de la rétribution historique, sévère mais consolante en ce qu'elle donne un sens à la catastrophe.</p>
+        <p><strong>La réponse de Jérémie</strong> — plus personnelle, plus douloureuse. Ses <em>Lamentations</em> (<em>Eikhah</em>) sont le cri de deuil le plus poignant de la littérature hébraïque. Il a prêché la soumission à Babylone — «&nbsp;Babylone est l'instrument de Yahvé&nbsp;» — et personne ne l'a écouté. Il a été mis en prison, jeté dans une citerne, traité de traître. Et il avait raison. Mais au cœur des Lamentations, une lueur&nbsp;: «&nbsp;Les bontés de Yahvé ne sont pas épuisées... elles se renouvellent chaque matin. Grande est ta fidélité.&nbsp;»</p>
+        <p><strong>La réponse d'Ézéchiel</strong> — prophète déjà en exil à Babylone depuis 597. La plus radicale théologiquement&nbsp;: la gloire de Yahvé (<em>kavod</em>) <em>quitte</em> le Temple avant sa destruction (Ézéchiel 10–11). Yahvé lui-même évacue sa demeure avant qu'elle brûle. Ce n'est pas une défaite — c'est un départ volontaire. Et Ézéchiel annonce le retour dans la vision des ossements desséchés (Ézéchiel 37)&nbsp;: les ossements se rassemblent, se couvrent de chair, reçoivent le souffle de vie. Israël ressuscitera.</p>
+        <p><strong>La réponse du Deutéro-Isaïe</strong> (Isaïe 40–55 — texte rédigé en exil, distinct du premier Isaïe) — la plus universaliste. Yahvé n'est pas le dieu vaincu de Juda — il est le Dieu créateur de l'univers qui utilise Nabuchodonosor comme instrument de jugement et utilisera Cyrus le Perse comme instrument de restauration. Cyrus — roi perse qui n'a jamais entendu parler de Yahvé — est appelé «&nbsp;l'oint de Yahvé&nbsp;» (<em>meshiho</em> — son messie). Première fois dans la Bible que le titre messie est appliqué à un non-Israélite. Déclaration théologique extraordinaire&nbsp;: Yahvé est maître de l'histoire universelle.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XIII — SYNTHÈSE -->
+    <section class="section" id="s13">
+      <div class="section-header">
+        <span class="section-numero">XIII</span>
+        <div>
+          <h2 class="section-titre">Synthèse — de la monarchie à la catastrophe</h2>
+          <p class="section-sous-titre">Quatre siècles de royaumes · Ce que la monarchie a produit · Ce que la catastrophe a créé</p>
+        </div>
+      </div>
+
+      <p>Au terme de ce parcours, de Saül à la destruction de 587, il est possible de proposer une lecture synthétique qui évite les deux écueils symétriques — l'hagiographie (chaque roi davidique comme figure messianique) et la démythification radicale (tout est invention tardive sans substrat historique).</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-epoch">~1025–1005 av. J.-C. · Saül</div>
+          <div class="timeline-titre">La monarchie comme réponse de crise</div>
+          <div class="timeline-corps">Face à la pression philistine, la confédération tribale choisit un chef militaire unique. Saül est archéologiquement presque invisible — chef de guerre tribal, pas encore monarque institutionnel. Mais sa fonction est réelle&nbsp;: unifier le commandement militaire. Sa tension avec Samuel pose pour la première fois le problème structurel de la monarchie israélite — le roi n'est pas au-dessus de la loi divine.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~1005–965 av. J.-C. · David</div>
+          <div class="timeline-titre">La fondation dynastique — historique et amplifiée</div>
+          <div class="timeline-corps">David a presque certainement existé — l'inscription de Tel Dan le confirme comme fondateur d'une dynasty. Son ascension tortueuse, son choix de Jérusalem, son association de l'Arche à sa capitale sont historiquement plausibles. L'empire «&nbsp;de l'Euphrate au Wadi d'Égypte&nbsp;» est vraisemblablement amplifié par la rédaction deutéronomiste. La réalité historique&nbsp;: un État centré sur Jérusalem contrôlant les hautes terres de Canaan.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~965–931 av. J.-C. · Salomon</div>
+          <div class="timeline-titre">L'apogée et les germes de la fracture</div>
+          <div class="timeline-corps">Salomon représente le moment de sophistication étatique maximale — administration bureaucratique, commerce international, construction monumentale (dont le Temple, dont les dimensions exactes sont inconnues faute de fouilles). C'est aussi le moment où l'État israélite centralise trop, impose trop, brise trop les structures tribales. La grandeur salomonienne porte en elle les germes de sa propre destruction.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">931–722 av. J.-C. · Royaumes divisés (Nord)</div>
+          <div class="timeline-titre">Deux siècles de déchirement — et la naissance de la littérature prophétique</div>
+          <div class="timeline-corps">La division est fiscale avant d'être théologique. Le Nord, plus puissant politiquement (dynasty omride), est plus instable dynastiquement. C'est dans le contexte de cette crise permanente que naissent les prophètes classiques — Élie, Amos, Osée — qui révolutionnent la théologie en substituant la justice éthique aux rites cultuels. La chute du Nord en 722 sera interprétée comme la confirmation de leurs oracles.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">722–587 av. J.-C. · Juda seul</div>
+          <div class="timeline-titre">La survie et la réforme — avant la catastrophe</div>
+          <div class="timeline-corps">Après la chute du Nord, Juda reste seul héritier de la tradition. Ézéchias résiste à Sennachérib (701) — renforçant la doctrine de l'inviolabilité de Sion. Josias entreprend la réforme deutéronomiste (~622) — centralisation du culte, fixation d'une proto-Torah, ambition de réunification. Sa mort à Megiddo (609) ouvre une période de désintégration politique rapide.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">587 av. J.-C. · La destruction</div>
+          <div class="timeline-titre">La catastrophe la plus documentée — et la plus créatrice</div>
+          <div class="timeline-corps">La destruction de Jérusalem, du Temple, et la déportation à Babylone sont historiquement certifiées par les Chroniques babyloniennes, les Lettres de Lachish, les tablettes de ration de Joïakîn. Et cette catastrophe produit paradoxalement la naissance du judaïsme — religion portable, centrée sur le texte et la prière, indépendante du Temple et du territoire. Le judaïsme tel qu'il existe aujourd'hui est né à Babylone entre 587 et 538.</div>
+        </div>
+      </div>
+
+      <p>La grande leçon de ce chapitre est peut-être la suivante&nbsp;: la monarchie israélite n'a duré que quatre siècles — un temps court à l'échelle de l'histoire. Elle a produit une théologie (l'alliance davidique, l'inviolabilité de Sion), une architecture (le Temple comme cosmologie), une littérature (les livres de Samuel et des Rois comme les premiers grands récits politiques réalistes de l'Antiquité). Et elle a échoué — comme toutes les monarchies finissent par échouer.</p>
+
+      <p>Mais cet échec a été le terreau d'une création intellectuelle et spirituelle sans équivalent dans l'Antiquité. Les prophètes qui ont accompagné la monarchie — en la contestant, en la jugeant, en lui opposant la parole divine — ont produit une pensée éthique et théologique dont la portée dépassera infiniment celle de l'État qu'ils critiquaient. Et la catastrophe de 587, en détruisant le Temple et la monarchie, a libéré une forme de religion que plus aucune catastrophe territoriale ne pourrait détruire — parce qu'elle n'avait plus besoin d'un territoire pour exister.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Question en suspens — vers le chapitre VIII</span>
+        </div>
+        <div class="encadre-body">
+          <p>Ce chapitre s'est arrêté sur le seuil de l'exil — la catastrophe de 587 et ses réponses théologiques immédiates. Mais le processus intellectuel qui s'enclenche à Babylone est d'une richesse extraordinaire&nbsp;: la fixation définitive de la Torah, la naissance de la synagogue comme institution de substitution, la montée en puissance de la pensée eschatologique et apocalyptique, la révolution universaliste du Deutéro-Isaïe.</p>
+          <p>Et en arrière-plan de toute cette période — de Saül à l'exil — le phénomène prophétique n'a jamais cessé de travailler la société israélite de l'intérieur&nbsp;: Élie et Élisée pour le IXe siècle, Amos et Osée au Nord, Isaïe et Michée au Sud pour le VIIIe, Jérémie et Ézéchiel pour la catastrophe de 587. Ces figures constituent une tradition intellectuelle et théologique d'une cohérence remarquable — et d'une originalité absolue dans l'Antiquité. C'est ce que le chapitre VIII examinera sous l'angle de l'âge prophétique dans sa totalité.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION CHAPITRES -->
+        <nav class="nav-chapitres">
+      <a href="chapitre-06-israel-tribus.html" class="nav-btn">← Chapitre VI</a>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <a href="chapitre-08-age-prophetique.html" class="nav-btn">Chapitre VIII →</a>
+    </nav>
+
+  </article>
+</main>
+
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+  btnTop.classList.toggle('visible', scrolled > 400);
+  highlightActiveSection();
+});
+
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+
+
+// ── Overlay sidebar mobile ──────────────────────────────
+const _overlay = document.getElementById('sidebar-overlay');
+const _sidebar  = document.getElementById('sidebar');
+const _toggle   = document.getElementById('menu-toggle');
+
+function toggleSidebar() {
+  const isOpen = _sidebar.classList.toggle('open');
+  if (_overlay) _overlay.classList.toggle('visible', isOpen);
+}
+
+if (_overlay) {
+  _overlay.addEventListener('click', () => {
+    _sidebar.classList.remove('open');
+    _overlay.classList.remove('visible');
+  });
+}
+// Fermer aussi en cliquant en dehors
+</script>
+
+</body>
+</html>
