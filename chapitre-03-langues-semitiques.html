@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre III — Les Langues Sémitiques · Aux Origines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ BARRE DE PROGRESSION ═══ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav { padding: 1rem 0; flex: 1; }
+
+.sidebar-nav .chapitre-item {
+  display: block;
+  padding: 0.4rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: rgba(245,237,224,0.5);
+  transition: all 0.25s ease;
+  line-height: 1.4;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-nav .chapitre-item:hover {
+  color: var(--or-pale);
+  border-left-color: var(--or);
+  background: rgba(200,148,58,0.08);
+  padding-left: 1.8rem;
+}
+
+.sidebar-nav .chapitre-item.actif {
+  color: var(--or-pale);
+  border-left-color: var(--or-vif);
+  background: rgba(200,148,58,0.12);
+}
+
+.sidebar-nav .chap-numero {
+  display: block;
+  font-size: 0.58rem;
+  color: var(--or);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.1rem;
+}
+
+.sidebar-nav .section-item {
+  display: block;
+  padding: 0.25rem 1.5rem 0.25rem 2rem;
+  font-family: var(--font-corps);
+  font-size: 0.72rem;
+  font-style: italic;
+  text-decoration: none;
+  color: rgba(245,237,224,0.35);
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+  line-height: 1.3;
+}
+
+.sidebar-nav .section-item:hover {
+  color: rgba(245,237,224,0.7);
+  padding-left: 2.3rem;
+}
+
+.sidebar-nav .section-item.active-section {
+  color: var(--or-pale);
+  border-left-color: rgba(200,148,58,0.5);
+}
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.15);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══ MAIN ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══ HERO ═══ */
+.chapter-hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 3rem 4rem;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200,148,58,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 100%, rgba(139,94,60,0.08) 0%, transparent 50%),
+    linear-gradient(180deg, var(--encre) 0%, #2d1e0a 60%, #1a1208 100%);
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.hero-ornement {
+  font-size: 1.8rem;
+  color: var(--or);
+  opacity: 0.6;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5em;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+.hero-numero {
+  font-family: var(--font-deco);
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.hero-numero::before, .hero-numero::after {
+  content: '——';
+  opacity: 0.4;
+  margin: 0 1rem;
+}
+
+.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  color: var(--parchemin-pale);
+  line-height: 1.1;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  font-weight: 400;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.15rem;
+  color: var(--or-pale);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  opacity: 0.85;
+}
+
+.hero-epigraphe {
+  max-width: 520px;
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: rgba(245,237,224,0.65);
+  font-style: italic;
+  line-height: 1.6;
+  border-left: 2px solid rgba(200,148,58,0.4);
+  padding-left: 1.2rem;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  font-style: normal;
+  font-family: var(--font-titre);
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to top, var(--parchemin-pale) 0%, transparent 100%);
+}
+
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 1.5rem auto 0;
+}
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,148,58,0.4), transparent);
+}
+.deco-ligne-symbole {
+  color: var(--or);
+  font-size: 0.7rem;
+  opacity: 0.6;
+  letter-spacing: 0.3em;
+}
+
+/* ═══ CORPS ═══ */
+.contenu {
+  max-width: calc(var(--max-prose) + 6rem);
+  margin: 0 auto;
+  padding: 4rem 3rem 6rem;
+}
+
+.section {
+  margin-bottom: 4.5rem;
+  scroll-margin-top: 2rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.2);
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 60px; height: 2px;
+  background: linear-gradient(90deg, var(--or), transparent);
+}
+
+.section-numero {
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--or);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(200,148,58,0.4);
+  border-radius: 2px;
+  white-space: nowrap;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  color: var(--encre);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1rem;
+  color: var(--brun);
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+.sous-section { margin-bottom: 2.5rem; }
+
+.sous-section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.05rem;
+  color: var(--brun);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sous-section-titre::before {
+  content: '✦';
+  color: var(--or);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--encre);
+  margin-bottom: 1.2rem;
+  text-align: justify;
+  hyphens: auto;
+}
+
+p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-deco);
+  font-size: 3.8rem;
+  line-height: 0.8;
+  margin: 0.1rem 0.12rem -0.1rem 0;
+  color: var(--or);
+  text-shadow: 1px 1px 0 rgba(139,94,60,0.3);
+}
+
+blockquote {
+  margin: 2rem 0;
+  padding: 1.5rem 1.8rem;
+  background: rgba(139,94,60,0.06);
+  border-left: 3px solid var(--or);
+  border-radius: 0 4px 4px 0;
+  position: relative;
+}
+
+blockquote::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.5rem; left: 1.2rem;
+  font-family: var(--font-deco);
+  font-size: 4rem;
+  color: var(--or);
+  opacity: 0.25;
+  line-height: 1;
+}
+
+blockquote p {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  font-style: italic;
+  color: var(--encre-douce);
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+blockquote p:first-of-type::first-letter { all: unset; }
+blockquote p:last-child { margin-bottom: 0; }
+
+blockquote cite {
+  display: block;
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--brun-clair);
+  text-align: right;
+  margin-top: 0.8rem;
+  font-style: normal;
+}
+
+.heb {
+  font-size: 1.15em;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  display: inline-block;
+}
+
+.ar {
+  font-size: 1.15em;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  display: inline-block;
+}
+
+.translitt {
+  font-style: italic;
+  color: var(--brun-clair);
+}
+
+/* ═══ TABLEAUX ═══ */
+.tableau-wrapper {
+  margin: 2.5rem 0;
+  overflow-x: auto;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  box-shadow: 0 2px 12px var(--ombre);
+}
+
+.tableau-titre {
+  background: var(--encre);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.2rem;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+thead { background: rgba(139,94,60,0.12); }
+
+thead th {
+  font-family: var(--font-titre);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(200,148,58,0.3);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+  transition: background 0.15s ease;
+}
+tbody tr:hover { background: rgba(200,148,58,0.05); }
+
+tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+  line-height: 1.55;
+  color: var(--encre);
+}
+
+tbody td:first-child {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+tbody tr:nth-child(even) { background: rgba(245,237,224,0.5); }
+
+/* ═══ ENCADRÉ ═══ */
+.encadre {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(200,148,58,0.35);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encadre-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(200,148,58,0.12);
+  padding: 0.75rem 1.2rem;
+  border-bottom: 1px solid rgba(200,148,58,0.2);
+}
+
+.encadre-icone {
+  color: var(--or);
+  font-size: 0.9rem;
+}
+
+.encadre-label {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brun);
+}
+
+.encadre-body {
+  padding: 1.2rem 1.5rem;
+  background: rgba(245,237,224,0.4);
+}
+
+.encadre-body p { margin-bottom: 0.6rem; }
+.encadre-body p:last-child { margin-bottom: 0; }
+
+/* ═══ NOTE DE MARGE ═══ */
+.note-marge {
+  float: right;
+  width: 210px;
+  margin: 0 0 1.5rem 2rem;
+  padding: 1rem 1.2rem;
+  background: rgba(200,148,58,0.07);
+  border: 1px solid rgba(200,148,58,0.25);
+  border-radius: 3px;
+  font-family: var(--font-corps);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--encre-douce);
+}
+
+.note-marge strong {
+  display: block;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.4rem;
+}
+
+/* ═══ ARBRE LINGUISTIQUE ═══ */
+.arbre-linguistique {
+  margin: 2.5rem 0;
+  padding: 2rem;
+  background: var(--encre);
+  border-radius: 4px;
+  border: 1px solid var(--or-encre);
+  overflow-x: auto;
+}
+
+.arbre-titre {
+  font-family: var(--font-titre);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.arbre-linguistique pre {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--parchemin-fonce);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.arbre-linguistique pre .noeud-or { color: var(--or-pale); font-weight: bold; }
+.arbre-linguistique pre .noeud-vif { color: var(--or-vif); }
+.arbre-linguistique pre .noeud-mort { color: rgba(245,237,224,0.35); font-style: italic; }
+.arbre-linguistique pre .noeud-vivant { color: #7ecf7e; }
+
+/* ═══ TIMELINE LINGUISTIQUE ═══ */
+.timeline-lang {
+  margin: 2.5rem 0;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-lang::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--or), rgba(200,148,58,0.2));
+}
+
+.tl-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 1.5rem;
+}
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -2.4rem;
+  top: 0.45rem;
+  width: 10px; height: 10px;
+  background: var(--or);
+  border-radius: 50%;
+  border: 2px solid var(--parchemin-pale);
+  box-shadow: 0 0 0 2px var(--or);
+}
+
+.tl-date {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+.tl-titre {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  color: var(--encre);
+  margin-bottom: 0.4rem;
+}
+
+.tl-corps {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.65;
+}
+
+/* ═══ DEBAT ═══ */
+.debat {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2.5rem 0;
+}
+
+.debat-voix {
+  padding: 1.5rem;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.debat-voix.question {
+  background: rgba(139,94,60,0.08);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-left: 3px solid var(--brun-clair);
+}
+
+.debat-voix.reponse {
+  background: rgba(200,148,58,0.06);
+  border: 1px solid rgba(200,148,58,0.2);
+  border-left: 3px solid var(--or);
+}
+
+.debat-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.debat-voix.question .debat-label { color: var(--brun-clair); }
+.debat-voix.reponse .debat-label { color: var(--or); }
+
+/* ═══ EXEMPLE RACINE ═══ */
+.racine-demo {
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  background: rgba(200,148,58,0.06);
+  border: 1px solid rgba(200,148,58,0.25);
+  border-radius: 4px;
+}
+
+.racine-demo-titre {
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 1rem;
+}
+
+.racine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.racine-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.racine-heb {
+  font-size: 1.6rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.racine-translit {
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--brun-clair);
+  margin-bottom: 0.15rem;
+}
+
+.racine-sens {
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+}
+
+/* ═══ BOITE COMPARAISON ═══ */
+.comp-langues {
+  margin: 2.5rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px var(--ombre);
+}
+
+.comp-col { background: var(--parchemin-pale); }
+
+.comp-col-header {
+  background: var(--encre);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.6rem 1rem;
+  text-align: center;
+}
+
+.comp-item {
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.comp-item:last-child { border-bottom: none; }
+.comp-item:hover { background: rgba(200,148,58,0.05); }
+
+.comp-fr {
+  font-family: var(--font-corps);
+  font-size: 0.82rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  flex-shrink: 0;
+}
+
+.comp-mot {
+  font-size: 1rem;
+  color: var(--brun);
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+
+.comp-latin { direction: ltr; font-style: italic; font-size: 0.88rem; }
+
+/* ═══ ORNEMENT ═══ */
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+/* ═══ NAV CHAPITRES ═══ */
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.3);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+.nav-btn:hover {
+  background: var(--encre);
+  color: var(--or-pale);
+  border-color: var(--encre);
+}
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.75rem;
+  color: var(--or);
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.nav-centre:hover { opacity: 1; }
+
+/* ═══ BTN TOP ═══ */
+#btn-top {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 200;
+  font-size: 1rem;
+}
+
+#btn-top.visible { opacity: 1; transform: translateY(0); }
+#btn-top:hover { background: var(--or); color: var(--encre); }
+
+em { color: var(--brun); font-style: italic; }
+strong { color: var(--encre); font-weight: 600; }
+.terme-cle { color: var(--brun); font-style: italic; font-weight: 500; }
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar { transform: translateX(-100%); transition: transform 0.35s ease; width: 280px; }
+  #sidebar.open { transform: translateX(0); box-shadow: 4px 0 30px rgba(0,0,0,0.5); }
+  #main { margin-left: 0; }
+  #menu-toggle { display: flex; }
+  .contenu { padding: 2rem 1.5rem 4rem; }
+  .debat { grid-template-columns: 1fr; }
+  .note-marge { float: none; width: 100%; margin: 1rem 0; }
+  .racine-grid { grid-template-columns: 1fr 1fr; }
+  .comp-langues { grid-template-columns: 1fr 1fr; }
+}
+
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 150;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 2px;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE AMÉLIORÉ — PUBLICATION WEB
+═══════════════════════════════════════════ */
+@media (max-width: 680px) {
+  html { font-size: 16px; }
+  
+  .chapter-hero {
+    min-height: 50vh;
+    padding: 4rem 1.5rem 3rem;
+  }
+  
+  .hero-titre {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+  }
+  
+  .tableau-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 500px;
+  }
+  
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .synthese {
+    padding: 1.8rem 1.2rem;
+  }
+  
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  blockquote {
+    padding-left: 1rem;
+    margin-left: 0;
+  }
+}
+
+/* Scrollbar sidebar sur tous les navigateurs */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Overlay mobile pour fermer la sidebar */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Lien retour accueil dans sidebar */
+.sidebar-home {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.65;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+
+<!-- ══════════════════════════════
+     SIDEBAR
+══════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la Cosmogonie à l'État d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="chapitre-01-cosmogonie.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-02-origines-mythiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-05-moise-exode.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-06-israel-tribus.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-07-les-royaumes.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-08-age-prophetique.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-11-palestine-1948.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     CONTENU PRINCIPAL
+══════════════════════════════ -->
+<main id="main">
+
+  <!-- FRONTISPICE -->
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre III</div>
+    <h1 class="hero-titre">Les Langues Sémitiques</h1>
+    <p class="hero-sous-titre">De l'adamique à l'Ivrit — une langue qui refuse de mourir</p>
+    <blockquote class="hero-epigraphe">
+      <span class="heb">בְּרֵאשִׁית — כָּתַב — מִכְתָּב — כְּתָב</span><br>
+      <em>Bereshit — katav — mikhtav — ketav</em><br>
+      « Au commencement — il écrivit — la lettre — l'écriture. »<br>
+      Trois consonnes. Un monde de sens.
+      <cite>— Racine K-T-V · Hébreu biblique</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <!-- CORPS -->
+  <article class="contenu">
+
+    <!-- INTRODUCTION -->
+    <section class="section" id="s0">
+      <p>La Bible ne nomme pas la langue parlée au jardin d'Éden. Mais elle pose, dès les premières pages, un acte linguistique fondateur : Adam nomme les animaux. Ce n'est pas un acte administratif banal. Dans la pensée sémitique antique, nommer c'est connaître l'essence — exercer une maîtrise ontologique sur ce que l'on désigne. Donner le <em>nom juste</em>, c'est saisir la réalité profonde de ce qu'on nomme. De cet acte originel, la tradition rabbinique a tiré une conclusion : Adam parlait une langue dans laquelle les mots correspondaient parfaitement à la nature des choses — la <em class="terme-cle">lashon ha-kodesh</em>, la langue sacrée, l'hébreu lui-même selon certains.</p>
+      <p>La Tour de Babel vient ensuite briser cette unité primordiale. Genèse 11,1 : <em>« Toute la terre avait une seule langue et les mêmes mots. »</em> Puis la dispersion divine, la confusion des langues — <em class="translitt">balal</em> —, d'où Babel. La diversité linguistique est théologiquement lue comme conséquence de l'hubris humaine, non comme état voulu. Ce que la linguistique comparative moderne dirait autrement : toutes les langues humaines descendent, par divergence sur des dizaines de millénaires, d'un ou plusieurs fonds ancestraux communs — mais le mécanisme est la préhistoire, non un acte divin ponctuel.</p>
+      <p>Ce chapitre descend depuis ces hauteurs mythiques jusqu'au concret épigraphique et phonologique. Il suit la trajectoire complète de l'hébreu — de ses origines dans la grande famille sémitique à sa résurrection moderne par un homme d'une ténacité presque incompréhensible — et s'interroge chemin faisant sur ses langues sœurs, rivales, et héritières. Il s'arrête aussi sur un débat révélateur : pourquoi le Kaddish, la grande prière du deuil juif, est-il en araméen ? La réponse démonte un mythe linguistique répandu et illustre ce que ce chapitre veut démontrer : en matière de langues, les apparences trompent systématiquement.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION I -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-numero">I</span>
+        <div>
+          <h2 class="section-titre">La grande famille afroasiatique</h2>
+          <p class="section-sous-titre">Où situer le sémitique dans le panorama des langues humaines</p>
+        </div>
+      </div>
+
+      <p>L'hébreu n'est pas une langue isolée. Il appartient à la grande famille des <em class="terme-cle">langues sémitiques</em>, qui est elle-même une branche de la superfamille <em class="terme-cle">afroasiatique</em> — l'une des familles linguistiques les mieux reconstituées du monde. Cette superfamille regroupe des langues apparemment très disparates qui partagent, sous leurs différences, un fond grammatical et lexical commun démontrable par la méthode comparative.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">La superfamille afroasiatique</span>
+        </div>
+        <div class="encadre-body">
+          <p>Six branches principales sont reconnues par les linguistes :</p>
+          <p><strong>Sémitique</strong> — hébreu, arabe, akkadien, araméen, amharique, ge'ez et dizaines d'autres (Proche-Orient, Moyen-Orient, Corne de l'Afrique).</p>
+          <p><strong>Égyptien</strong> — égyptien ancien et copte, langue liturgique chrétienne d'Égypte encore vivante.</p>
+          <p><strong>Berbère (Amazigh)</strong> — langues des populations d'Afrique du Nord : tamazight, kabyle, touareg.</p>
+          <p><strong>Tchadique</strong> — plus de 150 langues du bassin du lac Tchad, dont le haoussa, parlé par plus de 70 millions de personnes.</p>
+          <p><strong>Couchitique</strong> — somali, oromo, afar, beja (Corne de l'Afrique et vallée du Nil).</p>
+          <p><strong>Omotique</strong> — langues du sud-ouest de l'Éthiopie, dont le statut dans la famille est encore débattu.</p>
+          <p>Cette superfamille compte au total plus de 350 langues et plus de 500 millions de locuteurs — l'une des grandes familles linguistiques de l'humanité, ancrée entre l'Afrique du Nord et le Proche-Orient.</p>
+        </div>
+      </div>
+
+      <p>Ce que cette appartenance signifie concrètement : l'hébreu et l'égyptien ancien ne sont pas des étrangers complets. Un philologue habitué aux deux systèmes peut identifier des correspondances régulières de consonnes, des mots dont les racines remontent à un ancêtre commun reconstruit — le <em class="terme-cle">Proto-Afroasiatique</em> — parlé vraisemblablement il y a dix à quinze millénaires, probablement en Afrique du Nord-Est. C'est le fond commun, invisible à l'œil nu, qui unit ces langues séparées par des millénaires de divergence.</p>
+
+      <div class="note-marge">
+        <strong>Note méthodologique</strong>
+        La reconstruction des proto-langues repose sur la méthode comparative : repérage de correspondances phonétiques régulières entre langues apparentées, puis remontée vers la forme ancêtre. Plus la divergence est ancienne, plus la reconstruction est fragile. Le Proto-Afroasiatique est reconstruit avec moins de certitude que le Proto-Indo-Européen, dont la communauté scientifique dispose de davantage de langues attestées très tôt.
+      </div>
+
+      <p>Le sémitique lui-même — la branche qui nous occupe — est daté dans sa phase proto-commune aux environs de 3500–3000 av. J.-C. par les reconstructions les plus courantes, certains linguistes le reculant jusqu'à 5000–6000 av. La zone géographique d'origine est débattue : Afrique du Nord-Est, péninsule arabique, ou Levant méridional selon les hypothèses. Ce proto-sémitique n'a jamais été écrit — il n'est pas attesté, mais partiellement <em>reconstruit</em>, exactement comme les paléontologues restituent un animal disparu à partir de fragments fossiles.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION II -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-numero">II</span>
+        <div>
+          <h2 class="section-titre">L'arbre des langues sémitiques</h2>
+          <p class="section-sous-titre">Parentés, chronologies, langues vivantes et mortes</p>
+        </div>
+      </div>
+
+      <p>La famille sémitique est divisée en trois grandes branches selon la géographie et les correspondances phonétiques : le sémitique <em>oriental</em>, le sémitique <em>nord-ouest</em>, et le sémitique <em>du sud</em>. L'hébreu appartient au sémitique nord-ouest — la branche la plus riche en attestations épigraphiques anciennes, celle qui a produit le phénicien, l'araméen, l'ougaritique.</p>
+
+      <div class="arbre-linguistique">
+        <div class="arbre-titre">Arbre généalogique des langues sémitiques</div>
+        <pre><span class="noeud-or">Proto-sémitique</span>  (~3500–3000 av. J.-C.)
+│
+├── <span class="noeud-vif">Sémitique oriental</span>
+│   └── <span class="noeud-mort">Akkadien</span>  (~2500–500 av.)
+│       ├── <span class="noeud-mort">Babylonien</span>
+│       └── <span class="noeud-mort">Assyrien</span>
+│
+├── <span class="noeud-vif">Sémitique nord-ouest</span>
+│   ├── <span class="noeud-mort">Ougaritique</span>  (~1400–1200 av.)   [alphabet cunéiforme]
+│   ├── Cananéen
+│   │   ├── <span class="noeud-mort">Phénicien</span>  (~1050–200 av.)   ──► Alphabet mondial
+│   │   │   └── <span class="noeud-mort">Punique</span>  (Carthage)
+│   │   ├── <span class="noeud-vivant">Hébreu</span>  (~1200 av.–présent)   [seule langue ressuscitée]
+│   │   ├── <span class="noeud-mort">Moabite, Ammonite, Édomite</span>
+│   │   └── <span class="noeud-mort">Samaritain</span>  (liturgique résiduel)
+│   └── <span class="noeud-vivant">Araméen</span>  (~1200 av.–présent)
+│       ├── <span class="noeud-mort">Araméen impérial</span>  (~600–200 av.)
+│       ├── <span class="noeud-vivant">Syriaque</span>  (~100 ap.–présent)
+│       └── <span class="noeud-vivant">Néo-araméen</span>  (langues vivantes en danger)
+│
+└── <span class="noeud-vif">Sémitique du sud</span>
+    ├── <span class="noeud-vivant">Arabe</span>  (~500 av.–présent)   [420 millions de locuteurs]
+    └── Éthio-sémitique
+        ├── <span class="noeud-mort">Ge'ez</span>  (~300 ap.)   [liturgique chrétien]
+        └── <span class="noeud-vivant">Amharique, Tigrigna, Tigré</span>  (vivants)
+
+<span style="color:rgba(245,237,224,0.3); font-size:0.8em;">  Légende :  </span><span class="noeud-vivant">vert = vivant</span>  <span class="noeud-mort">estompé = attesté mais éteint</span></pre>
+      </div>
+
+      <p>La lecture de cet arbre appelle plusieurs observations de méthode. Premièrement, la mort d'une langue ne signifie pas sa disparition complète : l'akkadien est éteint comme langue parlée depuis le début de notre ère, mais ses textes cunéiformes demeurent lisibles et étudiés — il a laissé des traces profondes dans le vocabulaire araméen et hébreu. Deuxièmement, l'ougaritique — découvert à Ras Shamra (Syrie) à partir de 1929 — est une fenêtre extraordinaire sur le cananéen du XIVe siècle avant notre ère, dont l'hébreu est directement issu. Ses textes mythologiques (le cycle de Baal) éclairent des passages obscurs de la Bible hébraïque d'une lumière saisissante. Troisièmement, le phénicien mérite une mention particulière : c'est la langue dont l'alphabet consonantique, diffusé par les marchands phéniciens à travers la Méditerranée, a donné naissance à tous les alphabets du monde occidental — grec, latin, cyrillique, et par d'autres voies, arabe et hébreu carré.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Inscriptions majeures — Attestations épigraphiques des langues sémitiques</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Document</th>
+              <th>Date approx.</th>
+              <th>Langue</th>
+              <th>Intérêt</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Textes d'Ebla</td>
+              <td>~2400–2300 av.</td>
+              <td>Éblaïte (proto-sémitique nord)</td>
+              <td>Plus anciens textes sémitiques connus ; vocabulaire proto-cananéen</td>
+            </tr>
+            <tr>
+              <td>Épopée de Gilgamesh (akkadien)</td>
+              <td>~2100–1700 av.</td>
+              <td>Akkadien</td>
+              <td>Déluge de Uta-Napishtim — parallèle direct avec Noé (ch. II)</td>
+            </tr>
+            <tr>
+              <td>Lettres d'Amarna</td>
+              <td>~1360–1335 av.</td>
+              <td>Akkadien + gloses cananéennes</td>
+              <td>Fossiles linguistiques du cananéen — mots hébreux un millénaire avant la Bible</td>
+            </tr>
+            <tr>
+              <td>Tablettes d'Ougarit (cycle de Baal)</td>
+              <td>~1400–1200 av.</td>
+              <td>Ougaritique</td>
+              <td>Mythologie cananéenne ; éclaire la Bible ; alphabet cunéiforme consonantique</td>
+            </tr>
+            <tr>
+              <td>Calendrier de Gezer</td>
+              <td>~925 av.</td>
+              <td>Hébreu proto-biblique</td>
+              <td>Un des plus anciens textes hébreux épigraphiques ; liste agricole d'un écolier</td>
+            </tr>
+            <tr>
+              <td>Stèle de Mésha (pierre Moabite)</td>
+              <td>~840 av.</td>
+              <td>Moabite</td>
+              <td>Première mention extrabiblique du nom YHWH ; langue quasi identique à l'hébreu</td>
+            </tr>
+            <tr>
+              <td>Inscription de Siloé</td>
+              <td>~700 av.</td>
+              <td>Hébreu biblique classique</td>
+              <td>Tunnel d'Ézéchias ; texte technique vivant, hébreu non-liturgique</td>
+            </tr>
+            <tr>
+              <td>Ostraca de Lachish</td>
+              <td>~588 av.</td>
+              <td>Hébreu biblique classique</td>
+              <td>Correspondance militaire de la chute de Juda ; hébreu en situation de crise</td>
+            </tr>
+            <tr>
+              <td>Rouleau de la mer Morte (Grande Isaïe)</td>
+              <td>~125 av.</td>
+              <td>Hébreu mishnaïque / biblique</td>
+              <td>Texte biblique le plus ancien conservé ; transition entre HBC et HBT</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION III -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-numero">III</span>
+        <div>
+          <h2 class="section-titre">La racine trilitérale — la structure du sémitique</h2>
+          <p class="section-sous-titre">Trois consonnes comme squelette du monde</p>
+        </div>
+      </div>
+
+      <p>Avant d'entrer dans l'histoire de l'hébreu, il faut comprendre la structure qui sous-tend toutes les langues sémitiques et les distingue radicalement des langues indo-européennes. Le trait caractéristique le plus visible — et le plus élégant — du sémitique est le <em class="terme-cle">système des racines trilitérales</em> : trois consonnes forment le squelette conceptuel d'un mot, et les voyelles insérées entre ces consonnes créent des dérivés sémantiquement liés.</p>
+
+      <p>Le sens fondamental est porté par les consonnes. Les voyelles varient pour moduler ce sens : elles indiquent si l'action est accomplie ou en cours, si le mot désigne l'agent ou l'instrument, le lieu ou l'abstraction. C'est une vision du langage profondément différente de celle des langues indo-européennes, où racines et désinences s'agglutinent de manière différente.</p>
+
+      <div class="racine-demo">
+        <div class="racine-demo-titre">Racine K-T-V (כ-ת-ב) — « écrire » en hébreu</div>
+        <div class="racine-grid">
+          <div class="racine-item">
+            <div class="racine-heb">כָּתַב</div>
+            <div class="racine-translit">katav</div>
+            <div class="racine-sens">il a écrit (accompli)</div>
+          </div>
+          <div class="racine-item">
+            <div class="racine-heb">כּוֹתֵב</div>
+            <div class="racine-translit">kotev</div>
+            <div class="racine-sens">il écrit (participe actif)</div>
+          </div>
+          <div class="racine-item">
+            <div class="racine-heb">מִכְתָּב</div>
+            <div class="racine-translit">mikhtav</div>
+            <div class="racine-sens">lettre, document écrit</div>
+          </div>
+          <div class="racine-item">
+            <div class="racine-heb">כְּתָב</div>
+            <div class="racine-translit">ketav</div>
+            <div class="racine-sens">écriture, script</div>
+          </div>
+          <div class="racine-item">
+            <div class="racine-heb">כְּתֻבָּה</div>
+            <div class="racine-translit">ketubbah</div>
+            <div class="racine-sens">contrat de mariage (l'écrit)</div>
+          </div>
+          <div class="racine-item">
+            <div class="racine-heb">כְּתוּבִים</div>
+            <div class="racine-translit">ketuvim</div>
+            <div class="racine-sens">les Écrits (3ème partie du canon)</div>
+          </div>
+        </div>
+      </div>
+
+      <p>Cette même racine apparaît en arabe comme <em class="translitt">kataba</em> (il a écrit), <em class="translitt">kitāb</em> (livre), <em class="translitt">maktab</em> (bureau, école) — les trois consonnes K-T-B, avec des voyelles légèrement différentes selon la phonologie arabe. En akkadien, une forme apparentée existe également. Ce parallélisme inter-sémitique est la preuve directe de l'héritage commun — toutes ces langues ont hérité ce squelette consonantique du proto-sémitique.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Racines trilitérales partagées — Hébreu / Arabe / Akkadien</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>Racine</th>
+              <th>Hébreu</th>
+              <th>Arabe</th>
+              <th>Akkadien</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Maison</td>
+              <td>B-Y-T</td>
+              <td><span class="heb">בַּיִת</span> bayit</td>
+              <td><span class="ar">بَيْت</span> bayt</td>
+              <td>bītu</td>
+            </tr>
+            <tr>
+              <td>Fils</td>
+              <td>B-N</td>
+              <td><span class="heb">בֵּן</span> ben</td>
+              <td><span class="ar">اِبْن</span> ibn</td>
+              <td>māru / binu</td>
+            </tr>
+            <tr>
+              <td>Roi</td>
+              <td>M-L-K</td>
+              <td><span class="heb">מֶלֶךְ</span> melekh</td>
+              <td><span class="ar">مَلِك</span> malik</td>
+              <td>malku</td>
+            </tr>
+            <tr>
+              <td>Cœur</td>
+              <td>L-B-B</td>
+              <td><span class="heb">לֵב</span> lev</td>
+              <td><span class="ar">قَلْب</span> qalb (racine différente)</td>
+              <td>libbu</td>
+            </tr>
+            <tr>
+              <td>Eau</td>
+              <td>M-Y-M</td>
+              <td><span class="heb">מַיִם</span> mayim</td>
+              <td><span class="ar">مَاء</span> māʾ</td>
+              <td>mû</td>
+            </tr>
+            <tr>
+              <td>Paix / salut</td>
+              <td>Š-L-M</td>
+              <td><span class="heb">שָׁלוֹם</span> shalom</td>
+              <td><span class="ar">سَلَام</span> salām</td>
+              <td>šalāmu</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Débat — Aspect verbal et temps en hébreu</span>
+        </div>
+        <div class="encadre-body">
+          <p>Le système verbal hébreu repose traditionnellement sur l'aspect plutôt que sur le temps : <em class="translitt">qatal</em> (action accomplie, achevée) et <em class="translitt">yiqtol</em> (action inaccomplie, en cours ou future). C'est une vision du temps radicalement différente de celle des langues indo-européennes — l'hébreu ne demande pas <em>quand</em> l'action se produit, mais <em>si elle est achevée ou non</em>.</p>
+          <p>Cette distinction a des implications théologiques profondes : quand Genèse 1,1 dit <span class="heb">בָּרָא</span> (<em class="translitt">bara</em>), la forme accomplie, cela ne précise pas nécessairement un passé lointain — cela dit que l'acte créateur est <em>accompli, total, achevé</em>. Certains théologiens ont exploré cette nuance pour affirmer que la création n'est pas un événement daté mais un état ontologique permanent.</p>
+          <p>La linguistique moderne nuance cependant : les formes hébraïques expriment aussi du temps en contexte narratif, et les grammairiens contemporains (notamment John Cook, John Huehnergard) ont montré que l'opposition aspect/temps est plus complexe qu'une dichotomie simple.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IV -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-numero">IV</span>
+        <div>
+          <h2 class="section-titre">Le proto-cananéen — le grand-père de l'hébreu</h2>
+          <p class="section-sous-titre">Le continuum dialectal du Levant méridional (~2000–1200 av.)</p>
+        </div>
+      </div>
+
+      <p>Avant qu'il y ait un « hébreu » distinct, il y a le <em class="terme-cle">cananéen</em> — un continuum dialectal couvrant le Levant méridional entre ~2000 et ~1200 av. J.-C. Ce n'est pas une seule langue mais un faisceau de variétés régionales mutuellement intelligibles, parlées par les populations des cités-États de la zone : Ugarit au nord, Byblos sur la côte, Megiddo et Hazor dans les vallées, Jérusalem dans les hautes terres. L'hébreu, le phénicien, le moabite — toutes sont des branches de ce tronc commun cananéen.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Les Lettres d'Amarna — un fossile linguistique exceptionnel</h3>
+        <p>Les <em class="terme-cle">Lettres d'Amarna</em> (~1360–1335 av. J.-C.) constituent l'une des archives diplomatiques les plus extraordinaires de l'Antiquité. Découvertes en 1887 à Tell el-Amarna en Égypte — l'ancienne Akhetaton, capitale éphémère du pharaon Akhenaton —, elles comprennent environ 380 tablettes d'argile en écriture cunéiforme. Ce sont les lettres échangées entre la cour égyptienne et les rois des cités-États de Canaan, de Babylone, de Mitanni, d'Assyrie.</p>
+        <p>La langue de la correspondance est l'akkadien — la <em class="translitt">lingua franca</em> diplomatique du Proche-Orient à cette époque. Mais les auteurs cananéens des lettres — princes locaux rendant compte à Pharaon ou réclamant son aide contre les Habiru et d'autres ennemis — trahissent involontairement leur langue maternelle. Ils insèrent des <strong>gloses cananéennes</strong> : des mots cananéens notés en cunéiforme pour expliquer un terme akkadien difficile, ou tout simplement parce que leur contrôle de l'akkadien est imparfait. Ces gloses sont des fossiles linguistiques d'une valeur inestimable — elles nous donnent du vocabulaire cananéen du XIVe siècle avant notre ère, soit environ mille ans avant les premiers textes hébreux substantiels. Or, plusieurs de ces mots sont directement identifiables dans la Bible hébraïque.</p>
+
+        <blockquote>
+          <p>Le roi Rib-Hadda de Byblos écrit à Pharaon : <em>« Toutes mes villes ont été prises. »</em> Dans le même texte, il utilise des formes verbales qui sont du cananéen pur, non de l'akkadien — son cri d'alarme laisse échapper sa langue maternelle.</p>
+          <cite>— Lettres d'Amarna, EA 74, ~1340 av. J.-C.</cite>
+        </blockquote>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">L'ougaritique — la fenêtre sur le cananéen mythologique</h3>
+        <p>La découverte en 1929 des archives de <em class="terme-cle">Ras Shamra</em> — l'antique Ougarit, sur la côte syrienne — a constitué l'une des révolutions de la philologie sémitique du XXe siècle. Les tablettes d'Ugarit, datées du XIVe–XIIIe siècle avant notre ère, contiennent en ougaritique (un dialecte cananéen nord-occidental distinct mais très proche de l'hébreu) un cycle mythologique complet : les aventures du dieu Baal, ses combats contre Mot (la mort) et Yam (la mer), son amour pour la déesse Anat.</p>
+        <p>L'intérêt pour la philologie biblique est immédiat et massif. Des expressions, des images poétiques, des épithètes divines que l'on rencontre dans les Psaumes ou dans Isaïe — et qui semblaient obscures — s'éclairent soudain à la lumière des textes d'Ougarit. La <em>chevauchée sur les nuées</em> — épithète de Baal à Ugarit — se retrouve appliquée à YHWH dans le Psaume 68. Le combat de Dieu contre le dragon des eaux primordiales — évoqué dans Job et Isaïe — résonne directement avec les combats de Baal contre Yam. L'hébreu biblique a hérité d'un fond poétique et mythologique cananéen qu'il a retravaillé en l'intégrant à sa théologie monothéiste.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION V -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-numero">V</span>
+        <div>
+          <h2 class="section-titre">L'hébreu proto-biblique</h2>
+          <p class="section-sous-titre">Les premiers textes — XIIe–Xe siècles av. J.-C.</p>
+        </div>
+      </div>
+
+      <p>L'hébreu comme langue distincte du cananéen général commence à se dessiner dans les textes à partir du XIIe–Xe siècle avant notre ère — contemporain, précisément, de l'émergence d'Israël comme entité politique dans les hautes terres de Canaan (voir chapitre VI). Il n'y a pas de rupture nette, de jour où l'on a cessé de parler « cananéen » pour commencer à parler « hébreu » — c'est une différenciation graduelle de dialectes qui finissent par constituer une identité propre, renforcée par la constitution d'une littérature nationale.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le Cantique de Déborah — l'un des textes les plus anciens</h3>
+        <p>Le Cantique de Déborah (Juges 5) est couramment considéré par les biblistes comme l'un des textes hébreux les plus anciens conservés dans la Bible — daté avec prudence du XIIe siècle, peut-être même antérieur. Sa langue est archaïque, sa syntaxe parfois opaque, sa poésie dense et allusive. Il préserve des formes grammaticales et des mots que l'on ne retrouve nulle part ailleurs dans la Bible — comme des fossiles linguistiques d'un hébreu plus ancien que l'hébreu biblique classique.</p>
+        <p>La célèbre ouverture — <span class="heb">בְּפָרֹעַ פְּרָעוֹת בְּיִשְׂרָאֵל</span> (<em class="translitt">befaro'a pera'ot be-Yisrael</em>) — présente des formes verbales archaïques caractéristiques que les grammairiens hébreux identifient comme marque de grande antiquité. Ce n'est pas une reconstitution artificielle du passé — c'est une langue vivante d'une époque révolue.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le Calendrier de Gezer — l'hébreu d'un écolier</h3>
+        <p>En 1908, l'archéologue irlandais R.A.S. Macalister dégage à <em class="terme-cle">Gezer</em> — cité cananéenne puis israélite dans le Shefelah, la plaine de basse Judée — une petite tablette calcaire de 11 × 7 cm. Elle date d'environ 925 av. J.-C. et porte une liste de mois agricoles gravée en hébreu proto-biblique. Sa forme maladroite, l'absence de correction, la répétition d'une même information suggèrent qu'il s'agit d'un exercice scolaire — un enfant apprenant à écrire en recopiant un calendrier agricole.</p>
+
+        <blockquote>
+          <p>
+            Deux mois : la récolte des olives.<br>
+            Deux mois : la semaille (des céréales).<br>
+            Deux mois : la plantation tardive.<br>
+            Un mois : la récolte de lin.<br>
+            Un mois : la récolte de l'orge.<br>
+            Un mois : la récolte et la fête.<br>
+            Deux mois : la taille de la vigne.<br>
+            Un mois : les fruits d'été.
+          </p>
+          <cite>— Calendrier de Gezer, ~925 av. J.-C. (trad. de l'auteur)</cite>
+        </blockquote>
+
+        <p>Simple, concret, agricole. Aucune prétention littéraire. C'est la langue d'un paysan ou d'un enfant de paysan des hautes terres de Canaan au Xe siècle — et c'est précisément pour cela qu'il est précieux. Il nous donne l'hébreu ordinaire, non la langue travaillée de la littérature religieuse. Son écriture est <em class="terme-cle">proto-cananéenne</em> — la forme d'alphabet qui deviendra l'hébreu paléo-hébreu classique et, par voie phénicienne, l'ancêtre de tous les alphabets méditerranéens.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VI -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-numero">VI</span>
+        <div>
+          <h2 class="section-titre">L'hébreu biblique classique</h2>
+          <p class="section-sous-titre">IXe–VIe siècles av. J.-C. — la langue de la Bible</p>
+        </div>
+      </div>
+
+      <p>L'<em class="terme-cle">Hébreu Biblique Classique</em> (HBC) est la langue de la grande majorité de la Bible hébraïque — les livres historiques (Samuel, Rois, Josué), les grands prophètes (Isaïe, Jérémie, Ézéchiel), les Psaumes, les Proverbes. C'est une langue standardisée, probablement fondée sur le dialecte de Juda et de Jérusalem, avec une grammaire et un vocabulaire relativement stables — ce que les Massorètes de Tibériade (Ve–Xe s. ap.) vocaliseront et fixeront par écrit sous la forme que nous lisons aujourd'hui dans les Bibles hébraïques.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Caractéristiques phonologiques et grammaticales</h3>
+        <p>L'HBC possède un inventaire consonantique de vingt-deux lettres dans son alphabet — mais phonologiquement, il distinguait originellement davantage de sons. Plusieurs lettres avaient deux prononciations (la <em class="terme-cle">dagesh</em> — le point dur — distingue bet/vet, kaf/khaf, pe/fe, dalet/dhalet, etc.). Des sons gutturaux — alef, ayin, het, khaf, qof — représentent des phonèmes pharyngaux, uvulaires et vélaires absents des langues indo-européennes et qui posent de grandes difficultés aux apprenants occidentaux.</p>
+        <p>La syntaxe de l'HBC est majoritairement VSO — verbe-sujet-objet — contrairement au français SVO. Cela crée des effets stylistiques propres : l'action précède l'agent, ce qui donne une impression de dynamisme et d'urgence dans le récit. L'hébreu biblique est une langue qui « fait » avant de désigner qui fait.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Les grandes inscriptions épigraphiques</h3>
+        <p>L'<em class="terme-cle">Inscription de Siloé</em> (~700 av. J.-C.) est l'une des plus belles pièces de l'épigraphie hébraïque. Retrouvée en 1880 par un enfant se baignant dans le tunnel hydraulique de Siloé (Jérusalem), elle décrit la jonction des deux équipes de tailleurs de pierre qui creusaient depuis les deux extrémités opposées du tunnel. Le texte est vivant, presque enthousiaste — il décrit le moment où les ouvriers entendent les coups de leurs collègues à travers la roche, puis la jonction finale. C'est de l'hébreu technique, non liturgique, qui rend un événement concret avec une précision et une émotion rares dans l'épigraphie antique.</p>
+
+        <blockquote>
+          <p>Et voici la percée : lorsque les carriers levaient encore la pioche chacun vers ses compagnons, et qu'il restait trois coudées à percer, on entendait la voix de l'un qui appelait l'autre — car il y avait une fissure dans le rocher du côté droit et du côté gauche. Et au jour de la percée, les carriers frappèrent chacun à la rencontre de ses compagnons, pioche contre pioche. Et l'eau coula depuis la source jusqu'au bassin, deux cents coudées — cent coudées était la hauteur du rocher au-dessus de la tête des carriers.</p>
+          <cite>— Inscription de Siloé, ~700 av. J.-C. (trad. de l'auteur d'après le texte hébreu)</cite>
+        </blockquote>
+
+        <p>Les <em class="terme-cle">Ostraca de Lachish</em> (~588 av. J.-C.) constituent un autre ensemble d'une valeur extraordinaire : dix-huit tessons de poterie couverts d'écriture hébraïque à l'encre, retrouvés en 1935 dans les décombres du poste de garde de la porte de Lachish. Ce sont des messages militaires des derniers jours avant la conquête babylonienne — les dernières communications entre officiers d'un royaume en train de tomber. Le ton est urgent, parfois désespéré.</p>
+
+        <blockquote>
+          <p>Que ton serviteur sache que nous surveillons les signaux de feu de Lachish, selon tous les signes que mon seigneur a donnés — car nous ne voyons plus les signaux d'Azéqa.</p>
+          <cite>— Ostrakon de Lachish IV, ~588 av. J.-C.</cite>
+        </blockquote>
+
+        <p>Azéqa vient de tomber. Ce message est peut-être l'un des derniers témoignages directs du royaume de Juda en tant qu'entité indépendante. La langue est précise, sobre, militaire — rien à voir avec l'élévation stylistique des prophètes. C'est l'hébreu de gens qui ont peur.</p>
+
+        <div class="encadre">
+          <div class="encadre-header">
+            <span class="encadre-icone">◈</span>
+            <span class="encadre-label">La bulle de Baruch — un personnage biblique attesté</span>
+          </div>
+          <div class="encadre-body">
+            <p>En 1975, un collectionneur propose à Nahman Avigad, grand épigraphiste israélien, un petit sceau d'argile (une <em class="terme-cle">bulle</em>) portant l'inscription : <span class="heb">לברכיהו בן נריהו הספר</span> — <em>« Appartenant à Berekyahu fils de Neriyahu, le scribe. »</em></p>
+            <p>Berekyahu ben Neriyahu est le nom complet de <em>Baruch fils de Nériyahu</em> — le secrétaire du prophète Jérémie, mentionné par son nom complet précisément en Jérémie 36,4 et 36,8. Un personnage biblique nommément attesté par l'archéologie, sur un objet datable de la fin du VIIe ou début du VIe siècle av. J.-C. L'empreinte de son propre sceau a survécu 2600 ans.</p>
+            <p>Cela ne prouve pas que les prophéties de Jérémie sont historiquement exactes dans leurs moindres détails — mais cela confirme que des personnages précis, nommés dans la Bible, ont existé et laissé des traces matérielles.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VII -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-numero">VII</span>
+        <div>
+          <h2 class="section-titre">L'araméen — la grande transition</h2>
+          <p class="section-sous-titre">La langue rivale et les mécanismes de supplantation</p>
+        </div>
+      </div>
+
+      <p>L'hébreu n'a pas attendu la modernité pour être menacé. À partir du VIIIe siècle avant notre ère, une langue sœur — l'araméen — commence à le supplanter comme langue de communication internationale et administrative dans tout le Proche-Orient. Ce processus s'étend sur plusieurs siècles, change radicalement le paysage linguistique de la région, et laisse des traces profondes dans le texte biblique lui-même.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">L'araméen impérial — la langue des empires</h3>
+        <p>L'araméen est, comme l'hébreu, un dialecte du sémitique nord-ouest. Ses locuteurs originels — les Araméens — sont des populations semi-nomades qui s'installent progressivement en Syrie et en Mésopotamie au XIe–Xe siècle. Leur langue possède un avantage considérable : elle s'écrit en alphabet consonantique simple et peut être notée sur du papyrus (plus léger que les tablettes d'argile de l'akkadien cunéiforme), ce qui en fait un outil diplomatique et commercial bien adapté à la correspondance sur de longues distances.</p>
+        <p>Les <strong>Assyriens</strong> — qui conquièrent le Proche-Orient au VIIIe–VIIe siècle — adoptent l'araméen comme langue administrative de leur empire, aux côtés de l'akkadien. Les <strong>Babyloniens</strong> poursuivent cette politique. Les <strong>Perses Achéménides</strong>, à partir de Cyrus le Grand (539 av.), en font la langue officielle de leur empire international : l'<em class="terme-cle">araméen impérial</em> (<em class="translitt">aram diplomatique</em>) devient la lingua franca du Moyen-Orient du VIe au IVe siècle.</p>
+
+        <div class="note-marge">
+          <strong>L'anecdote de 2 Rois 18,26</strong>
+          Quand le général assyrien Rabshaqé harangue la population de Jérusalem depuis les murailles, les fonctionnaires judéens le supplient de parler en araméen plutôt qu'en hébreu (<em>yehudit</em>) — car le peuple assemblé sur les remparts comprend l'hébreu et serait terrorisé. L'araméen est déjà la langue des diplomates et des élites en 701 av. J.-C.
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">L'exil babylonien — le tournant décisif</h3>
+        <p>L'exil babylonien (587–538 av. J.-C.) précipite le changement. Les Judéens déportés vivent immergés dans un environnement araméophone. Leurs enfants grandissent en araméen. Quand Cyrus autorise le retour (538), ceux qui rentrent en Judée sont souvent des araméophones dont l'hébreu est rudimentaire ou passif. Le livre de Néhémie — qui décrit la reconstruction de Jérusalem vers 445 av. — consigne cette réalité avec une précision douloureuse : <em>« Leurs enfants parlaient à moitié ashdodite ou la langue de tel ou tel peuple, et ne savaient pas parler le judéen (yehudit). »</em> (Néhémie 13,24)</p>
+        <p>L'araméen devient progressivement la langue vernaculaire de la population juive de Palestine — la langue du quotidien, du marché, de la famille. L'hébreu recule vers le statut de langue <em>sacrée</em> et <em>savante</em> — celle de la Torah, de la liturgie, de l'étude. Cette situation perdurera pendant des siècles. Et c'est dans cet état de diglossie hébreu/araméen que vivra Jésus de Nazareth, au Ier siècle de notre ère.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Les passages araméens de la Bible</h3>
+        <p>La Bible hébraïque elle-même porte la marque de cette transition. Plusieurs passages sont rédigés directement en araméen :</p>
+        <ul style="margin: 1rem 0 1.2rem 1.5rem; line-height: 1.9; color: var(--encre);">
+          <li><strong>Daniel 2,4b–7,28</strong> — la grande section araméenne du livre de Daniel, probablement rédigée au IIe siècle av. J.-C.</li>
+          <li><strong>Esdras 4,8–6,18 et 7,12–26</strong> — correspondances administratives entre Jérusalem et la cour perse, authentiquement rédigées en araméen impérial.</li>
+          <li><strong>Genèse 31,47</strong> — un seul verset, où Laban nomme le cairn en araméen (<em class="translitt">yegar sahadutha</em>) tandis que Jacob le nomme en hébreu (<em class="translitt">gal'ed</em>) — les deux mots signifient « cairn témoignage ». Un moment de bilinguisme sémitique figé dans le texte.</li>
+          <li><strong>Jérémie 10,11</strong> — un seul verset en araméen au milieu d'un chapitre hébreu — peut-être une glose d'un copiste araméophone.</li>
+        </ul>
+        <p>Ces passages sont des fenêtres sur la réalité bilingue dans laquelle vivaient les auteurs et les copistes de la Bible — non des anomalies, mais des reflets de leur monde linguistique ordinaire.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VIII -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-numero">VIII</span>
+        <div>
+          <h2 class="section-titre">L'hébreu mishnaïque — la langue des rabbins</h2>
+          <p class="section-sous-titre">70 ap. J.-C.–500 ap. J.-C. — une langue vivante paradoxale</p>
+        </div>
+      </div>
+
+      <p>La destruction du Second Temple en 70 de notre ère et la dispersion qui s'ensuit précipitent une crise linguistique doublée d'un renouveau paradoxal. En Palestine, l'araméen domine la vie quotidienne. Dans la diaspora — Alexandrie, Rome, Antioche — le grec est la langue des communautés juives hellénophones : la <em class="terme-cle">Septante</em>, traduction grecque de la Bible réalisée à Alexandrie à partir du IIIe siècle av., est plus familière à beaucoup de Juifs de la diaspora que le texte hébreu original. L'hébreu semble condamné à devenir une langue liturgique fossilisée.</p>
+      <p>Mais c'est précisément dans cette période de crise maximale que l'hébreu connaît un renouveau extraordinaire — comme langue de la grande entreprise de codification rabbinique. C'est une langue vivante, créative, polémique — pas une relique.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La Mishna — ~200 ap. J.-C.</h3>
+        <p>Rabbi Yehouda HaNassi — le Prince, surnommé simplement « Rebbe » — compile et édite vers 200 ap. J.-C. la <em class="terme-cle">Mishna</em> (<em class="translitt">mishnah</em> — répétition, enseignement oral codifié) : premier grand corpus de la littérature rabbinique, recueil des discussions et décisions halakhiques des Tannaïm sur deux siècles. Ses soixante-trois traités couvrent tout le droit religieux et civil juif — de l'agriculture aux fêtes, du droit de propriété au mariage.</p>
+        <p>Sa langue — l'<em class="terme-cle">hébreu mishnaïque</em> ou hébreu rabbinique — est clairement distincte de l'hébreu biblique classique. Plus simple grammaticalement. Vocabulaire enrichi de centaines d'emprunts à l'araméen, au grec (<em class="translitt">sanhedrin</em> du grec <em class="translitt">synedrion</em>), au latin. Syntaxe plus analytique. C'est une langue <em>fonctionnelle</em> — elle sert à argumenter, à préciser, à trancher des questions légales. Sa clarté est parfois sèche, presque technique — très différente de la hauteur poétique de la Bible.</p>
+        <p>Ce qui est remarquable : l'hébreu mishnaïque n'est pas une langue morte maintenue artificiellement. Les rabbins débattent, plaisantent, s'indignent en hébreu mishnaïque. C'est la langue de leur intelligence collective. Sa vitalité est réelle, même si elle n'est plus la langue maternelle des enfants.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le Talmud — araméen et hébreu entrelacés</h3>
+        <p>Le Talmud — dans ses deux versions (<em class="terme-cle">Talmud de Jérusalem</em>, ~Ve s. ap. ; <em class="terme-cle">Talmud de Babylone</em>, ~VIe s. ap.) — est rédigé dans un mélange caractéristique et délibéré. Le texte de la Mishna (en hébreu mishnaïque) est cité, puis discuté dans la Guemara rédigée principalement en araméen — palestinien pour le Talmud de Jérusalem, babylonien pour le Talmud de Babylone. Les deux langues se relaient page après page, paragraphe après paragraphe, selon le genre de discours : hébreu pour les normes, araméen pour le débat.</p>
+        <p>Ce n'est pas un désordre. C'est l'enregistrement fidèle d'une réalité bilingue dans les grandes académies rabbiniques. L'hébreu est la langue du prescrit ; l'araméen est la langue de la discussion.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IX -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-numero">IX</span>
+        <div>
+          <h2 class="section-titre">L'hébreu médiéval — une langue qui refuse de mourir</h2>
+          <p class="section-sous-titre">VIIe–XIXe siècles — le paradoxe de la langue sans locuteur natif</p>
+        </div>
+      </div>
+
+      <p>Du VIIe siècle au XIXe siècle — plus d'un millénaire — l'hébreu n'est la langue maternelle de personne. Les Juifs parlent l'araméen, le judéo-grec, l'arabe, le perse, le yiddish, le ladino, selon les régions et les époques. Et pourtant l'hébreu ne disparaît pas. Il reste vivant comme langue de la Torah, de la prière, de la correspondance savante inter-communautaire. Un rabbin de Tolède peut écrire en hébreu à un rabbin de Bagdad ou de Troyes — et ils se comprennent. L'hébreu est une langue internationale juive sans être la langue maternelle d'aucun Juif.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">L'âge d'or judéo-arabe — IXe–XIIe siècles</h3>
+        <p>En terres islamiques — particulièrement dans al-Andalus (l'Espagne arabe) sous les califats omeyyade et abbasside — se produit un phénomène linguistique extraordinaire. Les grandes figures intellectuelles juives médiévales écrivent souvent en <em class="terme-cle">judéo-arabe</em> (arabe noté en caractères hébreux) pour leurs œuvres philosophiques, médicales et scientifiques, tout en maintenant l'hébreu pour la poésie religieuse et les textes halakhiques.</p>
+        <p><strong>Saadia Gaon</strong> (~882–942) traduit la Torah en arabe (le <em class="translitt">Tafsir</em>) et rédige la première grammaire hébraïque systématique. <strong>Yehuda Halévi</strong> (~1075–1141), dans ses <em>Poèmes de Sion</em>, porte l'hébreu médiéval à des sommets poétiques que peu de langues ont atteints — et innove en adaptant les formes métriques de la poésie arabe à la prosodie hébraïque. <strong>Moïse Maïmonide</strong> (~1135–1204) rédige son <em>Guide des Égarés</em> en arabe mais son code halakhique <em class="terme-cle">Mishné Torah</em> dans un hébreu mishnaïque d'une clarté et d'une élégance délibérément accessibles — lisible sans commentaire par tout Juif lettré.</p>
+        <p>Cette période voit aussi le développement de la grammaire hébraïque scientifique. Des grammairiens comme <strong>David Kimhi</strong> (Radak, ~1160–1235) analysent l'hébreu avec les outils de la linguistique arabe, codifient les règles morphologiques, établissent les paradigmes verbaux systématiques. Ce travail grammatical sera la fondation sur laquelle les humanistes chrétiens de la Renaissance apprendront l'hébreu — et sans laquelle la Réforme protestante, avec son retour au texte hébreu original, n'aurait pas été possible.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le yiddish et le ladino — les langues de la diaspora</h3>
+        <p>Deux grandes langues judéo-diasporiques se développent parallèlement à l'hébreu, et leur existence même illustre comment l'hébreu a maintenu une présence active même quand il n'était plus parlé comme langue première.</p>
+        <p>Le <em class="terme-cle">yiddish</em> — <em class="translitt">Judendeutsch</em>, littéralement « judéo-allemand » — est la langue des Juifs ashkénazes d'Europe centrale et orientale, développée à partir du Xe–XIe siècle. C'est un dialecte allemand médiéval enrichi massivement de vocabulaire hébreu et araméen pour les concepts religieux, de mots slaves (polonais, russe, biélorusse) pour le quotidien, et de quelques éléments romans. À la veille de la Shoah, il était la langue maternelle de plus de dix millions de Juifs. La dévastation est incommensurable : l'extermination des Juifs d'Europe a tué la majorité des locuteurs du yiddish.</p>
+        <p>Le <em class="terme-cle">ladino</em> (judéo-espagnol, <em class="translitt">judezmo</em>) est la langue des Juifs séfarades expulsés d'Espagne en 1492, qui ont porté avec eux l'espagnol du XVe siècle et l'ont maintenu vivant à Constantinople, Thessalonique, Amsterdam, au Maroc. C'est une capsule temporelle linguistique — des locuteurs du XXe siècle qui parlent un espagnol de la Renaissance, que Cervantes aurait reconnu avec un sourire. Il est aujourd'hui en extinction critique, avec quelques dizaines de milliers de locuteurs.</p>
+        <p>Ces deux langues ont en commun d'incorporer massivement du vocabulaire hébreu — et de maintenir ainsi une présence vivante de l'hébreu dans la vie quotidienne des communautés, même quand il n'était plus parlé comme langue première. L'hébreu a survécu en se laissant transporter.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION X -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-numero">X</span>
+        <div>
+          <h2 class="section-titre">Eliezer Ben-Yehouda — la résurrection d'une langue</h2>
+          <p class="section-sous-titre">L'homme qui a accompli l'impossible linguistique</p>
+        </div>
+      </div>
+
+      <p><em class="terme-cle">Eliezer Ben-Yehouda</em> (1858–1922) est l'une des figures les plus extraordinaires de toute l'histoire linguistique humaine. Né Eliezer Yitzhak Perlman en Lituanie dans une famille traditionnelle, il est d'abord destiné au rabbinat. Mais à vingt ans, la lecture du nationalisme européen — Mazzini, les mouvements d'unification nationale — le convainc d'une idée qui semble à tous ses contemporains une folie pure : les Juifs ne peuvent former une vraie nation sans une langue nationale commune, et cette langue doit être l'hébreu. Pas le yiddish — trop associé à la diaspora ashkénaze. Pas le russe ou l'allemand. L'hébreu, la seule langue que tous les Juifs dispersés dans le monde partagent comme texte.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le défi concret</h3>
+        <p>Ressusciter l'hébreu comme langue parlée quotidiennement signifiait résoudre des problèmes pratiques immenses. L'hébreu biblique et mishnaïque n'avait pas de mots pour : journal, dictionnaire, train, électricité, serviette, tomate, encyclopédie, révolution, nationalisme, bicyclette, téléphone. Des dizaines de milliers de réalités modernes n'avaient aucun équivalent dans la langue des scribes et des rabbins.</p>
+        <p>Ben-Yehouda adopte une méthode combinatoire :</p>
+        <ul style="margin: 1rem 0 1.2rem 1.5rem; line-height: 2; color: var(--encre);">
+          <li><strong>Réactivation de racines bibliques rares</strong> avec de nouveaux sens : <em class="translitt">iton</em> (journal) de <em class="translitt">et</em> (moment, époque) ; <em class="translitt">milon</em> (dictionnaire) de <em class="translitt">mila</em> (mot).</li>
+          <li><strong>Calques sémantiques</strong> — traduire mot à mot la structure d'un terme européen avec des racines hébraïques : <em class="translitt">rakevet</em> (train, chemin de fer) de <em class="translitt">rekev</em> (char, véhicule).</li>
+          <li><strong>Emprunts phonétiques hébraïsés</strong> : <em class="translitt">telefon</em>, <em class="translitt">radio</em>, <em class="translitt">televizia</em>.</li>
+          <li><strong>Résurrection de mots rares</strong> dans les textes rabbiniques, médiévaux, et même bibliques hapax — Ben-Yehouda lisait l'intégralité de la littérature hébraïque de toutes les époques à la recherche de mots dormants.</li>
+        </ul>
+        <p>Il publie son <em class="terme-cle">Grand Dictionnaire de la langue hébraïque ancienne et moderne</em> en dix-sept volumes — inachevé à sa mort, complété par ses successeurs. C'est l'équivalent pour l'hébreu de l'Oxford English Dictionary — la première documentation systématique exhaustive de la langue depuis ses origines.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La résolution absolue — et ses coûts humains</h3>
+        <p>Ben-Yehouda arrive à Jérusalem en 1881 avec une résolution d'une rigueur presque terrifiante : ne jamais parler que l'hébreu. Sa femme Dvora l'apprend rapidement. Ensemble, ils élèvent leur fils Ben-Zion Ben-Yehouda comme le <strong>premier enfant à avoir l'hébreu pour langue maternelle dans les temps modernes</strong> — après des siècles de dormance comme langue strictement savante. Ben-Zion grandit en entendant uniquement de l'hébreu dans sa maison, dans une ville où tout le monde parle l'arabe, le yiddish, le ladino ou le russe.</p>
+        <p>La rigueur de Ben-Yehouda est absolue, parfois cruelle. La tradition rapporte que lorsque Dvora, mourante de tuberculose, gémit en russe dans son agonie, il lui demande de parler hébreu. Quelle que soit l'exactitude de cette anecdote, elle illustre quelque chose de réel : cet homme a traité sa conviction linguistique comme une obligation morale absolue, au-delà de la courtoisie ou de la compassion ordinaires.</p>
+
+        <div class="debat">
+          <div class="debat-voix question">
+            <div class="debat-label">Résistances à Ben-Yehouda</div>
+            Les rabbins orthodoxes le condamnaient : profaner la langue sacrée de la Torah pour parler de pain, de politique, de trains. Les laïcs sionistes lui reprochaient l'utopisme — les Juifs ont déjà le yiddish, pourquoi ce traumatisme ? Les Ottomans l'emprisonnèrent brièvement pour un article jugé séditieux. Toutes les forces de l'establishment étaient contre lui.
+          </div>
+          <div class="debat-voix reponse">
+            <div class="debat-label">La logique de Ben-Yehouda</div>
+            Sa réponse était simple et implacable : une nation sans langue nationale n'est pas une nation, c'est une communauté religieuse en diaspora. Le yiddish était une langue ashkénaze — les Juifs séfarades, mizrahim, yéménites ne le parlaient pas. Seul l'hébreu était la propriété commune de tous les Juifs. Et une langue sacrée ne meurt pas de servir le vivant — elle se régénère.
+          </div>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le Vaad HaLashon — l'institution normative</h3>
+        <p>Ben-Yehouda fonde en 1890 le <em class="terme-cle">Vaad HaLashon</em> (Comité de la Langue Hébraïque), qui deviendra après 1948 l'<em class="terme-cle">Académie de la Langue Hébraïque</em> — l'équivalent de l'Académie française pour l'hébreu. Son rôle est de créer les néologismes officiels, de décider comment l'hébreu appelle les nouvelles réalités, de régler les disputes orthographiques et grammaticales. Elle fonctionne encore aujourd'hui et publie régulièrement ses décisions — parfois contestées par les locuteurs qui ont déjà adopté d'autres formes.</p>
+        <p>L'une des décisions politiques les plus importantes du mouvement sioniste fut de fonder la prononciation de l'hébreu moderne sur la tradition <em>séfarade</em> (Juifs d'Espagne et du Proche-Orient) plutôt qu'<em>ashkénaze</em> — jugée plus proche de la prononciation originelle et neutre par rapport aux communautés dominantes ashkénazes. C'est la raison pour laquelle l'hébreu israélien contemporain prononce <em class="translitt">shabbat</em> et non <em class="translitt">shabes</em> comme en yiddish.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XI -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-numero">XI</span>
+        <div>
+          <h2 class="section-titre">Débat — Pourquoi le Kaddish est-il en araméen ?</h2>
+          <p class="section-sous-titre">Déconstruction d'un mythe linguistique répandu</p>
+        </div>
+      </div>
+
+      <p>Il existe dans la transmission populaire — y compris dans certains milieux rabbiniques non spécialisés — une idée largement répandue : le Kaddish, la grande prière de deuil du judaïsme, est rédigé en araméen parce qu'il serait plus ancien que l'hébreu liturgique, remontant à une époque où l'araméen était la langue originelle ou primordiale de la prière juive. Cette affirmation, une fois confrontée à ce que nous avons vu de l'histoire des langues sémitiques, s'effondre entièrement.</p>
+
+      <div class="debat">
+        <div class="debat-voix question">
+          <div class="debat-label">La tradition populaire erronée</div>
+          <p>Le Kaddish est en araméen parce que c'est une prière très ancienne — plus ancienne même que l'hébreu liturgique, héritée d'une époque primordiale où l'araméen était la langue sacrée originelle de la tradition juive.</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Ce que l'histoire des langues démontre</div>
+          <p>Cette affirmation est fausse à double titre : l'araméen n'est pas plus ancien que l'hébreu, et l'araméen du Kaddish reflète non pas l'antiquité mais la <em>modernité populaire</em> de la prière.</p>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le texte et sa structure</h3>
+        <p>Le Kaddish commence par la formule araméenne : <span class="heb">יִתְגַּדַּל וְיִתְקַדַּשׁ שְׁמֵהּ רַבָּא</span> — <em class="translitt">Yitgadal veyitkadash shmeh rabba</em> — « Que soit magnifié et sanctifié Son grand Nom. » La première observation que tout hébraïsant fait immédiatement : <em class="translitt">yitgadal</em> et <em class="translitt">yitkadash</em>, les deux premiers mots, sont des formes verbales araméennes construites sur des racines hébraïques — <em class="translitt">g-d-l</em> (grand, grandir) et <em class="translitt">q-d-sh</em> (saint, sanctifier). L'araméen du Kaddish est fortement teinté d'hébreu, cohérent avec une composition dans des milieux académiques rabbiniques bilingues.</p>
+        <p>Certains chercheurs (notamment Joseph Heinemann dans ses travaux sur la prière synagogale) ont noté que la structure de base — magnification du Nom divin, demande de l'établissement du Royaume — est parallèle à Ézéchiel 38,23 : <em>« Je me montrerai grand et saint (<span class="heb">וְהִתְגַּדִּלְתִּי וְהִתְקַדִּשְׁתִּי</span> — <em class="translitt">vehitgadalti vehitkadashti</em>) et je me ferai connaître aux yeux de nombreuses nations. »</em> Ce verset d'Ézéchiel est en hébreu biblique classique — et il est probablement antérieur au Kaddish de plusieurs siècles. La prière araméenne cite implicitement une source hébraïque. C'est l'inverse de l'hypothèse d'antiquité de l'araméen.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La vraie raison — et ce qu'elle révèle</h3>
+        <p>Le Kaddish prend sa forme dans les académies rabbiniques de Babylonie et de Palestine entre le IIIe et le VIIe siècle de notre ère. Dans ce contexte — que nous avons décrit en détail — la situation linguistique est précisément celle-ci :</p>
+        <ul style="margin: 1rem 0 1.2rem 1.5rem; line-height: 2; color: var(--encre);">
+          <li><strong>L'hébreu</strong> est la langue sacrée et savante — celle de la Torah, de la Mishna, des grandes prières établies. Réservée aux hommes lettrés qui ont étudié.</li>
+          <li><strong>L'araméen</strong> est la langue vernaculaire populaire — celle parlée quotidiennement par les femmes, les enfants, les artisans, les gens ordinaires.</li>
+        </ul>
+        <p>Le Kaddish est rédigé en araméen <strong>précisément pour être compris par tout le monde</strong> — pas seulement par les érudits. C'est une prière de démocratisation liturgique. Sa raison d'être est l'accessibilité, non l'archaïsme. La vérité est rigoureusement inverse de la tradition populaire : le Kaddish est en araméen non parce qu'il est très ancien, mais parce qu'au moment de sa rédaction, l'araméen était la langue du peuple. Il parle au peuple dans sa langue. C'est un acte de générosité liturgique, non de conservatisme.</p>
+
+        <div class="encadre">
+          <div class="encadre-header">
+            <span class="encadre-icone">◈</span>
+            <span class="encadre-label">Synthèse du débat</span>
+          </div>
+          <div class="encadre-body">
+            <p>Ce débat sur le Kaddish est exemplaire d'un phénomène général : les traditions populaires sur les langues ont tendance à confondre <em>ancienneté de la langue</em> et <em>archaïsme perçu</em>. Une langue qui semble étrange ou incompréhensible est spontanément interprétée comme « plus ancienne » — alors qu'elle peut simplement être étrangère à notre propre tradition. L'araméen du Kaddish est incompréhensible à des Juifs dont la langue est le français ou l'anglais — ce qui crée un sentiment d'opacité mystérieuse assimilé à l'antiquité. Mais cette opacité n'est pas un marqueur temporel ; c'est un marqueur de distance linguistique.</p>
+            <p>En matière d'histoire des langues, l'intuition populaire se trompe presque toujours. La méthode philologique est la seule boussole fiable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XII -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <span class="section-numero">XII</span>
+        <div>
+          <h2 class="section-titre">Synthèse — La trajectoire complète</h2>
+          <p class="section-sous-titre">De la proto-langue à l'Ivrit — une histoire sans équivalent</p>
+        </div>
+      </div>
+
+      <p>L'hébreu est la seule langue de l'histoire humaine documentée à avoir été ressuscitée comme langue maternelle après des siècles de dormance comme langue exclusivement sacrée et littéraire. Le latin est mort en langue maternelle et a donné naissance à ses filles — français, espagnol, italien — mais nul ne l'a ressuscité. Le grec ancien et le grec moderne sont dans une continuité complexe mais sans rupture comparable. Le gaulois, le sumérien, l'akkadien, le copte, le gotique — tous morts sans résurrection. L'hébreu seul a fait ce trajet vertigineux.</p>
+
+      <div class="timeline-lang">
+        <div class="tl-item">
+          <div class="tl-date">~4000–3000 av. J.-C.</div>
+          <div class="tl-titre">Proto-sémitique</div>
+          <div class="tl-corps">Ancêtre commun reconstruit — jamais attesté par écrit. Localisation probable : Afrique du Nord-Est ou Proche-Orient.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">~2000–1400 av. J.-C.</div>
+          <div class="tl-titre">Proto-cananéen</div>
+          <div class="tl-corps">Continuum dialectal du Levant méridional. Gloses cananéennes dans les Lettres d'Amarna (XIVe s.). Ancêtre direct de l'hébreu, du phénicien, du moabite.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">~1400–1200 av. J.-C.</div>
+          <div class="tl-titre">Ougaritique</div>
+          <div class="tl-corps">Dialecte cananéen nord-occidental de Ras Shamra. Mythologie de Baal. Fenêtre extraordinaire sur le fond religieux pré-israélite.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">~1200–900 av. J.-C.</div>
+          <div class="tl-titre">Hébreu proto-biblique</div>
+          <div class="tl-corps">Cantique de Déborah (Juges 5), Calendrier de Gezer (~925). Hébreu archaïque, non encore standardisé.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">~900–500 av. J.-C.</div>
+          <div class="tl-titre">Hébreu Biblique Classique (HBC)</div>
+          <div class="tl-corps">Torah, Prophètes, Psaumes, Proverbes, Samuel, Rois. Langue standardisée sur le dialecte de Juda. Inscription de Siloé, Ostraca de Lachish, bulle de Baruch.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">~500–200 av. J.-C.</div>
+          <div class="tl-titre">Hébreu Biblique Tardif (HBT)</div>
+          <div class="tl-corps">Esdras, Néhémie, Chroniques, Daniel (hébreu). Vocabulaire influencé par l'araméen et le perse. Transition post-exilique.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">~200 av. – 500 ap. J.-C.</div>
+          <div class="tl-titre">Hébreu Mishnaïque</div>
+          <div class="tl-corps">Mishna (~200 ap.), Talmud (Ve–VIe s.). Langue vivante des académies rabbiniques. Vocabulaire enrichi d'araméen, grec, latin.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">~500–1880 ap. J.-C.</div>
+          <div class="tl-titre">Hébreu médiéval</div>
+          <div class="tl-corps">Poésie d'al-Andalus (Halévi, Ibn Gabirol), philosophie (Maïmonide), grammaire (Kimhi). Jamais langue maternelle. Jamais morte. Langue savante internationale juive.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1881–1948</div>
+          <div class="tl-titre">La résurrection — l'Ivrit en gestation</div>
+          <div class="tl-corps">Ben-Yehouda, Vaad HaLashon, premières familles hébraïsophones. Palestinesous mandat britannique. L'hébreu redevient langue maternelle.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1948–présent</div>
+          <div class="tl-titre">L'Ivrit — hébreu moderne</div>
+          <div class="tl-corps">Langue officielle de l'État d'Israël. ~9,3 millions de locuteurs natifs (2023). 60 000–80 000 mots actifs. Seule langue morte ressuscitée comme langue maternelle dans l'histoire humaine.</div>
+        </div>
+      </div>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Évolutions majeures entre hébreu biblique et hébreu moderne (Ivrit)</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Hébreu Biblique Classique</th>
+              <th>Ivrit (hébreu moderne)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Phonologie</td>
+              <td>29 consonnes distinctes (distinctions pharyngales, uvulaires)</td>
+              <td>Distinctions réduites ; prononciation séfarade standard ; alef/ayin fusionnés</td>
+            </tr>
+            <tr>
+              <td>Syntaxe</td>
+              <td>Majoritairement VSO (verbe-sujet-objet)</td>
+              <td>SVO dominant, sous influence des langues européennes des immigrants</td>
+            </tr>
+            <tr>
+              <td>Système verbal</td>
+              <td>Aspectuel (qatal/yiqtol — accompli/inaccompli)</td>
+              <td>Temporel plus régulier (passé/présent/futur), sous influence indo-européenne</td>
+            </tr>
+            <tr>
+              <td>Vocabulaire</td>
+              <td>~8 000 mots actifs dans la Bible</td>
+              <td>~60 000–80 000 mots actifs ; emprunts massifs de l'arabe, anglais, yiddish, russe</td>
+            </tr>
+            <tr>
+              <td>Vocalisation</td>
+              <td>Non écrite (système massorétique : Ve–Xe s. ap.)</td>
+              <td>Voyelles implicites dans l'écriture courante (niqqud optionnel)</td>
+            </tr>
+            <tr>
+              <td>Continuité</td>
+              <td colspan="2" style="text-align:center; font-style:italic; color:var(--brun-clair);">Un enfant israélien de 8 ans lisant la Bible lit la même langue — avec variations — qu'un scribe judéen gravant des ostraca à Lachish il y a 2 600 ans.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <blockquote>
+        <p>Toutes les langues humaines que nous connaissons ont des ancêtres, des filles, ou des sœurs — ou elles sont mortes et enterrées. L'hébreu est la seule à avoir des ancêtres, des sœurs, des filles — <em>et</em> à être revenu du tombeau. C'est pour cela que sa trajectoire n'appartient pas seulement à l'histoire de la linguistique, mais à l'histoire de l'identité humaine.</p>
+        <cite>— Orient Scholar, synthèse</cite>
+      </blockquote>
+
+    </section>
+
+    <!-- NAVIGATION CHAPITRES -->
+        <nav class="nav-chapitres">
+      <a href="chapitre-02-origines-mythiques.html" class="nav-btn">← Chapitre II</a>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <a href="chapitre-04-patriarches.html" class="nav-btn">Chapitre IV →</a>
+    </nav>
+
+  </article>
+</main>
+
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+
+  if (scrolled > 400) {
+    btnTop.classList.add('visible');
+  } else {
+    btnTop.classList.remove('visible');
+  }
+
+  highlightActiveSection();
+});
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menu-toggle');
+  if (sidebar.classList.contains('open') &&
+      !sidebar.contains(e.target) &&
+      !toggle.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+// Overlay mobile
+const overlay = document.getElementById('sidebar-overlay');
+if (overlay) {
+  overlay.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    overlay.classList.remove('visible');
+  });
+}
+
+// Update toggleSidebar to show overlay
+const origToggle = window.toggleSidebar;
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  if (overlay) overlay.classList.toggle('visible');
+};
+
+</script>
+
+</body>
+</html>

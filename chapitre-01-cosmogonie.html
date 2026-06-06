@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre I — Cosmogonie & Création · Aux Origines</title>
+<style>
+/* ═══════════════════════════════════════════
+   POLICES — GOOGLE FONTS EMBARQUÉES EN BASE64
+   On les charge via @import CDN-free fallback
+   avec stack locale soignée
+═══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+/* ═══════════════════════════════════════════
+   VARIABLES — PALETTE ENCRE / PARCHEMIN / OR
+═══════════════════════════════════════════ */
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* texture parchemin */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════
+   BARRE DE PROGRESSION
+═══════════════════════════════════════════ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR — NAVIGATION LATÉRALE FIXE
+═══════════════════════════════════════════ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav {
+  padding: 1rem 0;
+  flex: 1;
+}
+
+.sidebar-nav .chapitre-item {
+  display: block;
+  padding: 0.4rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: rgba(245,237,224,0.5);
+  transition: all 0.25s ease;
+  line-height: 1.4;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-nav .chapitre-item:hover {
+  color: var(--or-pale);
+  border-left-color: var(--or);
+  background: rgba(200,148,58,0.08);
+  padding-left: 1.8rem;
+}
+
+.sidebar-nav .chapitre-item.actif {
+  color: var(--or-pale);
+  border-left-color: var(--or-vif);
+  background: rgba(200,148,58,0.12);
+}
+
+.sidebar-nav .chap-numero {
+  display: block;
+  font-size: 0.58rem;
+  color: var(--or);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.1rem;
+}
+
+.sidebar-nav .section-item {
+  display: block;
+  padding: 0.25rem 1.5rem 0.25rem 2rem;
+  font-family: var(--font-corps);
+  font-size: 0.72rem;
+  font-style: italic;
+  text-decoration: none;
+  color: rgba(245,237,224,0.35);
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+  line-height: 1.3;
+}
+
+.sidebar-nav .section-item:hover {
+  color: rgba(245,237,224,0.7);
+  padding-left: 2.3rem;
+}
+
+.sidebar-nav .section-item.active-section {
+  color: var(--or-pale);
+  border-left-color: rgba(200,148,58,0.5);
+}
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.15);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══════════════════════════════════════════
+   CONTENU PRINCIPAL
+═══════════════════════════════════════════ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════
+   EN-TÊTE CHAPITRE — FRONTISPICE
+═══════════════════════════════════════════ */
+.chapter-hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 3rem 4rem;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200,148,58,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 100%, rgba(139,94,60,0.08) 0%, transparent 50%),
+    linear-gradient(180deg, var(--encre) 0%, #2d1e0a 60%, #1a1208 100%);
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ornement étoile-croix */
+.hero-ornement {
+  font-size: 1.8rem;
+  color: var(--or);
+  opacity: 0.6;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5em;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+.hero-numero {
+  font-family: var(--font-deco);
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.hero-numero::before,
+.hero-numero::after {
+  content: '——';
+  opacity: 0.4;
+  margin: 0 1rem;
+}
+
+.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  color: var(--parchemin-pale);
+  line-height: 1.1;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  font-weight: 400;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.15rem;
+  color: var(--or-pale);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  opacity: 0.85;
+}
+
+.hero-epigraphe {
+  max-width: 520px;
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: rgba(245,237,224,0.65);
+  font-style: italic;
+  line-height: 1.6;
+  border-left: 2px solid rgba(200,148,58,0.4);
+  padding-left: 1.2rem;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  font-style: normal;
+  font-family: var(--font-titre);
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to top, var(--parchemin-pale) 0%, transparent 100%);
+}
+
+/* ═══════════════════════════════════════════
+   CORPS DU TEXTE
+═══════════════════════════════════════════ */
+.contenu {
+  max-width: calc(var(--max-prose) + 6rem);
+  margin: 0 auto;
+  padding: 4rem 3rem 6rem;
+}
+
+/* Sections numérotées */
+.section {
+  margin-bottom: 4.5rem;
+  scroll-margin-top: 2rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.2);
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--or), transparent);
+}
+
+.section-numero {
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--or);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(200,148,58,0.4);
+  border-radius: 2px;
+  white-space: nowrap;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  color: var(--encre);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1rem;
+  color: var(--brun);
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+/* Sous-sections */
+.sous-section {
+  margin-bottom: 2.5rem;
+}
+
+.sous-section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.05rem;
+  color: var(--brun);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sous-section-titre::before {
+  content: '✦';
+  color: var(--or);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+/* Typographie corps */
+p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--encre);
+  margin-bottom: 1.2rem;
+  text-align: justify;
+  hyphens: auto;
+}
+
+p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-deco);
+  font-size: 3.8rem;
+  line-height: 0.8;
+  margin: 0.1rem 0.12rem -0.1rem 0;
+  color: var(--or);
+  text-shadow: 1px 1px 0 rgba(139,94,60,0.3);
+}
+
+/* Citation en bloc */
+blockquote {
+  margin: 2rem 0;
+  padding: 1.5rem 1.8rem;
+  background: rgba(139,94,60,0.06);
+  border-left: 3px solid var(--or);
+  border-radius: 0 4px 4px 0;
+  position: relative;
+}
+
+blockquote::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.5rem;
+  left: 1.2rem;
+  font-family: var(--font-deco);
+  font-size: 4rem;
+  color: var(--or);
+  opacity: 0.25;
+  line-height: 1;
+}
+
+blockquote p {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  font-style: italic;
+  color: var(--encre-douce);
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+blockquote p:first-of-type::first-letter { all: unset; }
+blockquote p:last-child { margin-bottom: 0; }
+
+blockquote cite {
+  display: block;
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--brun-clair);
+  text-align: right;
+  margin-top: 0.8rem;
+  font-style: normal;
+}
+
+/* Citation courte inline hébraïque */
+.heb {
+  font-size: 1.1em;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+}
+
+.translitt {
+  font-style: italic;
+  color: var(--brun-clair);
+}
+
+/* Tableaux comparatifs */
+.tableau-wrapper {
+  margin: 2.5rem 0;
+  overflow-x: auto;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  box-shadow: 0 2px 12px var(--ombre);
+}
+
+.tableau-titre {
+  background: var(--encre);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+thead {
+  background: rgba(139,94,60,0.12);
+}
+
+thead th {
+  font-family: var(--font-titre);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(200,148,58,0.3);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover {
+  background: rgba(200,148,58,0.05);
+}
+
+tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--encre);
+}
+
+tbody td:first-child {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(245,237,224,0.5);
+}
+
+/* Encadré académique */
+.encadre {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(200,148,58,0.35);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encadre-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(200,148,58,0.1);
+  border-bottom: 1px solid rgba(200,148,58,0.2);
+}
+
+.encadre-icone {
+  color: var(--or);
+  font-size: 0.9rem;
+}
+
+.encadre-label {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brun);
+}
+
+.encadre-body {
+  padding: 1.3rem 1.5rem;
+  background: rgba(245,237,224,0.3);
+}
+
+.encadre-body p {
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+.encadre-body p:last-child { margin-bottom: 0; }
+.encadre-body p:first-of-type::first-letter { all: unset; }
+
+/* Note marginale */
+.note-marge {
+  float: right;
+  clear: right;
+  width: 200px;
+  margin: 0 -1rem 1rem 2rem;
+  padding: 1rem;
+  background: rgba(200,148,58,0.07);
+  border-top: 2px solid var(--or);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--brun);
+  font-style: italic;
+}
+
+.note-marge strong {
+  display: block;
+  font-family: var(--font-titre);
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun-clair);
+  margin-bottom: 0.4rem;
+}
+
+/* Timeline */
+.timeline {
+  margin: 2.5rem 0;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 110px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--or), rgba(200,148,58,0.2));
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+.timeline-date {
+  width: 100px;
+  text-align: right;
+  padding-right: 1.2rem;
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--brun-clair);
+  padding-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.timeline-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--parchemin-pale);
+  border: 2px solid var(--or);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-dot.important {
+  background: var(--or);
+  width: 14px;
+  height: 14px;
+  margin-left: 4px;
+  margin-top: 0.35rem;
+}
+
+.timeline-texte {
+  padding-left: 1.2rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--encre);
+  flex: 1;
+}
+
+.timeline-texte strong {
+  color: var(--brun);
+  font-family: var(--font-titre);
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+
+/* Débat académique */
+.debat {
+  margin: 2.5rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(139,94,60,0.15);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.debat-col {
+  padding: 1.5rem;
+  background: var(--parchemin-pale);
+}
+
+.debat-col:first-child {
+  background: rgba(245,237,224,0.6);
+}
+
+.debat-titre {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(139,94,60,0.2);
+}
+
+.debat-col:first-child .debat-titre { color: var(--rouge-antique); }
+.debat-col:last-child .debat-titre { color: var(--brun); }
+
+.debat-col p {
+  font-size: 0.9rem;
+  margin-bottom: 0.7rem;
+  text-align: left;
+}
+
+.debat-col p:first-of-type::first-letter { all: unset; }
+
+/* Synthèse finale */
+.synthese {
+  background: linear-gradient(135deg, var(--encre) 0%, #2d1e0a 100%);
+  color: var(--parchemin-fonce);
+  padding: 3rem;
+  margin: 3rem 0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.synthese::before {
+  content: '✦';
+  position: absolute;
+  top: 1rem; right: 1.5rem;
+  font-size: 4rem;
+  color: rgba(200,148,58,0.1);
+  font-family: var(--font-deco);
+}
+
+.synthese h3 {
+  font-family: var(--font-titre);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 1.5rem;
+}
+
+.synthese p {
+  color: rgba(245,237,224,0.8);
+  font-size: 0.98rem;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.synthese p:first-of-type::first-letter { all: unset; }
+
+.synthese ul {
+  list-style: none;
+  margin: 1rem 0;
+}
+
+.synthese ul li {
+  padding: 0.4rem 0 0.4rem 1.5rem;
+  position: relative;
+  font-size: 0.95rem;
+  color: rgba(245,237,224,0.8);
+  border-bottom: 1px solid rgba(200,148,58,0.1);
+  line-height: 1.5;
+}
+
+.synthese ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--or);
+  opacity: 0.7;
+}
+
+/* Séparateur ornemental */
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+/* Navigation chapitres (bas de page) */
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.3);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+.nav-btn:hover {
+  background: var(--encre);
+  color: var(--or-pale);
+  border-color: var(--encre);
+}
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.75rem;
+  color: var(--or);
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.nav-centre:hover { opacity: 1; }
+
+/* Bouton retour haut */
+#btn-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 200;
+}
+
+#btn-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#btn-top:hover {
+  background: var(--or);
+  color: var(--encre);
+}
+
+/* ═══════════════════════════════════════════
+   MOBILE
+═══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    width: 280px;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 30px rgba(0,0,0,0.5);
+  }
+
+  #main {
+    margin-left: 0;
+  }
+
+  #menu-toggle {
+    display: flex;
+  }
+
+  .contenu {
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .debat {
+    grid-template-columns: 1fr;
+  }
+
+  .note-marge {
+    float: none;
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .timeline::before { left: 80px; }
+  .timeline-date { width: 70px; }
+}
+
+/* Toggle menu mobile */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 150;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 2px;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+/* Ornements décoratifs dans le hero */
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 1.5rem auto 0;
+}
+
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,148,58,0.4), transparent);
+}
+
+.deco-ligne-symbole {
+  color: var(--or);
+  font-size: 0.7rem;
+  opacity: 0.6;
+  letter-spacing: 0.3em;
+}
+
+/* Highlight texte important */
+em {
+  color: var(--brun);
+  font-style: italic;
+}
+
+strong {
+  color: var(--encre);
+  font-weight: 600;
+}
+
+.terme-cle {
+  color: var(--brun);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE AMÉLIORÉ — PUBLICATION WEB
+═══════════════════════════════════════════ */
+@media (max-width: 680px) {
+  html { font-size: 16px; }
+  
+  .chapter-hero {
+    min-height: 50vh;
+    padding: 4rem 1.5rem 3rem;
+  }
+  
+  .hero-titre {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+  }
+  
+  .tableau-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 500px;
+  }
+  
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .synthese {
+    padding: 1.8rem 1.2rem;
+  }
+  
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  blockquote {
+    padding-left: 1rem;
+    margin-left: 0;
+  }
+}
+
+/* Scrollbar sidebar sur tous les navigateurs */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Overlay mobile pour fermer la sidebar */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Lien retour accueil dans sidebar */
+.sidebar-home {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.65;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<!-- Barre de progression -->
+<div id="progress-bar"></div>
+
+<div id="sidebar-overlay"></div>
+
+<!-- Bouton menu mobile -->
+<button id="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+
+<!-- ═══════════════════════════════════════════
+     SIDEBAR — NAVIGATION
+═══════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la Cosmogonie à l'État d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-02-origines-mythiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-03-langues-semitiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-05-moise-exode.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-06-israel-tribus.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-07-les-royaumes.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-08-age-prophetique.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-11-palestine-1948.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     CONTENU PRINCIPAL
+═══════════════════════════════════════════ -->
+<main id="main">
+
+  <!-- FRONTISPICE -->
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre I</div>
+    <h1 class="hero-titre">Cosmogonie &amp; Création</h1>
+    <p class="hero-sous-titre">De Bereshit au Big Bang — deux langages, un seul silence</p>
+    <blockquote class="hero-epigraphe">
+      <span class="heb">בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ</span><br>
+      <em>Bereshit bara Elohim et hashamayim ve'et ha'aretz</em><br>
+      « Au commencement, Dieu créa les cieux et la terre. »
+      <cite>— Genèse 1,1</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <!-- CORPS -->
+  <article class="contenu">
+
+    <!-- Introduction -->
+    <div class="section">
+      <p>La Bible est une bibliothèque, non un livre. Ce constat — aussi simple qu'il paraisse — est la clé de tout ce qui suit. La première preuve en est donnée dès les premières pages : la Bible contient deux récits de création distincts, contradictoires dans leur ordre et dans leur théologie, placés côte à côte sans que personne n'ait jamais cherché à les harmoniser. C'est le premier signe que nous avons affaire à une collection de traditions vivantes, non à un texte uniforme dicté d'une seule voix.</p>
+      <p>Ce chapitre remonte jusqu'à l'acte fondateur — le commencement — en croisant quatre approches : la philologie des textes hébreux, l'histoire comparée des religions du Proche-Orient antique, la théologie mystique (Kabbale, patristique, islam), et la cosmologie physique moderne. Non pour les confondre, mais pour les laisser se parler.</p>
+    </div>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION I -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-numero">I</span>
+        <div>
+          <h2 class="section-titre">Les deux récits de Genèse</h2>
+          <p class="section-sous-titre">Une contradiction voulue — et ce qu'elle révèle</p>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Récit 1 — Genèse 1,1–2,3 (source Sacerdotale — P)</h3>
+        <p>C'est le récit cosmologique grandiose — six jours de création, structure liturgique parfaite, refrain répété sept fois <em>« Dieu vit que cela était bon »</em>, culminant sur le sabbat. Dieu est appelé <span class="translitt">Elohim</span> tout au long. Il crée par la parole — <span class="translitt">Vayomer Elohim</span> — « Dieu dit ». Pas d'effort, pas de matière préexistante apparente, pas de combat. Une création souveraine, ordonnée, hiérarchique.</p>
+
+        <div class="tableau-wrapper">
+          <div class="tableau-titre">Structure des six jours — Source Sacerdotale (P)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Jour</th>
+                <th>Espace créé</th>
+                <th>Jour</th>
+                <th>Habitant correspondant</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Jour 1</td>
+                <td>Lumière / Ténèbres</td>
+                <td>Jour 4</td>
+                <td>Soleil, lune, étoiles</td>
+              </tr>
+              <tr>
+                <td>Jour 2</td>
+                <td>Firmament (eaux supérieures / inférieures)</td>
+                <td>Jour 5</td>
+                <td>Oiseaux et poissons</td>
+              </tr>
+              <tr>
+                <td>Jour 3</td>
+                <td>Terre ferme et végétation</td>
+                <td>Jour 6</td>
+                <td>Animaux terrestres + l'homme et la femme</td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align:center; font-style:italic; color:var(--brun-clair); font-size:0.88rem;">Jour 7 — Repos divin. Sanctification du sabbat. Le cosmos n'est complet que dans son repos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>La structure est trop parfaite pour être accidentelle. Les trois premiers jours créent des <em>espaces</em> ; les trois suivants les <em>remplissent</em>. C'est une architecture cosmique intentionnelle — la signature d'une main sacerdotale qui pense en système.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Récit 2 — Genèse 2,4–3,24 (source Yahviste — J)</h3>
+        <p>Un récit radicalement différent dans le ton, l'ordre et la théologie. L'ordre de création est inversé par rapport au premier récit : d'abord la terre aride et sans végétation, puis une source qui jaillit du sol, puis <em>l'homme formé de la poussière</em> — avant les plantes et les animaux. Ensuite le jardin d'Éden planté. Ensuite les animaux créés pour l'homme. Ensuite la femme tirée de la côte — après lui, pas simultanément.</p>
+        <p>Dieu est appelé <span class="translitt">Yahvé Elohim</span> — combinaison des deux noms divins. Il ne crée pas par la parole mais <em>par le geste</em> : il façonne (<span class="translitt">yatsar</span>) l'homme comme un potier façonne l'argile, il souffle (<span class="translitt">naphah</span>) dans ses narines le souffle de vie. C'est un dieu artisan, physique, qui se promène dans le jardin « à la brise du soir », qui cherche Adam en criant <em>« Où es-tu ? »</em></p>
+
+        <div class="encadre">
+          <div class="encadre-header">
+            <span class="encadre-icone">◈</span>
+            <span class="encadre-label">Point de méthode critique</span>
+          </div>
+          <div class="encadre-body">
+            <p>Ces deux récits <strong>ne peuvent pas être harmonisés sans violence textuelle</strong>. L'homme est créé avant ou après les plantes ? La femme est créée simultanément avec l'homme ou après lui ? Les deux réponses sont dans la Bible, dans des textes consécutifs. Ce n'est pas une erreur de compilation — c'est la preuve que les rédacteurs finals de la Torah ont délibérément préservé deux traditions distinctes plutôt que d'en choisir une. La contradiction est un héritage respecté, pas une négligence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION II -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-numero">II</span>
+        <div>
+          <h2 class="section-titre">L'Enuma Elish — le grand parallèle mésopotamien</h2>
+          <p class="section-sous-titre">La cosmogonie babylonienne et son rapport à Genèse</p>
+        </div>
+      </div>
+
+      <p>Avant d'aller plus loin dans la théologie biblique, il faut regarder ce qui précède — et qui l'a nourrie. <em>L'Enuma Elish</em> — « Quand en haut » (premiers mots du texte) — est l'épopée de création babylonienne. Rédigée probablement sous Nabuchodonosor I<sup>er</sup> (~XII<sup>e</sup> s. av. J.-C.) dans sa forme connue, mais intégrant des traditions beaucoup plus anciennes, elle était récitée rituellement chaque année lors de la fête du Nouvel An babylonien (<span class="translitt">Akitu</span>).</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le récit cosmogonique de l'Enuma Elish</h3>
+
+        <div class="note-marge">
+          <strong>Note philologique</strong>
+          Le terme <em>Tehom</em> (l'abîme, Gn 1,2) est phonétiquement et étymologiquement lié à <em>Tiamat</em>. Ce n'est pas une coïncidence — c'est le même mot, adapté en hébreu. L'abîme originel de la Bible est une réminiscence linguistique de la déesse-océan babylonienne.
+        </div>
+
+        <p>Au commencement, deux eaux primordiales coexistent : <strong>Apsu</strong> — les eaux douces souterraines, masculin — et <strong>Tiamat</strong> — les eaux salées de la mer, féminin, représentée comme un dragon monstrueux. Leur mélange génère les premiers dieux. Ces dieux font trop de bruit ; Apsu veut les détruire pour dormir. Le jeune dieu Ea tue Apsu. Tiamat se soulève en vengeance avec une armée de monstres.</p>
+        <p>Le jeune dieu <strong>Marduk</strong> — dieu patron de Babylone — accepte de combattre Tiamat en échange de la souveraineté sur tous les dieux. Il la tue dans un combat cosmique, fend son corps en deux :</p>
+
+        <blockquote>
+          <p>Il fendit Tiamat en deux comme un poisson séché. Il dressa une moitié et en fit le ciel. Il tendit sa peau et y posta des gardes. Il leur ordonna de ne pas laisser passer ses eaux.</p>
+          <cite>— Enuma Elish, tablette IV</cite>
+        </blockquote>
+
+        <p>L'autre moitié devient la terre. Les yeux de Tiamat deviennent les sources du Tigre et de l'Euphrate. Sa queue devient la Voie Lactée. Puis Marduk crée l'humanité à partir du sang d'un dieu rebelle tué — Kingu, lieutenant de Tiamat :</p>
+
+        <blockquote>
+          <p>Je vais rassembler le sang, former des ossements. Je vais établir un être sauvage, son nom sera « homme ». Je vais créer l'être sauvage-homme. Qu'il soit chargé du service des dieux, afin que ceux-ci puissent se reposer.</p>
+          <cite>— Enuma Elish, tablette VI</cite>
+        </blockquote>
+
+        <p>L'humanité est créée pour <em>servir les dieux</em> — les nourrir par les sacrifices, les libérer du travail cosmique. Cette vision de l'homme comme serf cosmique est l'arrière-fond exact contre lequel le premier chapitre de la Genèse va s'inscrire en rupture totale.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION III -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-numero">III</span>
+        <div>
+          <h2 class="section-titre">La comparaison — ce que la Bible garde et ce qu'elle transforme</h2>
+          <p class="section-sous-titre">Tableau comparatif des structures cosmogoniques</p>
+        </div>
+      </div>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Comparaison structurelle — Enuma Elish / Genèse 1</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Élément</th>
+              <th>Enuma Elish (Babylone)</th>
+              <th>Genèse 1 (Source P)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>État initial</td>
+              <td>Deux eaux mélangées : Apsu (douce) + Tiamat (salée)</td>
+              <td><em>Tohu vabohu</em> — chaos aquatique, ténèbres sur l'abîme (<em>tehom</em>)</td>
+            </tr>
+            <tr>
+              <td>Séparation des eaux</td>
+              <td>Corps de Tiamat fendu en deux — violence cosmique</td>
+              <td>Firmament séparant les eaux supérieures et inférieures — parole divine paisible</td>
+            </tr>
+            <tr>
+              <td>Lumière</td>
+              <td>Astres créés en même temps que le reste</td>
+              <td>Lumière créée au jour 1, astres au jour 4 — dissociation délibérée</td>
+            </tr>
+            <tr>
+              <td>Combat cosmique</td>
+              <td>Marduk tue Tiamat — la création naît du meurtre</td>
+              <td>Absent en Gn 1. Traces fossilisées dans la poésie (Psaumes 74, 89 ; Job 26 ; Is 51)</td>
+            </tr>
+            <tr>
+              <td>Création de l'homme</td>
+              <td>Du sang d'un dieu rebelle (Kingu) — matière divine corrompue</td>
+              <td>De la poussière (<em>adamah</em>) et du souffle de Dieu (<em>nishmat hayim</em>)</td>
+            </tr>
+            <tr>
+              <td>But de l'homme</td>
+              <td>Servir les dieux, les nourrir par les sacrifices</td>
+              <td>« Dominer » la création — image de Dieu (<em>tselem Elohim</em>)</td>
+            </tr>
+            <tr>
+              <td>Repos final</td>
+              <td>Marduk s'installe dans son temple somptueux</td>
+              <td>Dieu se repose le 7<sup>e</sup> jour et le sanctifie — le repos comme couronnement</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Les parallèles structurels sont <strong>indéniables</strong> — séparation des eaux, création des astres, création de l'homme, repos divin après l'œuvre. Ce ne sont pas des coïncidences. Mais les différences sont <em>théologiquement révolutionnaires</em>.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Transformation 1 — La démythologisation du combat</h3>
+        <p>Dans l'Enuma Elish, la création naît d'un combat entre divinités rivales. La matière du monde est le cadavre d'un monstre vaincu. La création est violence. Genèse 1 efface ce combat. Il n'y a pas de Tiamat, pas de résistance, pas de sang. <span class="translitt">Elohim</span> parle, et cela est.</p>
+        <p>Mais des traces du combat cosmique subsistent dans d'autres textes bibliques — comme des fossiles d'une tradition plus ancienne que la rédaction sacerdotale n'a pas pu — ou voulu — complètement effacer :</p>
+
+        <blockquote>
+          <p>C'est toi qui as brisé la mer par ta puissance, qui as fracassé les têtes des dragons sur les eaux, qui as écrasé les têtes du Léviathan.</p>
+          <cite>— Psaume 74, 13–14</cite>
+        </blockquote>
+
+        <blockquote>
+          <p>N'est-ce pas toi qui as taillé Rahab en pièces, qui as transpercé le Dragon ?</p>
+          <cite>— Isaïe 51, 9</cite>
+        </blockquote>
+
+        <p><em>Rahab</em>, <em>Léviathan</em>, le Dragon, le Serpent fuyard — ces figures sont les équivalents hébreux de Tiamat. Elles apparaissent dans la poésie biblique comme vaincues par Yahvé lors de la création. La tradition du combat cosmique est présente dans la Bible — mais refoulée dans la poésie et les psaumes, tandis que la prose de Genèse 1 la remplace par la création paisible par la parole. Ce refoulement est lui-même un acte théologique.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Transformation 2 — L'homme image de Dieu</h3>
+        <p><span class="heb">צֶלֶם אֱלֹהִים</span> — <span class="translitt">Tselem Elohim</span> — « image de Dieu » (Genèse 1, 26–27). Dans tout le Proche-Orient antique, une seule personne est « image des dieux » — <em>le roi</em>. Les inscriptions royales égyptiennes et mésopotamiennes répètent inlassablement que le pharaon ou le roi est l'image vivante de la divinité sur terre — son représentant, son lieutenant cosmique.</p>
+        <p>La Genèse prend cette formule royale exclusive et l'attribue à <strong>tout être humain</strong> — homme et femme, sans distinction de rang ou d'origine. C'est une démocratisation radicale de la dignité royale. Chaque humain est roi. Chaque humain est l'image de Dieu.</p>
+
+        <div class="encadre">
+          <div class="encadre-header">
+            <span class="encadre-icone">◈</span>
+            <span class="encadre-label">Contexte politique — l'exil babylonien</span>
+          </div>
+          <div class="encadre-body">
+            <p>La source sacerdotale (P) est rédigée en contexte d'exil babylonien (~VI<sup>e</sup> s. av. J.-C.). Des Judéens déportés vivent sous la domination du roi de Babylone, image des dieux babyloniens. L'affirmation que <em>tout être humain</em> — pas seulement le roi, pas seulement les Babyloniens — est image du seul Dieu réel est <strong>politiquement et théologiquement explosive</strong>. Elle dit aux exilés : votre captivité ne définit pas votre dignité. Vous n'êtes pas les esclaves des dieux babyloniens. Vous êtes tous, chacun d'entre vous, l'image du seul Dieu réel.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Transformation 3 — La question de la création <em>ex nihilo</em></h3>
+        <p>L'Enuma Elish commence avec une matière préexistante — les deux océans Apsu et Tiamat. Les dieux émergent de cette matière et la transforment. Genèse 1,1 est l'un des versets les plus débattus de toute l'histoire de la théologie :</p>
+
+        <blockquote>
+          <p><span class="heb">בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ</span><br>
+          <span class="translitt">Bereshit bara Elohim et hashamayim ve'et ha'aretz</span><br>
+          « Au commencement, Dieu créa les cieux et la terre. »</p>
+          <cite>— Genèse 1, 1</cite>
+        </blockquote>
+
+        <p>Le verset 2 dit immédiatement : « La terre était <span class="translitt">tohu vabohu</span> (<span class="heb">תֹּהוּ וָבֹהוּ</span>) — chaos informe et vide — et les ténèbres étaient sur la face de l'abîme (<span class="translitt">tehom</span>). »</p>
+        <p><span class="translitt">Tohu vabohu</span> — chaos informe — <em>suggère une matière préexistante</em> sur laquelle Dieu intervient, pas une création à partir de rien. La doctrine de la <em>creatio ex nihilo</em> est une élaboration théologique tardive — elle n'est pas clairement dans le texte de Genèse 1. Le judaïsme rabbinique et le christianisme l'ont développée à partir du II<sup>e</sup> siècle ap. J.-C., mais le texte hébreu originel reste délibérément ambigu sur ce point.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IV -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-numero">IV</span>
+        <div>
+          <h2 class="section-titre">Le récit Yahviste — une cosmogonie radicalement différente</h2>
+          <p class="section-sous-titre">Adam, la poussière et le souffle divin</p>
+        </div>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">L'homme de poussière et de souffle</h3>
+        <blockquote>
+          <p>Yahvé Elohim forma l'homme de la poussière du sol (<span class="translitt">afar min ha-adamah</span>) et il insuffla dans ses narines un souffle de vie (<span class="translitt">nishmat hayim</span>), et l'homme devint un être vivant (<span class="translitt">nefesh hayya</span>).</p>
+          <cite>— Genèse 2, 7</cite>
+        </blockquote>
+
+        <p>Trois éléments théologiques décisifs s'entrelacent dans ce verset.</p>
+        <p>Premier élément : <strong>Adamah / Adam</strong> — le jeu de mots est intraduisible mais fondamental. <span class="translitt">Adam</span> (l'homme) vient de <span class="translitt">adamah</span> (la terre rouge, le sol). L'homme est littéralement <em>terrien</em> — fait de ce dont il vient et vers quoi il retourne. « Tu es poussière et tu retourneras en poussière » (Genèse 3,19) n'est pas une malédiction — c'est une description de la condition humaine inscrite dans le nom même de l'homme.</p>
+        <p>Deuxième élément : <strong>Le souffle divin</strong> — <span class="translitt">nishmat hayim</span>. Dieu ne parle pas l'homme en existence comme en Genèse 1. Il le <em>touche</em>, il souffle directement dans ses narines. C'est une intimité physique extraordinaire — le visage de Dieu contre le visage de l'argile. Ce contact direct entre le divin et l'humain est ce qui fait de l'homme un <span class="translitt">nefesh hayya</span> — un être vivant, animé.</p>
+        <p>Troisième élément : <strong><span class="translitt">Nefesh</span></strong> — traduit souvent « âme » dans les traductions modernes — ne désigne <em>pas</em> en hébreu biblique une substance immatérielle séparée du corps comme dans la philosophie grecque. <span class="translitt">Nefesh</span> c'est la personne entière, vivante, animée, soufflante. L'homme n'a pas une âme — il <em>est</em> un <span class="translitt">nefesh</span>. La distinction corps/âme est grecque, pas hébraïque. Cette confusion a traversé deux millénaires de théologie chrétienne.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Le jardin d'Éden et les deux arbres</h3>
+        <p>Le jardin d'<em>Éden</em> (<span class="translitt">Gan Eden</span>) — <span class="translitt">Eden</span> venant probablement de l'akkadien <span class="translitt">edinu</span> désignant la plaine, la steppe, ou de l'hébreu <span class="translitt">eden</span> signifiant délice, abondance. Au centre du jardin, deux arbres particuliers :</p>
+
+        <div class="tableau-wrapper">
+          <div class="tableau-titre">Les deux arbres du jardin — signification théologique</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Arbre</th>
+                <th>Hébreu</th>
+                <th>Don</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Arbre de vie</td>
+                <td><span class="heb">עֵץ הַחַיִּים</span> <em>(etz ha-hayim)</em></td>
+                <td>L'immortalité</td>
+                <td>Accessible — jamais explicitement interdit <em>avant</em> la chute</td>
+              </tr>
+              <tr>
+                <td>Arbre de la connaissance du bien et du mal</td>
+                <td><span class="heb">עֵץ הַדַּעַת טוֹב וָרָע</span> <em>(etz ha-da'at tov vara')</em></td>
+                <td>L'autonomie morale — capacité à décider seul du bien et du mal</td>
+                <td>Interdit par Dieu — « tu en mourras »</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>La question théologique fondamentale que pose ce récit : <em>pourquoi Dieu interdit-il la connaissance ?</em> Trois lectures s'affrontent dans la tradition interprétative :</p>
+
+        <div class="debat">
+          <div class="debat-col">
+            <div class="debat-titre">Lecture de la jalousie divine</div>
+            <p>Dieu veut maintenir l'homme dans l'ignorance pour préserver son propre pouvoir. Le serpent dit « Vous serez comme des dieux » — et après la chute Dieu lui-même confirme : « Voici, l'homme est devenu comme l'un de nous » (3,22). Cette lecture, défavorable à Dieu, a nourri les traditions gnostiques des premiers siècles.</p>
+          </div>
+          <div class="debat-col">
+            <div class="debat-titre">Lecture de la protection / temporalité</div>
+            <p>La connaissance du bien et du mal n'est pas une connaissance neutre — c'est l'autonomie morale totale. Dieu dit : l'homme n'est pas encore prêt pour cette responsabilité. La connaissance sans maturité détruit. Ou : l'interdit n'est pas permanent mais <em>prématuré</em>. La faute n'est pas d'avoir voulu connaître mais d'avoir voulu connaître trop tôt.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION V -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-numero">V</span>
+        <div>
+          <h2 class="section-titre">Le serpent — qui est-il vraiment ?</h2>
+          <p class="section-sous-titre">La figure la plus mal comprise de la Bible</p>
+        </div>
+      </div>
+
+      <p>La lecture populaire identifie le serpent à Satan. C'est une lecture chrétienne tardive — elle n'est <em>pas</em> dans le texte hébreu. Genèse 3,1 dit simplement : « Le serpent était le plus rusé (<span class="translitt">arum</span>) de tous les animaux des champs que Yahvé Elohim avait faits. »</p>
+      <p>Le serpent est un <strong>animal</strong> — créé par Dieu, parmi les animaux. Pas un ange déchu, pas une puissance maléfique cosmique. Un animal particulièrement intelligent. L'identification Satan/Serpent est une relecture chrétienne appuyée sur le Livre de la Sagesse (2,24 : « c'est par l'envie du diable que la mort est entrée dans le monde ») et l'Apocalypse (12,9 : « l'antique serpent, qui s'appelle Diable et Satan »). Ces textes sont du I<sup>er</sup> siècle ap. J.-C. — des siècles après la rédaction de la Genèse.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Le jeu de mots fondateur — <em>arum</em></span>
+        </div>
+        <div class="encadre-body">
+          <p>Le texte hébreu contient un jeu de mots remarquable : à la fin de Genèse 2, l'homme et la femme sont décrits comme <span class="translitt">arummim</span> (nus, sans honte). Au début de Genèse 3, le serpent est décrit comme <span class="translitt">arum</span> (rusé). Les deux mots partagent la même racine. L'auteur signale ainsi une connexion — la nudité innocente et la ruse du serpent sont les deux faces d'un même moment de basculement : avant la connaissance et après.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VI -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-numero">VI</span>
+        <div>
+          <h2 class="section-titre">La lettre Beth — ce qui précède le commencement</h2>
+          <p class="section-sous-titre">La réponse rabbinique à la question de l'avant</p>
+        </div>
+      </div>
+
+      <p>Le premier mot de toute la Bible hébraïque est <span class="heb">בְּרֵאשִׁית</span> — <span class="translitt">Bereshit</span> — « Au commencement ». Ce mot commence par la lettre <strong>Beth</strong> (<span class="heb">ב</span>) — la <em>deuxième</em> lettre de l'alphabet hébreu. Pourquoi pas Aleph, la première ?</p>
+      <p>Un Midrash célèbre répond : la lettre Beth (<span class="heb">ב</span>) est <em>fermée sur trois côtés et ouverte vers l'avant</em>. Vers l'avenir. Vers ce qui vient. Ce qui est derrière (avant la création), ce qui est en haut, ce qui est en bas — voilà ce qui est fermé, inaccessible au langage humain. Seul ce qui est devant nous — l'histoire qui commence avec la création — est accessible à la connaissance et au récit.</p>
+
+      <blockquote>
+        <p>Quiconque réfléchit à quatre choses, il eût mieux valu pour lui qu'il ne fût pas venu au monde : ce qui est en haut, ce qui est en bas, ce qui est avant, ce qui est après.</p>
+        <cite>— Talmud de Babylone, Hagiga 11b</cite>
+      </blockquote>
+
+      <p>Ce n'est pas une censure — c'est une épistémologie. Ces questions dépassent la capacité cognitive humaine non parce qu'elles sont interdites mais parce qu'elles sont <em>sans réponse possible</em> dans les catégories humaines de temps et d'espace. Remarquable humilité intellectuelle inscrite dans la forme d'une lettre.</p>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La Kabbale — Ein Sof, l'infini sans limite</h3>
+        <p>La mystique juive médiévale — particulièrement le Zohar (XIII<sup>e</sup> s.) et la Kabbale lourianique (Isaac Louria, XVI<sup>e</sup> s. à Safed en Galilée) — a développé la pensée la plus sophistiquée sur ce qui précède la création.</p>
+        <p>Avant toute chose — avant même la pensée divine, avant toute relation, avant tout attribut — il y a <span class="heb">אֵין סוֹף</span> — <strong><span class="translitt">Ein Sof</span></strong> — littéralement « sans fin », « sans limite ». Pas « Dieu » au sens personnel — quelque chose d'antérieur à toute personnalité, toute relation, tout être déterminé. L'infini pur, indifférencié, sans intérieur ni extérieur, sans haut ni bas, sans avant ni après.</p>
+        <p><span class="translitt">Ein Sof</span> ne crée pas directement — il ne peut pas, parce que la création implique une limite et <span class="translitt">Ein Sof</span> est par définition sans limite. La création nécessite donc un acte paradoxal : le <span class="heb">צִמְצוּם</span> — <strong><span class="translitt">Tsimtsoum</span></strong> — la <em>contraction</em>.</p>
+        <p>Dieu se retire en lui-même — se contracte, crée un espace vide (<span class="translitt">halal</span>) au sein de l'infini — et c'est dans cet espace que la création peut avoir lieu. La création n'est pas une expansion de Dieu vers l'extérieur — c'est un <em>retrait de Dieu qui laisse de la place</em> pour que quelque chose d'autre que lui puisse exister. L'acte créateur est un acte d'effacement de soi.</p>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">Augustin et la création du temps</h3>
+        <p>Augustin d'Hippone (~400 ap. J.-C.) pose la question avec une netteté philosophique parfaite dans les <em>Confessions</em> (XI, 12–13) :</p>
+
+        <blockquote>
+          <p>Que faisait Dieu avant de créer le ciel et la terre ? [...] Ma réponse n'est pas celle de quelqu'un qui esquive la question en plaisantant : « Il préparait l'enfer pour ceux qui scrutent de trop près. » [...] Je réponds : tu n'existais pas encore dans le temps, car c'est toi qui as créé le temps.</p>
+          <cite>— Augustin d'Hippone, Confessions, XI, 12–13 (~400 ap. J.-C.)</cite>
+        </blockquote>
+
+        <p>La réponse d'Augustin est philosophiquement révolutionnaire : Dieu n'a pas créé le monde <em>dans</em> le temps — il a créé le monde <em>avec</em> le temps. Le temps lui-même est une créature. Il n'y a pas eu de « avant » la création parce que l'« avant » présuppose le temps qui n'existait pas encore. La question « qu'y avait-il avant la création ? » est <em>mal formée</em> — elle utilise une catégorie temporelle pour désigner quelque chose qui précède le temps lui-même. C'est comme demander ce qui est au nord du pôle Nord.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VII -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-numero">VII</span>
+        <div>
+          <h2 class="section-titre">La structure des sept jours — une liturgie cosmique</h2>
+          <p class="section-sous-titre">Pourquoi la Genèse est une architecture, pas un reportage</p>
+        </div>
+      </div>
+
+      <p>La source sacerdotale construit le récit de Genèse 1 comme une <em>liturgie</em>. La structure est trop parfaite pour être accidentelle. Les six jours forment trois paires parallèles — trois jours de séparation des espaces, trois jours de peuplement des espaces ainsi créés :</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Parallélisme liturgique des six jours</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Jour</th>
+              <th>Espace créé</th>
+              <th>Jour</th>
+              <th>Habitant correspondant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jour 1</td>
+              <td>Lumière / Ténèbres</td>
+              <td>Jour 4</td>
+              <td>Soleil, Lune, Étoiles</td>
+            </tr>
+            <tr>
+              <td>Jour 2</td>
+              <td>Ciel / Mer</td>
+              <td>Jour 5</td>
+              <td>Oiseaux et Poissons</td>
+            </tr>
+            <tr>
+              <td>Jour 3</td>
+              <td>Terre / Végétation</td>
+              <td>Jour 6</td>
+              <td>Animaux terrestres et Homme</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Le septième jour rompt le schéma — pas de création, pas de peuplement. Seulement le repos (<span class="translitt">shabbat</span> de <span class="translitt">shavat</span> — cesser, s'arrêter) et la sanctification. Le cosmos n'est complet que dans son repos. La signification théologique est profonde : le monde n'est pas une machine qui tourne à plein régime. Il a besoin d'un rythme — travail et repos, création et contemplation.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Le sabbat comme marqueur d'identité en exil</span>
+        </div>
+        <div class="encadre-body">
+          <p>Dans le contexte babylonien, l'insistance de la source P sur le sabbat est également politique. Les Babyloniens ont des jours néfastes (<span class="translitt">umu limnu</span>) liés au calendrier lunaire — mais pas de jour hebdomadaire de repos universel. Le sabbat est une innovation israélite.</p>
+          <p>En exil, il devient le <strong>marqueur d'identité par excellence</strong>, le signe de l'alliance que même sans Temple, sans territoire, sans roi, ce peuple peut maintenir. Observer le sabbat c'est s'aligner sur le rythme divin de l'univers — c'est affirmer que l'on appartient à un ordre cosmique différent de celui de Babylone.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VIII -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-numero">VIII</span>
+        <div>
+          <h2 class="section-titre">Le dialogue avec l'Égypte</h2>
+          <p class="section-sous-titre">Un parallèle moins connu — l'Hymne à Aton et le Psaume 104</p>
+        </div>
+      </div>
+
+      <p>L'Enuma Elish n'est pas le seul parallèle. Les <em>Textes des Pyramides</em> égyptiens (~2400 av. J.-C.) et les <em>Textes des Sarcophages</em> décrivent une cosmogonie d'Héliopolis où le dieu Atoum se crée lui-même à partir du chaos primordial (<span class="translitt">Noun</span>) — les eaux ténébreuses — et génère les premiers dieux.</p>
+      <p>L'<em>Hymne à Aton</em> (~XIV<sup>e</sup> s. av. J.-C., pharaon Akhenaton) — le texte le plus proche d'un monothéisme dans l'Égypte ancienne — présente un dieu solaire unique créateur de toute vie. Certains versets sont frappants de parallélisme avec le Psaume 104 :</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Parallélisme — Hymne à Aton / Psaume 104</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Thème</th>
+              <th>Hymne à Aton (~1350 av. J.-C.)</th>
+              <th>Psaume 104 (~X<sup>e</sup>–VI<sup>e</sup> s. av.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Lever du soleil</td>
+              <td>Quand tu te lèves à l'horizon, tu illumines les deux terres</td>
+              <td>Yahvé se revêt de lumière comme d'un manteau</td>
+            </tr>
+            <tr>
+              <td>Nuit</td>
+              <td>Quand tu te couches à l'occident, la terre est dans les ténèbres comme la mort</td>
+              <td>Tu étends les ténèbres et c'est la nuit — où rôdent toutes les bêtes des forêts</td>
+            </tr>
+            <tr>
+              <td>Eau et vie</td>
+              <td>Tu fais la crue pour le dieu qui tient dans les mains les semences des hommes</td>
+              <td>Tu envoies des sources dans les ravines — elles courent entre les montagnes</td>
+            </tr>
+            <tr>
+              <td>Universalité</td>
+              <td>Pays étrangers, Syrie, Nubie — tu mets un Nil dans le ciel pour eux</td>
+              <td>Que tes œuvres sont nombreuses, Yahvé ! La terre est remplie de tes créatures</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Ces traditions égyptiennes ont circulé au Levant pendant des siècles — particulièrement pendant la période où Canaan était sous domination égyptienne (XVIII<sup>e</sup>–XII<sup>e</sup> s. av. J.-C.). Elles constituent un autre fond sur lequel les traditions bibliques se sont construites, en <em>transformant ce qu'elles empruntaient</em>.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IX -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-numero">IX</span>
+        <div>
+          <h2 class="section-titre">Ce que la science dit de l'avant — du Big Bang à la singularité</h2>
+          <p class="section-sous-titre">Les limites de la physique au seuil du commencement</p>
+        </div>
+      </div>
+
+      <p>Le Big Bang — terme ironiquement inventé par Fred Hoyle qui ne croyait <em>pas</em> au modèle — est aujourd'hui le cadre cosmologique standard, soutenu par trois piliers observationnels majeurs.</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">1929</div>
+          <div class="timeline-dot important"></div>
+          <div class="timeline-texte"><strong>Edwin Hubble</strong> — les galaxies s'éloignent les unes des autres à des vitesses proportionnelles à leur distance. L'univers est en expansion.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">1948</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-texte"><strong>Gamow, Alpher, Herman</strong> — prédiction du rayonnement fossile (CMB). L'univers chaud a laissé une empreinte thermique.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">1964</div>
+          <div class="timeline-dot important"></div>
+          <div class="timeline-texte"><strong>Penzias et Wilson (Nobel 1978)</strong> — découverte accidentelle du CMB. Confirmation du Big Bang. « Photographie » de l'univers 380 000 ans après son origine.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">1981</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-texte"><strong>Alan Guth — Inflation cosmique</strong>. Dans les premiers instants (10<sup>-36</sup> à 10<sup>-32</sup> secondes), l'univers subit une expansion exponentielle gigantesque.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">1983</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-texte"><strong>Hartle et Hawking — modèle sans frontière</strong>. Le temps, proche du Big Bang, se « spatialise » — la question du « avant » devient sans objet géométrique.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2020</div>
+          <div class="timeline-dot important"></div>
+          <div class="timeline-texte"><strong>Roger Penrose (Nobel)</strong> — CCC (Cosmologie Cyclique Conforme). Notre Big Bang pourrait être la « mort » thermique d'un univers précédent.</div>
+        </div>
+      </div>
+
+      <p>Le modèle standard s'arrête au <strong>temps de Planck</strong> — 10<sup>-43</sup> seconde après le Big Bang. En deçà, la gravité quantique prend le relais de la relativité générale — et nous n'avons pas encore de théorie de la gravité quantique qui fonctionne. La singularité initiale — densité et température infinies — est le mur mathématique au-delà duquel la physique actuelle ne dit rien. Non par censure idéologique, mais par limitation structurelle des équations.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Hypothèses au-delà du mur — modèles alternatifs</span>
+        </div>
+        <div class="encadre-body">
+          <p><strong>Loop Quantum Gravity (Rovelli, Smolin, Ashtekar)</strong> — l'espace-temps lui-même est quantifié. La singularité disparaît, remplacée par un <em>Big Bounce</em> — l'univers actuel serait la phase d'expansion qui suit l'effondrement d'un univers précédent.</p>
+          <p><strong>Modèle Hartle-Hawking</strong> — « no-boundary proposal ». Le temps, au voisinage du Big Bang, prend une forme imaginaire et se comporte comme une dimension spatiale. Il n'y a alors pas de « avant » — la question est topologiquement mal posée. Hawking aimait dire : c'est comme demander ce qu'il y a « au sud du pôle Sud ».</p>
+          <p><strong>Modèle ekpyrotique (Steinhardt, Turok)</strong> — notre Big Bang est résulté de la collision de deux <em>branes</em> (membranes d'univers parallèles) dans un espace à dimensions supplémentaires. Né de la théorie des cordes, non falsifiable dans l'état actuel.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION X -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-numero">X</span>
+        <div>
+          <h2 class="section-titre">Tsimtsoum, Ein Sof et vide quantique — les convergences</h2>
+          <p class="section-sous-titre">Un dialogue, ni concordisme ni conflit</p>
+        </div>
+      </div>
+
+      <p>La position intellectuellement honnête n'est ni le <em>concordisme</em> (forcer Bible et physique à dire la même chose) ni le <em>conflit</em> (prétendre que la science a réfuté la religion). La voie rigoureuse est le <strong>dialogue critique</strong> : reconnaître que science et théologie répondent à des questions <em>différentes</em>.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">La distinction fondamentale des niveaux</span>
+        </div>
+        <div class="encadre-body">
+          <p>La science répond à <strong>comment</strong> — par quels mécanismes, selon quelles lois, dans quel ordre. Elle est extraordinairement puissante dans ce registre.</p>
+          <p>La théologie répond à <strong>pourquoi</strong> — pourquoi y a-t-il quelque chose plutôt que rien, pourquoi ces lois, pourquoi la conscience peut-elle connaître le cosmos, quelle est la valeur de l'existence. Ces questions ne sont pas scientifiques — pas parce qu'elles sont moins importantes, mais parce qu'elles relèvent d'un registre différent.</p>
+          <p>Le philosophe des sciences <strong>Ernan McMullin</strong> l'a formulé ainsi : la science décrit la structure de la réalité — la théologie questionne son fondement.</p>
+        </div>
+      </div>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Les quatre grandes convergences — sans confusion ni confusion</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Convergence</th>
+              <th>Formulation théologique</th>
+              <th>Formulation physique</th>
+              <th>Nature du rapprochement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 — Le temps comme créature</td>
+              <td>Augustin (~400) : Dieu n'a pas créé le monde <em>dans</em> le temps, il a créé le monde <em>avec</em> le temps</td>
+              <td>Hawking : le temps est une dimension de l'univers — il a émergé avec l'univers, la question de l'« avant » est mal formée</td>
+              <td>Convergence structurelle sur la nature du temps — deux langages, même intuition</td>
+            </tr>
+            <tr>
+              <td>2 — Contraction créatrice</td>
+              <td>Tsimtsoum (Louria, XVI<sup>e</sup> s.) : Dieu se retire, crée un espace vide en son sein — la création commence dans un retrait</td>
+              <td>Inflation cosmique : expansion exponentielle à partir d'un état de densité maximale — les fluctuations quantiques génèrent les graines de toutes les structures</td>
+              <td>Analogie structurelle — moment primordial où quelque chose d'infiniment dense se « déploie »</td>
+            </tr>
+            <tr>
+              <td>3 — Le vide qui n'est pas rien</td>
+              <td>Ein Sof : l'infini indifférencié, sans attribut — pas « rien », mais pas quelque chose de déterminé non plus. Plénitude paradoxale</td>
+              <td>Vide quantique : état de plus basse énergie, rempli de fluctuations et de paires de particules virtuelles — le « rien » duquel tout émerge n'est pas vide</td>
+              <td>Analogie conceptuelle — L. Krauss critiqué : le vide quantique avec ses lois n'est pas « rien » au sens philosophique</td>
+            </tr>
+            <tr>
+              <td>4 — L'ajustement fin</td>
+              <td>Les constantes de l'univers sont ce qu'elles sont parce qu'elles ont été voulues telles — argument téléologique (Aquin, Leibniz)</td>
+              <td>Fred Hoyle (athée) : la résonance du carbone-12 permettant la nucléosynthèse stellaire est ajustée avec une précision troublante — « un superintellect a manipulé la physique »</td>
+              <td>Question partagée non résolue — multivers (non falsifiable) ou théorie unificatrice contraignante</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sous-section">
+        <h3 class="sous-section-titre">La question que ni la science ni la théologie ne peut éviter</h3>
+        <p>Il y a une question que les deux discours partagent et qu'aucun ne peut résoudre seul : <em>pourquoi les mathématiques décrivent-elles si parfaitement la réalité physique ?</em></p>
+        <p>Eugene Wigner l'a appelée <strong>« l'efficacité déraisonnable des mathématiques dans les sciences naturelles »</strong> (1960). Les mathématiques — inventées par des humains pour résoudre des problèmes abstraits — se révèlent être le langage exact dans lequel l'univers est écrit. Les nombres complexes inventés au XVI<sup>e</sup> siècle se révèlent indispensables en mécanique quantique. Les géométries non-euclidiennes développées au XIX<sup>e</sup> siècle deviennent la base de la relativité générale.</p>
+        <p>Pourquoi ? Ce n'est pas une question scientifique — la science <em>utilise</em> les mathématiques, elle ne peut pas expliquer <em>pourquoi</em> elles fonctionnent. C'est une question philosophique et théologique. Et elle reste ouverte.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XI — SYNTHÈSE -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-numero">XI</span>
+        <div>
+          <h2 class="section-titre">Ce que les deux récits disent ensemble</h2>
+          <p class="section-sous-titre">Synthèse — de Bereshit à la singularité initiale</p>
+        </div>
+      </div>
+
+      <p>La juxtaposition des deux récits de création — le cosmologique (P) et le narratif (J) — dit quelque chose qu'aucun des deux ne pourrait dire seul.</p>
+      <p>Le premier dit : le cosmos est ordonné, bon, créé par un Dieu souverain qui parle et cela est. L'univers a une structure, une hiérarchie, un sens. L'homme est le couronnement d'un processus majestueux.</p>
+      <p>Le second dit : l'homme est fait de poussière et de souffle divin, vulnérable, libre, capable de transgression et de croissance. Dieu marche dans le jardin, cherche l'homme, lui pose des questions. L'univers n'est pas seulement un cosmos ordonné — c'est <em>une relation</em>.</p>
+      <p>Ensemble, les deux récits disent : la création est à la fois ordre et relation, cosmos et jardin, grandeur et intimité. Aucune cosmologie antique — ni sumérienne, ni égyptienne, ni grecque — ne tient simultanément ces deux dimensions avec la même force.</p>
+
+      <div class="synthese">
+        <h3>Ce que « la Création » dit vraiment</h3>
+        <p>En remontant depuis l'État d'Israël moderne jusqu'à la Création, on a suivi le mouvement inverse de la Bible elle-même. La Bible commence par le cosmos et finit par un peuple particulier dans un pays particulier. En remontant cette trajectoire, on voit que chaque étape est une couche de signification posée sur les précédentes.</p>
+        <p>La Création dans la Bible n'est pas un reportage cosmologique. C'est une déclaration théologique et politique — rédigée par des gens en exil, face à la cosmogonie babylonienne dominante, pour dire :</p>
+        <ul>
+          <li>Le monde n'est pas né du sang et du combat des dieux. Il est bon.</li>
+          <li>L'homme n'est pas fait pour servir les dieux. Il est fait à l'image de Dieu.</li>
+          <li>Le temps n'est pas circulaire et répétitif. Il est orienté — il va quelque part.</li>
+          <li>Le sabbat n'est pas une interruption de la vie — il en est le couronnement.</li>
+          <li>La frontière entre création <em>ex nihilo</em> et transformation du chaos reste délibérément ouverte dans le texte hébreu.</li>
+        </ul>
+        <p>Et au bout de la chaîne — que l'on arrive par le chemin de la prière ou par le chemin des équations — on rencontre la même frontière. La physique dit : avant le temps de Planck, nos équations s'effondrent. La Kabbale dit : avant le Tsimtsoum, il n'y a ni espace ni temps ni attribut dicible. Augustin dit : la question du « avant la création » est mal formée. Hawking dit la même chose avec d'autres mots.</p>
+        <p>Deux langages. Un seul silence en dessous.</p>
+      </div>
+
+      <blockquote>
+        <p><span class="heb">וַיֹּאמֶר אֱלֹהִים יְהִי אוֹר — וַיְהִי אוֹר</span><br>
+        <span class="translitt">Vayomer Elohim yehi or — vayehi or</span><br>
+        Dieu dit : que la lumière soit — et la lumière fut.</p>
+        <cite>— Genèse 1, 3</cite>
+      </blockquote>
+
+      <blockquote>
+        <p>t&nbsp;=&nbsp;0, ρ&nbsp;→&nbsp;∞, T&nbsp;→&nbsp;∞ — singularité initiale.</p>
+        <cite>— Cosmologie standard, équations de Friedmann</cite>
+      </blockquote>
+
+    </section>
+
+    <!-- Navigation chapitres -->
+        <nav class="nav-chapitres">
+      <span style="opacity:0.3; font-family:var(--font-titre); font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase;">← Début du livre</span>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <a href="chapitre-02-origines-mythiques.html" class="nav-btn">Chapitre II →</a>
+    </nav>
+
+  </article>
+</main>
+
+<!-- Bouton retour haut -->
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+// Barre de progression
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+
+  // Bouton retour haut
+  if (scrolled > 400) {
+    btnTop.classList.add('visible');
+  } else {
+    btnTop.classList.remove('visible');
+  }
+
+  // Surlignage des sections dans le menu
+  highlightActiveSection();
+});
+
+// Sidebar mobile
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Fermer sidebar en cliquant ailleurs (mobile)
+document.addEventListener('click', (e) => {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menu-toggle');
+  if (sidebar.classList.contains('open') &&
+      !sidebar.contains(e.target) &&
+      !toggle.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+
+// Surlignage actif des sections dans la sidebar
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+// Smooth scroll depuis la sidebar
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    // Fermer sidebar sur mobile
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+// Overlay mobile
+const overlay = document.getElementById('sidebar-overlay');
+if (overlay) {
+  overlay.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    overlay.classList.remove('visible');
+  });
+}
+
+// Update toggleSidebar to show overlay
+const origToggle = window.toggleSidebar;
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  if (overlay) overlay.classList.toggle('visible');
+};
+
+</script>
+
+</body>
+</html>

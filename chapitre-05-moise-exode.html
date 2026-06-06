@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre V — Moïse &amp; l'Exode · Aux Origines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ BARRE DE PROGRESSION ═══ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav { padding: 1rem 0; flex: 1; }
+
+.chapitre-item {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,237,224,0.55);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.chapitre-item:hover { color: var(--or-pale); background: rgba(200,148,58,0.07); }
+
+.chapitre-item.actif {
+  color: var(--or);
+  background: rgba(200,148,58,0.12);
+  border-left: 2px solid var(--or);
+}
+
+.chap-numero {
+  display: block;
+  font-size: 0.58rem;
+  opacity: 0.55;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.15rem;
+}
+
+.section-item {
+  display: block;
+  padding: 0.3rem 1.5rem 0.3rem 2.4rem;
+  font-family: var(--font-corps);
+  font-size: 0.76rem;
+  color: rgba(245,237,224,0.38);
+  text-decoration: none;
+  transition: color 0.2s;
+  line-height: 1.4;
+  border-left: 1px solid transparent;
+}
+
+.section-item:hover { color: var(--or-pale); }
+.section-item.active-section {
+  color: var(--or);
+  border-left-color: var(--or);
+  background: rgba(200,148,58,0.05);
+}
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.12);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══ BOUTON MENU MOBILE ═══ */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 200;
+  background: var(--encre);
+  border: 1px solid var(--or-encre);
+  color: var(--or);
+  width: 40px; height: 40px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-titre);
+}
+
+/* ═══ CONTENU PRINCIPAL ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.chapter-hero {
+  position: relative;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  padding: 5rem 4rem 4rem;
+  overflow: hidden;
+  text-align: center;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(200,148,58,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(200,148,58,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.chapter-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--parchemin-pale));
+  pointer-events: none;
+}
+
+.hero-ornement {
+  color: var(--or);
+  font-size: 0.85rem;
+  letter-spacing: 0.6em;
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+}
+
+.hero-numero {
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.75;
+  margin-bottom: 0.8rem;
+}
+
+h1.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: var(--or-pale);
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: rgba(245,237,224,0.6);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+}
+
+.hero-epigraphe {
+  max-width: 560px;
+  margin: 0 auto 2rem;
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(245,237,224,0.75);
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-epigraphe .heb {
+  display: block;
+  font-size: 1.7rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--or-pale);
+  margin-bottom: 0.5rem;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-titre);
+  letter-spacing: 0.1em;
+  color: var(--or);
+  opacity: 0.7;
+  margin-top: 0.8rem;
+  font-style: normal;
+}
+
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 300px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--or), transparent);
+  opacity: 0.3;
+}
+
+.deco-ligne-symbole {
+  color: var(--or);
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: var(--parchemin-pale);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* ═══ ARTICLE CONTENU ═══ */
+.contenu {
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  padding: 3rem 2.5rem 6rem;
+}
+
+.section {
+  margin-bottom: 4rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+.section-numero {
+  font-family: var(--font-deco);
+  font-size: 2rem;
+  color: var(--or);
+  opacity: 0.35;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--encre);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.2rem;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.88rem;
+  color: var(--brun-clair);
+  font-style: italic;
+}
+
+.contenu p {
+  margin-bottom: 1.1rem;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.contenu p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-deco);
+  font-size: 3.5rem;
+  line-height: 0.8;
+  color: var(--or);
+  margin: 0.05em 0.1em 0 0;
+  opacity: 0.75;
+}
+
+.terme-cle {
+  font-style: italic;
+  color: var(--brun);
+  font-weight: 500;
+}
+
+em { color: var(--brun-clair); }
+
+/* ═══ NOTE MÉTHODOLOGIQUE ═══ */
+.note-methodo {
+  background: rgba(26,18,8,0.04);
+  border-left: 3px solid var(--or);
+  padding: 1.4rem 1.6rem;
+  border-radius: 0 3px 3px 0;
+  margin-bottom: 1.5rem;
+  font-size: 0.93rem;
+  line-height: 1.7;
+}
+
+.note-methodo-label {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.7rem;
+  opacity: 0.85;
+}
+
+.note-methodo p { margin-bottom: 0.6rem; }
+.note-methodo p:last-child { margin-bottom: 0; }
+
+/* ═══ BLOCKQUOTE ═══ */
+blockquote {
+  margin: 2rem 0;
+  padding: 1.6rem 2rem;
+  background: rgba(200,148,58,0.05);
+  border-left: 3px solid rgba(200,148,58,0.4);
+  border-radius: 0 3px 3px 0;
+}
+
+blockquote p {
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--encre-douce);
+  margin-bottom: 0.5rem;
+}
+
+blockquote cite {
+  display: block;
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--or);
+  opacity: 0.75;
+  font-style: normal;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+/* ═══ BLOC DÉBAT ═══ */
+.debat-bloc {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px var(--ombre);
+}
+
+.debat-voix {
+  padding: 1.4rem 1.8rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.debat-voix p { margin-bottom: 0.7rem; }
+.debat-voix p:last-child { margin-bottom: 0; }
+
+.debat-voix.question {
+  background: var(--parchemin-fonce);
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+.debat-voix.reponse {
+  background: var(--parchemin-pale);
+}
+
+.debat-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.7rem;
+  opacity: 0.85;
+}
+
+/* ═══ TABLEAU ═══ */
+.tableau-wrapper {
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.tableau-titre {
+  font-family: var(--font-titre);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  margin-bottom: 0.8rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+thead tr {
+  background: var(--encre);
+  color: var(--or-pale);
+}
+
+thead th {
+  padding: 0.65rem 0.9rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 600;
+}
+
+tbody tr { border-bottom: 1px solid rgba(139,94,60,0.12); }
+tbody tr:hover { background: rgba(200,148,58,0.04); }
+tbody td { padding: 0.7rem 0.9rem; color: var(--encre-douce); vertical-align: top; }
+tbody td:first-child { font-weight: 500; color: var(--brun); font-family: var(--font-titre); font-size: 0.83rem; }
+tbody td em { color: var(--brun-clair); font-style: italic; }
+
+/* ═══ BOÎTE COMPARAISON ═══ */
+.comp-boite {
+  margin: 2.5rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px var(--ombre);
+}
+
+.comp-col { background: var(--parchemin-pale); }
+
+.comp-col-header {
+  background: var(--encre);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.65rem 1rem;
+  text-align: center;
+}
+
+.comp-item {
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.comp-item:last-child { border-bottom: none; }
+.comp-item:hover { background: rgba(200,148,58,0.05); }
+
+.comp-item strong {
+  display: block;
+  color: var(--brun);
+  font-size: 0.8rem;
+  font-family: var(--font-titre);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.1rem;
+}
+
+/* ═══ TIMELINE ═══ */
+.timeline {
+  margin: 2rem 0;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--or), rgba(200,148,58,0.1));
+}
+
+.timeline-item {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 0.55rem;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--or);
+  opacity: 0.5;
+}
+
+.timeline-epoch {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.3rem;
+}
+
+.timeline-titre {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-corps {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.65;
+}
+
+/* ═══ NOMS DIVINS ═══ */
+.noms-divins {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.nom-divin-item {
+  padding: 1.2rem;
+  background: rgba(200,148,58,0.06);
+  border: 1px solid rgba(200,148,58,0.2);
+  border-radius: 3px;
+}
+
+.nom-divin-heb {
+  font-size: 1.8rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.nom-divin-translit {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+  margin-bottom: 0.4rem;
+}
+
+.nom-divin-sens {
+  font-size: 0.9rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  margin-bottom: 0.4rem;
+}
+
+.nom-divin-ref {
+  font-size: 0.8rem;
+  color: var(--encre-douce);
+}
+
+/* ═══ BOÎTE SYNTHÈSE ═══ */
+.synthese-bloc {
+  margin: 3rem 0;
+  padding: 2rem 2.2rem;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.synthese-bloc::before {
+  content: '✦';
+  position: absolute;
+  top: -1rem; right: 1rem;
+  font-size: 5rem;
+  color: var(--or);
+  opacity: 0.05;
+  font-family: var(--font-titre);
+}
+
+.synthese-label {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.synthese-bloc p {
+  font-size: 0.97rem;
+  line-height: 1.75;
+  color: rgba(245,237,224,0.82);
+  margin-bottom: 0.8rem;
+  text-align: left;
+}
+
+.synthese-bloc p:last-child { margin-bottom: 0; }
+.synthese-bloc p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+/* ═══ BOÎTE ATTENTION ═══ */
+.attention-bloc {
+  margin: 2rem 0;
+  padding: 1.3rem 1.6rem;
+  background: rgba(139,26,26,0.05);
+  border-left: 3px solid var(--rouge-antique);
+  border-radius: 0 3px 3px 0;
+  font-size: 0.93rem;
+  line-height: 1.7;
+}
+
+.attention-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rouge-antique);
+  margin-bottom: 0.6rem;
+  opacity: 0.85;
+}
+
+/* ═══ BOÎTE SOURCES PRIMAIRES ═══ */
+.sources-boite {
+  margin: 2rem 0;
+  border: 1px solid rgba(200,148,58,0.25);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.sources-header {
+  background: rgba(200,148,58,0.1);
+  padding: 0.65rem 1.2rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.9;
+}
+
+.source-item {
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid rgba(200,148,58,0.1);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.source-item:last-child { border-bottom: none; }
+
+.source-titre {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.source-date {
+  font-size: 0.75rem;
+  color: var(--or);
+  font-style: italic;
+  margin-bottom: 0.25rem;
+}
+
+.source-corps { color: var(--encre-douce); }
+
+/* ═══ ORNEMENT ═══ */
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+/* ═══ NAV CHAPITRES ═══ */
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.3);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+.nav-btn:hover {
+  background: var(--encre);
+  color: var(--or-pale);
+  border-color: var(--encre);
+}
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.75rem;
+  color: var(--or);
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.nav-centre:hover { opacity: 1; }
+
+/* ═══ BTN TOP ═══ */
+#btn-top {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(10px);
+  font-family: var(--font-titre);
+}
+
+#btn-top.visible {
+  opacity: 0.7;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#btn-top:hover { opacity: 1; }
+
+/* ═══ CARTE MOÏSE (profil biographique) ═══ */
+.profil-carte {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.profil-phase {
+  padding: 1.4rem;
+  border-right: 1px solid rgba(139,94,60,0.15);
+  background: var(--parchemin-pale);
+  text-align: center;
+}
+
+.profil-phase:last-child { border-right: none; }
+
+.profil-annees {
+  font-family: var(--font-deco);
+  font-size: 1.5rem;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 0.3rem;
+}
+
+.profil-titre {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brun);
+  margin-bottom: 0.5rem;
+}
+
+.profil-corps {
+  font-size: 0.87rem;
+  color: var(--encre-douce);
+  line-height: 1.55;
+}
+
+/* ═══ TEXTE HÉBREU INLINE ═══ */
+.heb-inline {
+  font-size: 1.4rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  line-height: 1.2;
+}
+
+/* ═══ BOÎTE BILAN ARCHÉOLOGIQUE ═══ */
+.bilan-arche {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bilan-col { background: var(--parchemin-pale); }
+
+.bilan-col-header {
+  padding: 0.65rem 1rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.bilan-col-header.atteste {
+  background: rgba(26,18,8,0.85);
+  color: var(--or-pale);
+}
+
+.bilan-col-header.absent {
+  background: rgba(139,26,26,0.75);
+  color: rgba(245,237,224,0.9);
+}
+
+.bilan-col-item {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+  font-size: 0.87rem;
+  line-height: 1.5;
+  color: var(--encre-douce);
+}
+
+.bilan-col-item:last-child { border-bottom: none; }
+
+.bilan-col-item strong {
+  display: block;
+  color: var(--brun);
+  font-size: 0.8rem;
+  font-family: var(--font-titre);
+  margin-bottom: 0.1rem;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+
+  #main { margin-left: 0; }
+
+  #menu-toggle { display: flex; }
+
+  .chapter-hero { padding: 4rem 1.5rem 3rem; }
+
+  .contenu { padding: 2rem 1.2rem 4rem; }
+
+  .bilan-arche { grid-template-columns: 1fr; }
+  .bilan-col:first-child { border-bottom: 1px solid rgba(139,94,60,0.2); }
+}
+
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+  .nav-chapitres { flex-direction: column; gap: 0.8rem; text-align: center; }
+  .profil-carte { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE AMÉLIORÉ — PUBLICATION WEB
+═══════════════════════════════════════════ */
+@media (max-width: 680px) {
+  html { font-size: 16px; }
+  
+  .chapter-hero {
+    min-height: 50vh;
+    padding: 4rem 1.5rem 3rem;
+  }
+  
+  .hero-titre {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+  }
+  
+  .tableau-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 500px;
+  }
+  
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .synthese {
+    padding: 1.8rem 1.2rem;
+  }
+  
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  blockquote {
+    padding-left: 1rem;
+    margin-left: 0;
+  }
+}
+
+/* Scrollbar sidebar sur tous les navigateurs */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Overlay mobile pour fermer la sidebar */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Lien retour accueil dans sidebar */
+.sidebar-home {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.65;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<button id="menu-toggle" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<!-- ══════════════════════════════
+     SIDEBAR NAVIGATION
+══════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique interactif</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la cosmogonie à la naissance d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="chapitre-01-cosmogonie.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-02-origines-mythiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-03-langues-semitiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-06-israel-tribus.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-07-les-royaumes.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-08-age-prophetique.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-11-palestine-1948.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     CONTENU PRINCIPAL
+══════════════════════════════ -->
+<main id="main">
+
+  <!-- FRONTISPICE -->
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre V</div>
+    <h1 class="hero-titre">Moïse &amp; l'Exode</h1>
+    <p class="hero-sous-titre">L'homme le plus important de la Bible que l'histoire ne peut pas saisir</p>
+    <blockquote class="hero-epigraphe">
+      <span class="heb">אֶהְיֶה אֲשֶׁר אֶהְיֶה</span>
+      <em>Ehyeh asher ehyeh</em><br>
+      « Je serai ce que je serai. »<br>
+      Un dieu refuse d'être nommé — et ce refus devient son nom.
+      <cite>— Exode 3, 14</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <!-- CORPS -->
+  <article class="contenu">
+
+    <!-- INTRODUCTION -->
+    <section class="section" id="s0">
+      <div class="note-methodo">
+        <div class="note-methodo-label">⚑ Posture méthodologique — Historien · Bibliste · Archéologue · Philologue</div>
+        <p>Moïse constitue le paradoxe central de toute l'historiographie biblique. Il est le personnage le plus important de la Torah — présent dans quatre de ses cinq livres, législateur fondateur du judaïsme, figure de référence du christianisme et de l'islam — et pourtant il n'existe aucune mention de lui dans aucune source extrabiblique. Pas une inscription égyptienne, pas une stèle, pas une archive administrative, pas un papyrus. Rien. Ce silence absolu n'est pas une preuve d'inexistence, mais il impose une rigueur méthodologique absolue : tout ce qu'on peut dire de Moïse historiquement doit être reconstruit par inférence, par analogie, et par critique interne du texte.</p>
+        <p>Ce chapitre suit la trajectoire complète du dossier mosaïque — du nom à la mort, du buisson ardent au Sinaï — en croisant systématiquement le récit biblique avec les données archéologiques, épigraphiques et les conclusions de la critique textuelle. Une attention particulière est portée à la question la plus explosive du dossier : l'origine du nom et du culte de Yahvé dans un milieu midianite, et ce que cela signifie pour la compréhension de la révolution religieuse qu'incarne Moïse.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION I -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-numero">I</span>
+        <div>
+          <h2 class="section-titre">Le nom — premier et meilleur indice historique</h2>
+          <p class="section-sous-titre">Moshé · מֹשֶׁה · Msy · La philologie contre l'hagiographie</p>
+        </div>
+      </div>
+
+      <p>L'analyse commence toujours par le nom, et le nom de Moïse est l'un des arguments les plus solides de tout le dossier. Non pas parce qu'il prouve l'existence d'un individu historique précis, mais parce qu'il trahit une origine qui ne s'invente pas.</p>
+
+      <p>La Bible propose une étymologie populaire hébraïque en Exode 2,10 : lorsque la fille de Pharaon tire l'enfant de l'eau, elle déclare <em>«&nbsp;je l'ai tiré des eaux&nbsp;»</em> — <em class="terme-cle">meshitihu</em> — et lui donne le nom Moshé, comme si ce nom venait du verbe <em>mashah</em>, « tirer, retirer ». C'est une étymologie narrative, un jeu de mots hébraïque dans la bouche d'une Égyptienne — ce qui est déjà linguistiquement suspect. Un locuteur égyptien ne raisonnerait pas par la phonologie de l'hébreu.</p>
+
+      <p>La réalité philologique est plus intéressante, et plus révélatrice. <strong>Moshé est un nom authentiquement égyptien.</strong> La racine <em class="terme-cle">msy</em> en égyptien ancien signifie littéralement « enfant de, né de ». On la retrouve dans les noms théophores les plus courants du Nouvel Empire : <em>Thout-mosis</em> (enfant de Thoth), <em>Ra-mosis</em> ou Ramsès (enfant de Rê), <em>Ah-mosis</em> (enfant de la lune). Moshé serait simplement <em>msy</em> — « l'enfant » — sans préfixe divin, ce qui pourrait indiquer un nom tronqué dont la partie théophore a été délibérément effacée par la tradition hébraïque, jugée incompatible avec le monothéisme.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Noms théophores égyptiens contenant la racine msy/mose — Nouvel Empire (~1550–1070 av. J.-C.)</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nom égyptien</th>
+              <th>Translittération</th>
+              <th>Sens</th>
+              <th>Porteur connu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Thoutmosis</td>
+              <td><em>Djhwty-ms</em></td>
+              <td>Enfant de Thoth</td>
+              <td>Cinq pharaons de la XVIIIe dynastie</td>
+            </tr>
+            <tr>
+              <td>Ramsès</td>
+              <td><em>Ra-ms-sw</em></td>
+              <td>Enfant de Rê</td>
+              <td>Onze pharaons dont Ramsès II</td>
+            </tr>
+            <tr>
+              <td>Ahmosis</td>
+              <td><em>Jꜥḥ-ms</em></td>
+              <td>Enfant de la lune</td>
+              <td>Fondateur de la XVIIIe dynastie (~1550)</td>
+            </tr>
+            <tr>
+              <td>Ptahmosis</td>
+              <td><em>Ptḥ-ms</em></td>
+              <td>Enfant de Ptah</td>
+              <td>Haut fonctionnaire de Ramsès II</td>
+            </tr>
+            <tr>
+              <td>Moshé / Moïse</td>
+              <td><em>Ms / Msy</em></td>
+              <td>L'enfant (préfixe divin absent)</td>
+              <td>Tradition hébraïque — préfixe théophore possiblement supprimé</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Ce détail philologique est capital pour l'évaluation historique. Aucun rédacteur du VIIe siècle av. J.-C. cherchant à glorifier le héros fondateur de son peuple n'aurait spontanément donné à ce héros un nom égyptien si ce n'était pas une donnée traditionnelle très ancienne, trop enracinée pour être modifiée ou camouflée. Le nom est une cicatrice historique — et elle dit clairement : cet homme avait un lien réel avec l'Égypte.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION II -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-numero">II</span>
+        <div>
+          <h2 class="section-titre">La naissance — un mythe universel habillant un homme réel</h2>
+          <p class="section-sous-titre">Sargon d'Akkad · La corbeille sur le fleuve · Le héros exposé</p>
+        </div>
+      </div>
+
+      <p>Exode 2,1–10 : une femme hébraïque met au monde un fils, le cache trois mois, puis le dépose dans une corbeille de joncs enduite de bitume qu'elle pose dans le Nil, au bord des roseaux. La fille de Pharaon vient se baigner, aperçoit la corbeille, fait retirer l'enfant, le prend en pitié, l'adopte et lui donne un nom égyptien. C'est l'un des récits de naissance les plus beaux et les plus économes de la littérature antique.</p>
+
+      <p>Mais ce récit n'est pas original à Moïse — et c'est précisément ce qui est instructif. La même structure narrative apparaît dans un texte mésopotamien qui précède l'Exode de plusieurs siècles : <strong>la Légende de Sargon d'Akkad</strong>, premier grand conquérant de l'histoire (~2300 av. J.-C.).</p>
+
+      <blockquote>
+        <p>« Ma mère était une grande prêtresse, mon père je ne le connais pas... Ma mère me conçut et m'enfanta en secret. Elle me plaça dans un panier de roseaux, elle scella mon couvercle avec du bitume. Elle me déposa dans le fleuve qui ne s'éleva pas sur moi. Le fleuve me porta jusqu'au porteur d'eau Akki. Akki, le porteur d'eau, me retira en plongeant son seau. Akki, le porteur d'eau, m'éleva comme son propre fils. »</p>
+        <cite>— Légende de Sargon d'Akkad · Texte cunéiforme · ~XVIIe s. av. J.-C. (copie) sur un original plus ancien</cite>
+      </blockquote>
+
+      <p>Les parallèles sont frappants : corbeille de roseaux, enduit de bitume, dépôt dans un fleuve, découverte par un personnage de statut élevé, adoption et éducation dans un milieu supérieur au milieu d'origine. Ce motif a été qualifié par le mythographe Otto Rank dans son étude de 1909 (<em>Le mythe de la naissance du héros</em>) de <em class="terme-cle">mythe du héros exposé</em> — il apparaît dans des dizaines de traditions culturelles : Romulus déposé sur le Tibre, Œdipe abandonné sur le mont Cithéron, Cyrus le Grand exposé dans les collines médianes, Krishna confié à des bergers.</p>
+
+      <div class="attention-bloc">
+        <div class="attention-label">⚑ Mise en garde méthodologique — Comparatisme et historicité</div>
+        <p>La découverte de ce parallèle au XIXe siècle a parfois été utilisée pour « démythologiser » Moïse et en conclure à son caractère purement fictif. C'est une erreur de méthode fondamentale. Le fait qu'un motif narratif soit répandu dans plusieurs cultures ne signifie pas que le personnage qui le porte est inventé — cela signifie que sa figure a été habillée du vêtement narratif universel du héros exposé à la naissance, qui marque dans toutes les cultures antiques la destinée exceptionnelle de celui qui sera grand. La convergence du motif trahit non la fiction mais l'importance.</p>
+        <p>Ce que ce récit dit sur Moïse est programmatique : il est un homme frontière dès sa naissance — entre les eaux et la terre, entre la mort et la vie, entre le monde hébreu et le monde égyptien. Son identité est double avant même qu'il ait conscience de lui-même.</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION III -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-numero">III</span>
+        <div>
+          <h2 class="section-titre">À la cour de Pharaon — vraisemblance historique</h2>
+          <p class="section-sous-titre">Le <em>kap</em> royal · Éducation biculturelle · Profil de l'homme-frontière</p>
+        </div>
+      </div>
+
+      <p>La Bible est remarquablement discrète sur l'enfance et la jeunesse de Moïse à la cour égyptienne — elle passe en quelques versets de sa découverte dans le Nil à sa maturité d'adulte. Le Nouveau Testament, lui, dans le discours d'Étienne (Actes 7,22), affirme que Moïse « fut instruit dans toute la sagesse des Égyptiens ». La tradition rabbinique, dans des développements haggadiques considérables, élabore une enfance princière complète avec exploits militaires en Éthiopie.</p>
+
+      <p>Ce qui est historiquement plausible ne requiert pas ces broderies. La réalité institutionnelle du Nouvel Empire suffit. Les textes égyptiens attestent l'existence d'une institution appelée le <em class="terme-cle">kap</em> — la « nurserie royale » — où des enfants de familles étrangères, otages ou fils de vassaux, étaient élevés avec les enfants royaux et recevaient une éducation égyptienne complète : écriture hiéroglyphique et hiératique, administration, arts militaires, rites religieux. Parmi ces enfants du kap : des Nubiens, des Cananéens, des Syriens. Leur intégration au système égyptien était réelle et profonde.</p>
+
+      <p>Si Moïse a un substrat historique réel — et l'ensemble des indices converge vers cette hypothèse — c'est précisément dans ce milieu qu'il faut le chercher : un homme d'origine sémitique, portant un nom égyptien, élevé dans le système administratif et cultuel de la cour, parlant l'égyptien et l'hébreu, connaissant les deux mondes avec une égale intimité. Ce profil biculturel expliquerait à la fois son efficacité comme interlocuteur de Pharaon et son rôle de médiateur entre les travailleurs hébreux et le pouvoir égyptien.</p>
+
+      <div class="sources-boite">
+        <div class="sources-header">Sources égyptiennes attestant la présence sémitique au Nouvel Empire</div>
+        <div class="source-item">
+          <div class="source-titre">Papyrus Anastasi VI (~XIIIe s. av. J.-C.)</div>
+          <div class="source-date">Époque Ramsès II–III · Delta oriental</div>
+          <div class="source-corps">Rapport d'un garde-frontière du delta oriental signalant le passage de « tribus shasu de Edom » avec leurs troupeaux vers les étangs de Per-Atum (Pithom). Première attestation d'une perméabilité contrôlée de la frontière orientale égyptienne pour des populations sémitiques nomades.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Inscriptions de Pi-Ramsès (Tell el-Dab'a / Qantir)</div>
+          <div class="source-date">~XIIIe s. av. J.-C. · Delta nord-oriental</div>
+          <div class="source-corps">Fouilles de Manfred Bietak (depuis 1966) et Edgar Pusch (depuis 1980) ont révélé la capitale de Ramsès II et une présence intensive de main-d'œuvre étrangère, dont des populations sémitiques employées dans la construction. Le nom Ramsès est directement lié au texte biblique de l'Exode 1,11.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Papyrus Leyde 348 (~XIIIe s. av. J.-C.)</div>
+          <div class="source-date">Archives administratives · Époque ramesside</div>
+          <div class="source-corps">Registre de distribution de rations à des Apiru (populations apatrides, semi-serviles) employés comme carriers de pierres pour le transport de monolithes. Les Apiru — terme socio-économique qui recoupe partiellement les Hébreux — sont explicitement documentés dans les archives de la construction ramesside.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Stèle de Merneptah (~1208 av. J.-C.)</div>
+          <div class="source-date">Thèbes · Victoires de Pharaon Merneptah</div>
+          <div class="source-corps">Première mention extrabiblique du nom « Israël » comme entité collective déjà présente en Canaan — pas en Égypte. Ce détail fixe une borne chronologique décisive : en 1208, une population se désignant ou désignée comme Israël existe déjà hors d'Égypte, ce qui est cohérent avec un Exode au cours du XIIIe siècle.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IV -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-numero">IV</span>
+        <div>
+          <h2 class="section-titre">Le meurtre et la fuite — le tournant</h2>
+          <p class="section-sous-titre">Exode 2,11–15 · Texture psychologique réaliste · Midian</p>
+        </div>
+      </div>
+
+      <p>Exode 2,11–15 est l'un des passages les plus psychologiquement saisissants de toute la Torah, et l'un de ceux qui ont la texture la plus rugueuse de la réalité historique. Moïse adulte sort et voit ses « frères » — les Hébreux. Il voit un Égyptien frapper un Hébreu. Il regarde d'un côté et de l'autre, ne voit personne, tue l'Égyptien et cache le corps dans le sable. Le lendemain, il sort à nouveau et voit deux Hébreux se quereller. Il dit au coupable : « Pourquoi frappes-tu ton prochain ? » Et celui-ci répond : « Qui t'a établi chef et juge sur nous ? Est-ce que tu veux me tuer comme tu as tué l'Égyptien ? » Moïse prend peur, réalise que l'affaire est connue, et apprend que Pharaon veut le tuer. Il fuit au pays de Midian.</p>
+
+      <p>Ce récit ne ressemble pas à une hagiographie. Un héros mythologique stylisé ne commet pas un meurtre impulsif, ne panique pas à la découverte de sa faute, ne fuit pas pour sauver sa peau. C'est la texture d'un homme — avec ses réflexes, ses peurs, ses erreurs. Ce détail a la résistance du réel, ou d'une tradition si ancienne et si enracinée qu'elle n'a pas pu être édulcorée.</p>
+
+      <p>La fuite mène au <em class="terme-cle">pays de Midian</em> — région à l'est du golfe d'Aqaba, dans le nord-ouest de l'Arabie actuelle, que les sources égyptiennes identifient sous le nom de Madian ou associent aux populations <em>shasu</em> du désert méridional. Les Midianites sont une population arabe semi-nomade bien attestée dans les sources de plusieurs cultures de l'âge du Bronze. C'est là que Moïse s'arrête, s'assoie près d'un puits, et rencontre les sept filles de Jéthro — ou Réuel — <em class="terme-cle">prêtre de Midian</em>. Il épouse Séphora, l'une d'elles, et entre dans la famille de ce prêtre.</p>
+
+      <p>Ce détail — apparemment anecdotique dans une lecture rapide — est d'une importance théologique explosive. C'est lui qui ouvre la question la plus profonde de tout le dossier mosaïque.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION V -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-numero">V</span>
+        <div>
+          <h2 class="section-titre">Jéthro, prêtre de Midian — l'hypothèse kénite</h2>
+          <p class="section-sous-titre">L'origine de Yahvé · F.W. Ghillany · La théorie midianite · Exode 18</p>
+        </div>
+      </div>
+
+      <p>Voici la question que pose le texte biblique lui-même, si on le lit avec attention : Moïse rencontre Yahvé pour la première fois au buisson ardent — sur la « montagne de Dieu », Horeb/Sinaï — alors qu'il est berger du troupeau de son beau-père Jéthro, <em>prêtre de Midian</em>. Après l'Exode, quand Jéthro rejoint Moïse au désert (Exode 18), il prononce une bénédiction remarquable :</p>
+
+      <blockquote>
+        <p>« Maintenant je sais que Yahvé est plus grand que tous les dieux — car dans l'affaire même où [les Égyptiens] ont agi avec arrogance contre eux, il les a dominés. »</p>
+        <cite>— Exode 18, 11</cite>
+      </blockquote>
+
+      <p>Et aussitôt : Jéthro offre des holocaustes et des sacrifices à Yahvé. Aaron et tous les anciens d'Israël viennent manger avec lui « devant Dieu ». Un prêtre midianite préside à un repas sacrificiel en l'honneur de Yahvé — et personne n'est surpris. La question que pose ce texte est vertigineuse : <strong>est-ce que Jéthro, prêtre midianite, connaissait déjà Yahvé avant que Moïse ne lui parle de lui ?</strong></p>
+
+      <div class="debat-bloc">
+        <div class="debat-voix question">
+          <div class="debat-label">Daniel — Question</div>
+          <p>Jéthro est présenté comme prêtre de Midian avant que Moïse n'arrive. Il offre des sacrifices à Yahvé après avoir entendu parler de l'Exode. Mais il aurait pu avoir appris à connaître Yahvé à travers Moïse, son gendre, pendant les années de Moïse à Midian. Pourquoi en faire une théorie sur l'origine midianique de Yahvé ?</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Orient Scholar — Historien · Bibliste · Critique textuelle</div>
+          <p>La remarque est légitime — et précisément à ce niveau que la théorie se distingue de la simple lecture narrative. Plusieurs éléments convergents, au-delà du seul épisode de Jéthro, constituent l'argument.</p>
+          <p>Premier élément : Exode 3 situe la <em>première rencontre</em> de Moïse avec Yahvé sur « la montagne de Dieu » — Horeb ou Sinaï — qui est <em>dans</em> le territoire de Midian, là où Moïse garde les troupeaux de Jéthro. La montagne sainte de Yahvé est géographiquement une montagne midianique.</p>
+          <p>Deuxième élément : Exode 6,2–3, dans la source Sacerdotale (P), dit explicitement que les patriarches ne connaissaient pas le nom Yahvé. Si Yahvé était la divinité d'Israël depuis Abraham, pourquoi Moïse ne le connaît-il pas quand il arrive à Midian ?</p>
+          <p>Troisième élément : Les textes poétiques les plus archaïques de la Bible — Deutéronome 33,2 ; Juges 5,4–5 ; Habacuc 3,3 — situent tous la demeure originelle de Yahvé au sud : Sinaï, Séir, Édom, Paran, Téman. Ces régions correspondent précisément au territoire des Kénites et Midianites — pas à Canaan.</p>
+          <p>C'est l'ensemble de cette convergence qui constitue la <em class="terme-cle">théorie kénite ou midianite</em>, proposée au XIXe siècle par F.W. Ghillany (1842) et développée depuis par des chercheurs comme Karl Budde, William Foxwell Albright, et dans une version révisée par Frank Moore Cross. Selon cette hypothèse : Yahvé était à l'origine la divinité tribale des Kénites ou Midianites — peuple du désert du nord-arabique, associé dans la Bible au travail du métal (les Kénites sont des forgerons). Moïse, initié à ce culte dans le milieu de son beau-père, a ensuite apporté ce dieu aux clans hébreux qui l'ont adopté comme leur dieu libérateur.</p>
+          <p>Le consensus actuel ne tranche pas définitivement en faveur de cette théorie — mais elle est prise très au sérieux par la majorité des spécialistes comme l'explication la plus économique de l'origine géographique et culturelle du yahvisme primitif.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VI -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-numero">VI</span>
+        <div>
+          <h2 class="section-titre">Le buisson ardent — la révélation du Nom</h2>
+          <p class="section-sous-titre">Exode 3 · Ehyeh asher ehyeh · La révolution philosophique du Nom</p>
+        </div>
+      </div>
+
+      <p>Exode 3 est théologiquement le texte le plus dense de toute la Bible hébraïque. La scène est sobre : Moïse mène le troupeau de Jéthro au-delà du désert, jusqu'à la montagne de Dieu, à l'Horeb. L'ange de Yahvé lui apparaît dans une flamme de feu du milieu d'un buisson — un buisson qui brûle sans se consumer. Moïse s'approche. La voix l'appelle par son nom. Et commence l'un des dialogues les plus commentés de toute l'histoire de la pensée humaine.</p>
+
+      <blockquote>
+        <p>« Je suis le Dieu de ton père, le Dieu d'Abraham, le Dieu d'Isaac et le Dieu de Jacob. »<br>
+        Moïse se voile la face, car il craint de regarder Dieu.</p>
+        <cite>— Exode 3, 6</cite>
+      </blockquote>
+
+      <p>Puis Moïse demande, dans un geste d'une audace extraordinaire : « Quel est ton nom ? » — comme si connaître le nom était nécessaire pour convaincre le peuple. Et la réponse divine est la formule la plus commentée de toute l'histoire de la philosophie et de la théologie.</p>
+
+      <div class="noms-divins">
+        <div class="nom-divin-item">
+          <span class="nom-divin-heb">אֶהְיֶה אֲשֶׁר אֶהְיֶה</span>
+          <div class="nom-divin-translit">Ehyeh asher ehyeh</div>
+          <div class="nom-divin-sens">Formulation originale — Exode 3,14 · Forme en hébreu : inaccompli du verbe <em>hayah</em></div>
+          <div class="nom-divin-ref">Inaccompli = action non achevée, dynamique, ouverte. Sens littéral : « Je serai ce que je serai » ou « Je suis en train d'être ce que je suis en train d'être »</div>
+        </div>
+        <div class="nom-divin-item">
+          <span class="nom-divin-heb">יהוה</span>
+          <div class="nom-divin-translit">YHWH — le Tétragramme</div>
+          <div class="nom-divin-sens">Le nom donné au verset suivant (Ex 3,15) comme nom à révéler au peuple — forme à la 3e personne du même verbe <em>hayah</em></div>
+          <div class="nom-divin-ref">Sens probable : « Il fait être », « Il fait advenir » — un dieu de l'histoire et du devenir, pas de l'être statique</div>
+        </div>
+        <div class="nom-divin-item">
+          <span class="nom-divin-heb">אֲדֹנָי</span>
+          <div class="nom-divin-translit">Adonaï — « Mon Seigneur »</div>
+          <div class="nom-divin-sens">Substitut liturgique post-biblique — le nom YHWH devient imprononçable, remplacé à la lecture par Adonaï</div>
+          <div class="nom-divin-ref">Pratique attestée dans les manuscrits de Qoumrân et le Talmud. Kyrios (Seigneur) dans la Septante et le NT suit la même logique</div>
+        </div>
+        <div class="nom-divin-item">
+          <span class="nom-divin-heb">יְהֹוָה</span>
+          <div class="nom-divin-translit">Yéhovah / Jéhovah</div>
+          <div class="nom-divin-sens">Reconstruction médiévale — consonnes de YHWH + voyelles d'Adonaï. <strong>Ce nom n'a jamais existé dans l'Antiquité.</strong></div>
+          <div class="nom-divin-ref">Erreur des masorètes ou lecteurs chrétiens médiévaux qui ont cru que les signes vocaliques du codex massorétique faisaient partie du nom divin lui-même</div>
+        </div>
+      </div>
+
+      <p>Les traductions d'<em>Ehyeh asher ehyeh</em> se ramifient en une pluralité de lectures théologiquement toutes défendables :</p>
+
+      <div class="bilan-arche">
+        <div class="bilan-col">
+          <div class="bilan-col-header atteste">Traductions classiques</div>
+          <div class="bilan-col-item">
+            <strong>Septante (IIIe s. av. J.-C.) — grec</strong>
+            <em>Ego eimi ho On</em> — « Je suis l'Être » · Influence de la métaphysique grecque de l'être statique
+          </div>
+          <div class="bilan-col-item">
+            <strong>Vulgate (IVe s. ap.) — latin</strong>
+            <em>Ego sum qui sum</em> — « Je suis celui qui suis » · Reprise de la Septante, fondement de la théologie scolastique
+          </div>
+          <div class="bilan-col-item">
+            <strong>Traduction hébraïque de Maïmonide (XIIe s.)</strong>
+            Dieu comme être nécessaire, pur, au-delà de tout attribut positif — théologie négative (apophase)
+          </div>
+        </div>
+        <div class="bilan-col">
+          <div class="bilan-col-header absent">Traductions modernes — plus fidèles à l'hébreu</div>
+          <div class="bilan-col-item">
+            <strong>Martin Buber / Franz Rosenzweig (1925)</strong>
+            « Je serai là comme celui que je serai là » — dieu de la présence active, de la relation, pas de l'essence
+          </div>
+          <div class="bilan-col-item">
+            <strong>Everett Fox (1995) — traduction littérale</strong>
+            « I will be-there howsoever I will be-there » — intraduisible en français, accent sur l'immanence dynamique
+          </div>
+          <div class="bilan-col-item">
+            <strong>Lecture philologique directe</strong>
+            « Je ferai advenir ce que je ferai advenir » — dieu de l'histoire, pas de la nature ou de l'ontologie
+          </div>
+        </div>
+      </div>
+
+      <p>Ce qui est certain au-delà de la traduction : ce texte représente une révolution dans l'histoire des religions. Pour la première fois dans les textes connus, une divinité <em>refuse</em> d'être nommée — et ce refus devient son nom. Un dieu qui échappe à toute maîtrise humaine par le nom, à toute manipulation magique, à toute localisation cosmique fixe. Dans les religions du Proche-Orient antique, connaître le vrai nom d'un dieu, c'est avoir prise sur lui — pouvoir l'invoquer, le contraindre, le diriger. Yahvé refuse cette prise.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VII -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-numero">VII</span>
+        <div>
+          <h2 class="section-titre">L'origine de Yahvé — ce que disent les fouilles et les textes</h2>
+          <p class="section-sous-titre">Soleb · Amarah-Ouest · Kuntillet Ajrud · Les Shasu de YHW</p>
+        </div>
+      </div>
+
+      <p>Si Yahvé est une divinité dont le culte a été transmis à Moïse dans un milieu midianite, on devrait trouver des traces de ce nom ou de ce culte dans des régions méridionales — au Sinaï, dans le Néguev, en Édom — avant sa diffusion vers Canaan. C'est précisément ce que révèlent les sources épigraphiques et archéologiques les plus récentes.</p>
+
+      <div class="sources-boite">
+        <div class="sources-header">Attestations extrabibliques du nom Yahvé — du plus ancien au plus récent</div>
+        <div class="source-item">
+          <div class="source-titre">Textes de Soleb et Amarah-Ouest (Égypte)</div>
+          <div class="source-date">~XIVe–XIIIe s. av. J.-C. · Règnes d'Amenhotep III et Ramsès II</div>
+          <div class="source-corps">Dans des listes topographiques égyptiennes, parmi les désignations de peuples ou régions du désert méridional, apparaît la mention <em>t3 š3sw yhw</em> — « le pays des Shasu de YHW ». Les Shasu sont des populations nomades du Néguev, du Sinaï et du nord-arabique, documentés dans de nombreuses sources égyptiennes. YHW dans ce contexte désigne probablement une divinité ou un lieu nommé d'après cette divinité, associé à ces nomades méridionaux. C'est la première attestation extrabiblique possible du nom Yahvé — et sa localisation correspond précisément à la région du Midian et du Sinaï.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Stèle de Mésha (~840 av. J.-C.) — la Pierre Moabite</div>
+          <div class="source-date">Dhiban (Moab, Jordanie actuelle) · Conservée au Louvre</div>
+          <div class="source-corps">Le roi Mésha de Moab, ennemi d'Israël, mentionne Yahvé comme le dieu d'Israël dans le contexte de sa victoire sur ce peuple. Première attestation indubitable du tétragramme dans une inscription non biblique. Yahvé est ici explicitement identifié comme le dieu national d'Israël — pas de Moab.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Inscriptions de Kuntillet Ajrud (Néguev)</div>
+          <div class="source-date">~IXe–VIIIe s. av. J.-C. · Site de caravansérail / sanctuaire dans le désert du Néguev</div>
+          <div class="source-corps">Deux inscriptions majeures mentionnent respectivement « Yahvé du Téman » (région d'Édom, au sud) et « Yahvé de Samarie » — indiquant l'existence de formes locales ou régionales du culte yahviste. La mention de « Yahvé du Téman » est d'une importance considérable : elle confirme l'association de Yahvé avec le sud, et elle introduit la question — explosive pour la théologie ultérieure — d'une possible parèdre divine, une « Ashéra » associée à Yahvé dans le culte populaire.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">Inscriptions de Khirbet el-Qom (Judée)</div>
+          <div class="source-date">~VIIIe s. av. J.-C. · Judée occidentale</div>
+          <div class="source-corps">Bénédiction gravée dans une tombe : « Béni soit Ouria par Yahvé [et] par son Ashéra ». Deuxième attestation de l'association Yahvé/Ashéra dans le culte populaire — ce qui atteste que le yahvisme exclusif et aniconique des textes prophétiques était loin d'être la réalité du culte ordinaire au VIIIe siècle.</div>
+        </div>
+      </div>
+
+      <p>Ce tableau épigraphique confirme avec cohérence la <em class="terme-cle">piste méridionale</em> de l'origine de Yahvé. Il converge avec les textes poétiques les plus archaïques de la Bible elle-même — ce que les biblistes appellent les <em>geographies of Yahweh</em> — ces formules poétiques conservées dans des textes considérés comme parmi les plus anciens de la Bible hébraïque :</p>
+
+      <blockquote>
+        <p>« Yahvé est venu du Sinaï, il s'est levé de Séir sur eux, il a resplendi depuis la montagne de Paran. »</p>
+        <cite>— Deutéronome 33, 2 — Bénédiction de Moïse (texte archaïque)</cite>
+      </blockquote>
+
+      <blockquote>
+        <p>« Yahvé, quand tu sortis de Séir, quand tu t'avanças depuis les champs d'Édom, la terre trembla, les cieux fondirent... »</p>
+        <cite>— Juges 5, 4 — Cantique de Déborah (considéré parmi les textes les plus anciens de la Bible)</cite>
+      </blockquote>
+
+      <p>Séir, Édom, Paran, Téman — toutes ces géographies pointent vers le même horizon méridional et sud-est de Canaan, là où vivent les Kénites et les Midianites. Ce n'est pas la géographie canonique d'un dieu cananéen. C'est la géographie d'un dieu importé du désert.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VIII -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-numero">VIII</span>
+        <div>
+          <h2 class="section-titre">L'Exode — noyau historique et amplification épique</h2>
+          <p class="section-sous-titre">Ce qui est attesté · Ce qui ne l'est pas · Jan Assmann et la mémoire culturelle</p>
+        </div>
+      </div>
+
+      <p>La question de l'historicité de l'Exode est peut-être la plus débattue de toute l'archéologie biblique. Elle oppose non pas croyants et incroyants — la distinction est bien plus subtile — mais deux types de vérité : celle de la chronique et celle du mythe fondateur, qui sont deux modes distincts de dire vrai.</p>
+
+      <div class="bilan-arche">
+        <div class="bilan-col">
+          <div class="bilan-col-header atteste">Ce qui est historiquement attesté ou plausible</div>
+          <div class="bilan-col-item">
+            <strong>Présence sémitique en Égypte</strong>
+            Des populations sémitiques en situation servile ou semi-servile dans le delta du Nil sont bien documentées par les archives égyptiennes, du Bronze Moyen au Nouvel Empire.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Main-d'œuvre étrangère à Pi-Ramsès</strong>
+            Le Papyrus Leyde 348 mentionne des Apiru (population apatride recouvrant partiellement les Hébreux) employés comme carriers de pierres dans les chantiers ramesside du delta nord-oriental.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Fugitifs traversant la frontière orientale</strong>
+            Le Papyrus Anastasi VI (~XIIIe s.) rapporte le passage de populations de type shasu par la frontière orientale, sous surveillance militaire, vers les étangs de Per-Atum (Pithom, cité biblique de l'Exode 1,11).
+          </div>
+          <div class="bilan-col-item">
+            <strong>Nom de Moïse authentiquement égyptien</strong>
+            Racine <em>msy</em> égyptienne, bien attestée dans l'onomastique du Nouvel Empire — ne s'invente pas par un rédacteur hébreu tardif.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Israël en Canaan dès ~1208</strong>
+            La Stèle de Merneptah atteste une entité nommée Israël déjà présente en Canaan, cohérente avec un Exode au XIIIe siècle.
+          </div>
+        </div>
+        <div class="bilan-col">
+          <div class="bilan-col-header absent">Ce qui n'est pas attesté archéologiquement</div>
+          <div class="bilan-col-item">
+            <strong>Exode de masse</strong>
+            Les 600 000 hommes adultes d'Ex/Nb 1,46 — soit 2 à 3 millions de personnes avec femmes et enfants — n'ont laissé aucune trace dans le Sinaï malgré des décennies de prospections intensives (Eliezer Oren). Le désert du Sinaï ne pouvait physiquement pas nourrir cette population pendant 40 ans.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Les Dix Plaies</strong>
+            Une catastrophe naturelle à l'échelle nationale frappant l'Égypte la plus prospère de son histoire — Ramsès II est au faîte de sa puissance — n'a laissé aucune trace dans les archives égyptiennes extraordinairement prolixes de cette période.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Mention de Moïse en dehors de la Bible</strong>
+            Aucune inscription égyptienne, aucune archive administrative, aucun texte contemporain ne mentionne Moïse. Ce silence n'est pas une preuve d'inexistence, mais il impose une prudence absolue.
+          </div>
+          <div class="bilan-col-item">
+            <strong>Présence israélite au Sinaï pendant 40 ans</strong>
+            Aucun camp, aucun foyer, aucun dépotoir, aucun sépulture en masse correspondant à cette période n'a été découvert dans la péninsule sinaïtique.
+          </div>
+        </div>
+      </div>
+
+      <p>La synthèse la plus rigoureuse de l'état actuel de la recherche — partagée par des chercheurs aussi différents qu'Israel Finkelstein (sceptique), William Dever (modéré), et Nahum Sarna (plus confiant) — est celle d'un <em class="terme-cle">noyau historique réel entouré d'une amplification mémorielle de grande envergure</em>.</p>
+
+      <p>Un groupe restreint — peut-être quelques centaines ou quelques milliers de personnes, pas des millions — a vécu une expérience d'oppression puis de libération en Égypte, sous la conduite d'un homme nommé Moïse. Cette expérience, transmise oralement sur plusieurs générations, est devenue le mythe fondateur de toute une confédération de peuples qui l'ont adoptée comme leur propre mémoire — même ceux qui n'avaient jamais vu l'Égypte. C'est le mécanisme de la <em class="terme-cle">mémoire culturelle</em> que Jan Assmann, égyptologue et théoricien à l'Université de Heidelberg, a théorisé dans ses travaux fondamentaux sur la mnémotechnie sociale dans l'Antiquité.</p>
+
+      <div class="debat-bloc">
+        <div class="debat-voix question">
+          <div class="debat-label">Daniel — Question</div>
+          <p>Assmann est cité dans plusieurs contextes de notre conversation. Quel est exactement son apport spécifique au dossier de l'Exode, au-delà d'une théorie générale de la mémoire ?</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Orient Scholar — Historien · Théoricien de la mémoire</div>
+          <p>Jan Assmann distingue deux régimes mémoriels fondamentalement différents. La <em>mémoire communicative</em> est ce que les vivants se transmettent oralement entre contemporains et proches — elle couvre environ trois à quatre générations, soit 80 à 120 ans. La <em>mémoire culturelle</em> est ce que des institutions — temples, scribes, fêtes liturgiques, textes canoniques — fixent comme fondation immémoriale d'une identité collective. Elle peut couvrir des millénaires.</p>
+          <p>L'apport décisif d'Assmann pour l'Exode est double. D'abord, la Torah est précisément le dispositif de passage de la mémoire communicative (récits tribaux oraux sur quelques générations) à la mémoire culturelle institutionnalisée — et ce passage crée un peuple unifié là où il y avait des clans dispersés. Ensuite — et c'est la thèse de son livre <em>Moses the Egyptian</em> (1997) puis <em>Exodus</em> (2015) — l'Exode n'est pas principalement un événement historique mais une <em>figure mnémonique</em> : un cadre interprétatif qui permet à des populations disparates de se reconnaître dans une même histoire de libération, quel que soit leur rapport réel à l'Égypte.</p>
+          <p>C'est ce qui explique que le Seder de Pâque dise encore aujourd'hui, à la première personne du pluriel : « Nous étions esclaves en Égypte. » Non pas « nos ancêtres », mais « nous ». La mémoire culturelle absorbe les non-présents dans la narration des présents. Deux millénaires après les faits supposés, un Juif de Varsovie en 1935 dit « nous étions esclaves » et le dit <em>vrai</em> — d'une vérité qui n'est pas factuelle mais identitaire et fondatrice.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IX -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-numero">IX</span>
+        <div>
+          <h2 class="section-titre">L'âge de Moïse — symbole et régimes de vérité</h2>
+          <p class="section-sous-titre">80 ans à l'Exode · 120 ans à la mort · Le chiffre 40 · Sumer et l'âge symbolique</p>
+        </div>
+      </div>
+
+      <p>Exode 7,7 le dit explicitement : Moïse avait quatre-vingts ans et Aaron quatre-vingt-trois ans quand ils se présentèrent devant Pharaon. Et Deutéronome 34,7 précise à sa mort : « Moïse avait cent vingt ans quand il mourut. Sa vue n'avait pas baissé et sa vigueur n'avait pas disparu. »</p>
+
+      <p>Un homme de quatre-vingts ans conduisant un peuple à travers le désert, affrontant Pharaon, recevant la Loi au Sinaï, arbitrant les conflits tribaux, organisant une armée — et mourrant à cent vingt ans avec ses facultés intactes. La question historique est légitime et la tradition rabbinique elle-même l'a longuement discutée.</p>
+
+      <div class="profil-carte">
+        <div class="profil-phase">
+          <div class="profil-annees">0–40</div>
+          <div class="profil-titre">L'Égyptien</div>
+          <div class="profil-corps">Enfance et jeunesse à la cour de Pharaon · éducation du <em>kap</em> royal · formation biculturelle</div>
+        </div>
+        <div class="profil-phase">
+          <div class="profil-annees">40–80</div>
+          <div class="profil-titre">Le Berger Midianite</div>
+          <div class="profil-corps">Exil à Midian · mariage avec Séphora · initiation au culte de Yahvé chez Jéthro · buisson ardent</div>
+        </div>
+        <div class="profil-phase">
+          <div class="profil-annees">80–120</div>
+          <div class="profil-titre">Le Prophète</div>
+          <div class="profil-corps">Retour en Égypte · Exode · désert · Sinaï · Loi · mort au mont Nébo sans atteindre la Terre Promise</div>
+        </div>
+      </div>
+
+      <p>Trois blocs de quarante ans parfaitement symétriques. Chaque phase correspond à une identité : l'Égyptien, le berger midianite, le prophète d'Israël. C'est une <em class="terme-cle">construction narrative et théologique</em>, pas un curriculum vitae.</p>
+
+      <p>Dans le monde antique, la frontière entre le symbolique et le littéral n'était pas tracée comme elle l'est pour nous. Un lecteur du IIe siècle av. J.-C. ne se posait pas la question « est-ce biologiquement possible ? » de la même manière qu'un lecteur du XXIe siècle. Ce n'est pas naïveté — c'est un autre régime de vérité, parfaitement cohérent en son propre système. Pour ce lecteur, dire que Moïse avait 120 ans et que « sa vigueur ne s'était pas épuisée » était une manière de dire quelque chose de vrai — pas factuellement, mais essentiellement : cet homme était hors du commun, sa vie entière était sous protection divine, les lois ordinaires de la décrépitude ne s'appliquaient pas à lui.</p>
+
+      <p>Le parallèle est immédiat avec la Liste Royale Sumérienne — ce texte cunéiforme qui attribue à certains rois antédiluviens des règnes de 28 800 ans, 36 000 ans. Personne ne croyait cela littéralement au sens moderne. Cela signifiait : ces rois appartiennent à un temps primordial, d'une autre nature que le temps ordinaire. La longueur de vie est un marqueur de qualité existentielle, pas une date biologique.</p>
+
+      <p>Et pourtant — et c'est là que le texte biblique révèle sa complexité — coexistant avec ce cadre symbolique des âges, la Bible conserve des traces d'un Moïse très humainement fragile :</p>
+
+      <div class="sources-boite">
+        <div class="sources-header">Les détails qui « sonnent vrai » — textures de réalité dans le portrait de Moïse</div>
+        <div class="source-item">
+          <div class="source-titre">Le bégaiement — Exode 4,10</div>
+          <div class="source-date">Source Yahviste (J) · Dialogue au buisson ardent</div>
+          <div class="source-corps">Moïse dit à Yahvé : « De grâce, Seigneur, je ne suis pas un homme éloquent — ni hier, ni avant-hier, ni depuis que tu parles à ton serviteur. Je suis lent de bouche et lent de langue. » C'est pour cette raison qu'Aaron sera son porte-parole. Le fondateur du peuple, le législateur du Sinaï, bégaie. Un détail aussi peu flatteur ne s'invente pas dans une hagiographie.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">L'épuisement organisationnel — Exode 18</div>
+          <div class="source-date">Source Élohiste (E) · Après le Sinaï</div>
+          <div class="source-corps">Jéthro observe son gendre juger le peuple du matin au soir — seul, sans délégation. Il lui dit franchement : « Ce que tu fais n'est pas bien. Tu t'épuiseras toi-même et ce peuple aussi. » Il lui conseille de nommer des lieutenants. Moïse accepte le conseil organisationnel de son beau-père midianite. Un prophète infaillible n'a pas besoin de conseils logistiques de sa belle-famille.</div>
+        </div>
+        <div class="source-item">
+          <div class="source-titre">La colère incontrôlée — Nombres 20</div>
+          <div class="source-date">Source Yahviste · Désert de Tsîn</div>
+          <div class="source-corps">Yahvé ordonne à Moïse de <em>parler</em> au rocher pour en faire jaillir de l'eau. Moïse, exaspéré par les plaintes du peuple, <em>frappe</em> le rocher deux fois avec son bâton au lieu de lui parler. L'eau jaillit quand même — mais Yahvé dit à Moïse : « Parce que vous ne m'avez pas fait confiance... vous ne ferez pas entrer cette assemblée dans le pays que je lui donne. » C'est pour cette seule désobéissance impulsive — après quarante ans d'épreuves — que Moïse sera privé d'entrer en Terre Promise. La punition semble disproportionnée, et les commentateurs juifs l'ont longuement débattue. Mais elle révèle un homme capable de craquer après quarante ans de service.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION X -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-numero">X</span>
+        <div>
+          <h2 class="section-titre">Le Sinaï — la scène fondatrice de la législation</h2>
+          <p class="section-sous-titre">Exode 19–24 · Théophanie orageuse · Le peuple tenu à distance · Moïse seul</p>
+        </div>
+      </div>
+
+      <p>Après l'Exode, le peuple arrive au désert du Sinaï au troisième mois. Yahvé convoque Moïse au sommet de la montagne. Et ce qui suit — Exode 19 — est l'une des scènes théophaniques les plus impressionnantes de toute la littérature religieuse antique :</p>
+
+      <blockquote>
+        <p>« Le troisième jour, dès le matin, il y eut des tonnerres et des éclairs, une épaisse nuée sur la montagne et un son de trompette très puissant... Tout le peuple qui était dans le camp tremblait... La montagne du Sinaï était toute en fumée parce que Yahvé y était descendu dans le feu ; sa fumée montait comme la fumée d'une fournaise, et toute la montagne était en grande agitation. »</p>
+        <cite>— Exode 19, 16–18</cite>
+      </blockquote>
+
+      <p>La mise en scène est délibérée et structurée : Yahvé est inaccessible directement. Le peuple doit établir des limites autour de la montagne — quiconque la touche sera mis à mort. Moïse seul monte. L'asymétrie est absolue. C'est la naissance institutionnelle de la médiation prophétique : le prophète comme seul intermédiaire autorisé entre le divin et le collectif humain.</p>
+
+      <p>Cette structure — la montagne sainte, le médiateur unique, la révélation d'une loi, le peuple en retrait — est attestée dans d'autres contextes proche-orientaux et constitue une forme narrativo-religieuse largement partagée. Ce qui en fait la singularité israélite n'est pas la forme mais le contenu : le premier texte de loi qui émane de la scène du Sinaï — le <em class="terme-cle">Décalogue</em> ou Dix Paroles — est adressé non pas à un roi mais à tout un peuple, en son entier, indistinctement.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XI -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-numero">XI</span>
+        <div>
+          <h2 class="section-titre">Le Décalogue — parallèles orientaux et révolution éthique</h2>
+          <p class="section-sous-titre">Deux versions · Exode 34 « cultuel » · Hammurabi · L'éthique universelle</p>
+        </div>
+      </div>
+
+      <p>La critique biblique révèle une réalité plus complexe que la simple réception de deux Tables de pierre. Il existe non pas un mais <em>au moins trois</em> Décalogues dans la Torah :</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-epoch">Exode 20,1–17 · Source Élohiste (E) ou composite</div>
+          <div class="timeline-titre">Le Décalogue « éthique » — version la plus connue</div>
+          <div class="timeline-corps">Pas d'autres dieux, pas d'images taillées, ne pas prendre le nom de Yahvé en vain, observer le Shabbat (motivé par la création divine), honorer père et mère, ne pas tuer, ne pas commettre d'adultère, ne pas voler, ne pas porter de faux témoignage, ne pas convoiter. Version fondée sur une éthique sociale et spirituelle.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">Deutéronome 5,6–21 · Source Deutéronomiste (D)</div>
+          <div class="timeline-titre">Le Décalogue deutéronomique — version quasi identique, avec une variante significative</div>
+          <div class="timeline-corps">La formulation du Shabbat diffère : ici la motivation n'est pas la création (Genèse 2) mais la libération d'Égypte — « souviens-toi que tu fus esclave en Égypte. » Ce changement de justification n'est pas anodin : il révèle deux théologies du repos sabbatique, l'une cosmologique (P/création), l'autre historique et sociale (D/libération).</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">Exode 34,10–28 · Source Yahviste (J) — souvent appelé « Décalogue cultuel »</div>
+          <div class="timeline-titre">Le plus ancien — et le plus surprenant</div>
+          <div class="timeline-corps">Ce passage est explicitement désigné comme « les dix paroles » par le texte lui-même (Ex 34,28) — mais son contenu est radicalement différent : obligations cultuelles, interdiction des mariages mixtes avec les Cananéens, prescriptions sur les prémices, la Pâque, les pèlerinages, l'offrande des premiers-nés. Aucune des formules éthiques du Décalogue classique. Beaucoup de chercheurs considèrent ce texte comme le plus ancien — un code rituel et identitaire qui précède la systématisation éthique du Décalogue de l'Exode 20.</div>
+        </div>
+      </div>
+
+      <div class="debat-bloc">
+        <div class="debat-voix question">
+          <div class="debat-label">Daniel — Question</div>
+          <p>On cite souvent les parallèles avec le Code de Hammurabi pour relativiser l'originalité du Décalogue. Mais Hammurabi est un code civil et pénal alors que le Décalogue est religieux et éthique. N'est-ce pas comparer des choses incomparables ?</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Orient Scholar — Historien du droit · Bibliste · Orientaliste</div>
+          <p>L'observation est juste et importante. Le Code de Hammurabi (~1754 av. J.-C.) et les lois hittites (~XIVe–XIIIe s.) sont des codes de droit civil et pénal — ils traitent de propriété, d'héritage, de compensation pour dommages, de statut des esclaves. Le Décalogue est d'un autre ordre entièrement.</p>
+          <p>Les parallèles réels ne sont pas entre le Décalogue et Hammurabi, mais entre le <em>Code de l'Alliance</em> (Exode 20,22–23,33) — les lois détaillées qui suivent immédiatement le Décalogue — et ces codes proche-orientaux. Là, les ressemblances sont frappantes : même structure casuistique (« si quelqu'un fait X, alors Y »), même préoccupation pour les dommages aux personnes et aux biens, mêmes catégories de délit. Cela place le Code de l'Alliance dans sa tradition juridique régionale.</p>
+          <p>Ce qui est véritablement original dans le Décalogue lui-même — et cela ne diminue pas sa valeur, c'est au contraire ce qui le distingue — est triple. Premièrement, il s'adresse à tout un peuple en bloc, pas à un roi. Dans toutes les cultures voisines, la loi descend de la divinité au roi, qui la dispense au peuple. Ici Yahvé parle directement au collectif : « tu n'auras pas » — singulier universellement distribué. Deuxièmement, il intègre dans ses protections des catégories normalement exclues du droit : les étrangers résidents, les serviteurs, les animaux (interdiction de travailler le Shabbat « afin que ton serviteur et ta servante se reposent comme toi »). Troisièmement, il fonde la morale non sur la peur du roi ou de la justice humaine mais sur l'acte de libération divin : « Je suis Yahvé ton Dieu qui t'ai fait sortir du pays d'Égypte, de la maison de servitude. » L'obligation morale découle de la gratitude pour une libération reçue.</p>
+        </div>
+      </div>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Décalogue éthique (Exode 20) — les Dix Paroles et leur structure</div>
+        <table>
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Parole</th>
+              <th>Formulation hébraïque</th>
+              <th>Tradition rabbinique · Enjeu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Pas d'autres dieux</td>
+              <td><em>Lo yihyeh lekha elohim acherim</em></td>
+              <td>Non un athéisme mais une exclusivité d'allégeance — monolâtrie avant monothéisme</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Pas d'image taillée</td>
+              <td><em>Lo ta'aseh lekha pessel</em></td>
+              <td>L'aniconisme radical — révolution dans le paysage cultuel proche-oriental</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Ne pas prendre le nom en vain</td>
+              <td><em>Lo tissa et shem YHWH</em></td>
+              <td>Interdit du serment magique et de la manipulation du divin par le langage</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Observer le Shabbat</td>
+              <td><em>Zakhor et yom ha-Shabbat</em></td>
+              <td>Temps consacré contre la logique de la productivité pure — social et cosmologique</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Honorer père et mère</td>
+              <td><em>Kabbed et avikha ve-et imekha</em></td>
+              <td>Seule obligation avec une promesse de récompense explicite — frontière entre deux tables</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Ne pas tuer</td>
+              <td><em>Lo tirtsach</em></td>
+              <td><em>Ratsach</em> = meurtre illégal, non la guerre ou la peine capitale</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Ne pas commettre d'adultère</td>
+              <td><em>Lo tin'af</em></td>
+              <td>Protection des liens familiaux et de la stabilité sociale</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Ne pas voler</td>
+              <td><em>Lo tignov</em></td>
+              <td>Certains rabbins : interdit original du vol d'une personne (enlèvement)</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Pas de faux témoignage</td>
+              <td><em>Lo ta'aneh ve-re'akha ed shav</em></td>
+              <td>Fondement d'un système judiciaire équitable — contre la parole comme arme</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Ne pas convoiter</td>
+              <td><em>Lo tachmod</em></td>
+              <td>Unique interdit portant sur un état intérieur, pas un acte — révolution morale</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XII -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <span class="section-numero">XII</span>
+        <div>
+          <h2 class="section-titre">La mort de Moïse — le détail le plus étrange de tout le texte</h2>
+          <p class="section-sous-titre">Deutéronome 34 · Le mont Nébo · La tombe inconnue · Ce que ça dit de la tradition</p>
+        </div>
+      </div>
+
+      <p>La mort de Moïse est l'une des scènes les plus bouleversantes et théologiquement les plus énigmatiques de toute la Bible. Deutéronome 34 : Yahvé dit à Moïse de monter sur le mont Nébo, en face de Jéricho. Moïse monte. Yahvé lui montre tout le pays — Galaad jusqu'à Dan, Nephtali, Éphraïm, Manassé, Juda jusqu'à la mer Occidentale, le Néguev, le cercle du Jourdain, la plaine de Jéricho. Et puis :</p>
+
+      <blockquote>
+        <p>« Yahvé lui dit : C'est le pays que j'ai juré de donner à Abraham, Isaac et Jacob en disant "je le donnerai à ta descendance". Je te l'ai fait voir de tes yeux, mais tu n'y passeras pas. Moïse, serviteur de Yahvé, mourut là, au pays de Moab, selon l'ordre de Yahvé. Il l'enterra dans la vallée, au pays de Moab, en face de Beth Peor. Et personne ne connaît son tombeau jusqu'à ce jour. »</p>
+        <cite>— Deutéronome 34, 4–6</cite>
+      </blockquote>
+
+      <p>Pas de tombeau. Pas de lieu de pèlerinage. Pas de reliques. Yahvé enterre lui-même son serviteur dans un endroit tenu secret. Le fondateur du peuple, le prophète inégalé, celui qui a vu Dieu face à face — meurt à la frontière de ce qu'il a cherché toute sa vie, sans jamais mettre le pied dans la Terre Promise.</p>
+
+      <p>C'est théologiquement extraordinaire — et historiquement inexplicable si Moïse était une pure fiction créée par des rédacteurs. Aucun rédacteur inventant un héros fondateur ne lui infligerait cette fin. On invente des héros qui triomphent — qui entrent dans la ville, qui jouissent du fruit de leur travail. Les héros fictifs ne meurent pas au seuil de leur rêve, frustrés, enterrés par Dieu dans un lieu que personne ne peut retrouver. Cette mort-là a la texture rugueuse de la réalité — ou d'une tradition si ancienne et si enracinée qu'elle ne pouvait absolument pas être édulcorée par des siècles de rédaction.</p>
+
+      <p>La tradition juive a beaucoup médité cette mort. Le Talmud (Sotah 14a) dit : « Moïse a cherché toute sa vie à entrer en Terre Promise — n'était-ce pas pour en goûter les fruits ? Mais non : il voulait accomplir les commandements qui ne pouvaient être accomplis qu'en Israël. » La Hagadah du Pessah retourne la privation en acte d'amour : Moïse ne pouvait pas entrer pour ne pas que son tombeau devienne un lieu de culte — pour que les Israélites n'adorent jamais son tombeau plutôt que Yahvé.</p>
+
+      <p>Deutéronome 34,10 conclut : « Il ne s'est plus levé en Israël de prophète comme Moïse, lui que Yahvé connaissait face à face. » C'est la seule fois dans tout le Pentateuque qu'une telle déclaration est faite. Et elle est au passé — rétrospective, définitive, irréversible. Le texte sait déjà, au moment où il est rédigé, que cette figure est unique et ne sera pas répétée.</p>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XIII -->
+    <section class="section" id="s13">
+      <div class="section-header">
+        <span class="section-numero">XIII</span>
+        <div>
+          <h2 class="section-titre">El et Yahvé — le processus historique de fusion</h2>
+          <p class="section-sous-titre">Deux divinités distinctes · Exode 6,2–3 comme aveu · La cicatrice documentaire</p>
+        </div>
+      </div>
+
+      <p>La tension fondamentale que le chapitre IV a identifiée sur les noms divins des patriarches — Abraham invoque El sous diverses épithètes, jamais Yahvé dans le contexte de première rencontre — trouve ici son explication historique la plus rigoureuse.</p>
+
+      <div class="debat-bloc">
+        <div class="debat-voix question">
+          <div class="debat-label">Daniel — Question (prolongement d'une observation précédente)</div>
+          <p>Si Yahvé est un dieu midianique transmis par Moïse, comment expliquer que la source Yahviste (J) utilise ce nom depuis Adam, y compris dans des récits qui précèdent Moïse de plusieurs millénaires selon la chronologie biblique ? N'est-ce pas une contradiction fondamentale de la théorie kénite elle-même ?</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Orient Scholar — Bibliste · Critique textuelle · Historien des religions</div>
+          <p>Cette tension — que tu as identifiée avec précision — est précisément l'une des cicatrices les plus visibles de la composition composite de la Bible. Elle ne réfute pas la théorie kénite : elle révèle comment des traditions contradictoires ont été conservées côte à côte par un acte délibéré de transmission.</p>
+          <p>Exode 6,2–3, dans la source Sacerdotale (P) — la source la plus tardive et la plus théologiquement systématique — est remarquable par son honnêteté :</p>
+          <blockquote style="margin:0.8rem 0 0.5rem;">
+            <p>« Dieu parla à Moïse et lui dit : Je suis Yahvé. Je me suis manifesté à Abraham, à Isaac et à Jacob comme El Shaddaï, mais sous mon nom de Yahvé je ne me suis pas fait connaître d'eux. »</p>
+            <cite>— Exode 6, 2–3 · Source Sacerdotale (P)</cite>
+          </blockquote>
+          <p>Cette déclaration reconnaît explicitement une <em class="terme-cle">révélation progressive</em> du nom divin : El Shaddaï pour les patriarches, Yahvé pour Moïse uniquement. C'est la source P elle-même qui dit que les patriarches adoraient un dieu différemment nommé.</p>
+          <p>La source J, elle, refuse cette discontinuité — pour J, Yahvé est le nom divin depuis toujours, depuis Adam, depuis Noé. Elle utilise donc Yahvé partout, y compris dans des contextes où cela est anachronique par rapport à la théologie de P.</p>
+          <p>Le rédacteur final (le <em>Redaktor</em>) a cousu les deux ensemble sans chercher à harmoniser. Il a conservé les deux traditions contradictoires — Yahvé depuis Adam (J) et Yahvé révélé seulement à Moïse (P) — parce que les deux traditions étaient trop vénérables et trop vivantes dans leurs milieux respectifs pour être supprimées. La contradiction n'est pas une négligence rédactionnelle : c'est un acte de fidélité à la pluralité des mémoires.</p>
+          <p>Historiquement, le processus le plus probable est le suivant : des populations cananéennes adoraient El sous ses diverses formes locales (El Shaddaï, El Elyon, El de Béthel, etc.). Un groupe associé à Moïse apporte du sud le culte de Yahvé. Les deux traditions entrent en contact lors de la constitution de la confédération israélite. Progressivement — sur plusieurs siècles — El et Yahvé sont identifiés, leurs attributs fusionnent, et le tétragramme prend le dessus comme nom personnel du dieu unique. La trace de cette fusion subsiste dans le texte canonique sous forme de tensions irrésolues que la critique documentaire permet de lire.</p>
+        </div>
+      </div>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">El et Yahvé — profil comparatif avant la fusion</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>El (cananéen)</th>
+              <th>Yahvé (midianique / kénite)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Attestation externe</td>
+              <td>Très bien attesté à Ugarit (XIVe–XIIe s.) et dans tout le Proche-Orient</td>
+              <td>Textes égyptiens de Soleb/Amarah-Ouest (~XIVe s.) — Shasu de YHW</td>
+            </tr>
+            <tr>
+              <td>Géographie</td>
+              <td>Partout en Canaan — dieu suprême du panthéon</td>
+              <td>Sud et sud-est — Sinaï, Édom, Séir, Paran, Téman</td>
+            </tr>
+            <tr>
+              <td>Caractère</td>
+              <td>Patriarcal, serein, père des dieux et des hommes, siège dans son assemblée</td>
+              <td>Guerrier, de feu et de tempête, mobile, lié à la libération</td>
+            </tr>
+            <tr>
+              <td>Relation aux patriarches</td>
+              <td>El Shaddaï, El Elyon, El Roi, El Olam — tous utilisés par Abraham, Isaac, Jacob</td>
+              <td>Non utilisé par les patriarches selon la source P (Exode 6,3)</td>
+            </tr>
+            <tr>
+              <td>Population porteuse</td>
+              <td>Cananéens sédentaires et semi-nomades des hautes terres</td>
+              <td>Kénites / Midianites — forgerons et nomades du désert méridional</td>
+            </tr>
+            <tr>
+              <td>Fusion dans la Bible</td>
+              <td colspan="2" style="text-align:center;font-style:italic;color:var(--brun);">Progressive, du XIe au VIe siècle av. J.-C. — trace visible dans les tensions documentaires J/E/P</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XIV — SYNTHÈSE -->
+    <section class="section" id="s14">
+      <div class="section-header">
+        <span class="section-numero">XIV</span>
+        <div>
+          <h2 class="section-titre">Synthèse — Qui était Moïse ?</h2>
+          <p class="section-sous-titre">Noyau historique · Amplification mémorielle · Ce que sa figure dit de l'histoire des religions</p>
+        </div>
+      </div>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">✦ Synthèse finale — Orient Scholar · Historien · Bibliste · Archéologue</div>
+        <p>La position la plus défendable à l'état actuel de la recherche est celle d'un <em>noyau historique réel autour d'une figure progressivement amplifiée jusqu'aux dimensions d'un mythe fondateur universel</em>.</p>
+        <p>Un homme d'origine sémitique, portant un nom égyptien — probablement tronqué de son préfixe théophore —, élevé dans le système administratif et culturel de la cour égyptienne du Nouvel Empire, initié au culte de Yahvé dans le milieu midianite de son beau-père le prêtre Jéthro, a conduit un groupe restreint de travailleurs forcés hors d'Égypte. Il leur a transmis une vision religieuse révolutionnaire : un dieu sans image, sans localisation fixe, lié à la liberté plutôt qu'au pouvoir, exigeant une éthique universellement distribuée plutôt que des rites réservés à une élite.</p>
+        <p>Cette figure réelle a ensuite été amplifiée sur plusieurs siècles par des générations de rédacteurs — prêtres de Silo et de Jérusalem, prophètes d'Élie à Ézéchiel, scribes de la cour de Josias, exilés de Babylone. Ils ont projeté sur lui la totalité de la législation israélite, les théophanies cosmiques du Sinaï, les miracles épiques de l'Exode. Moïse est devenu le réceptacle de toute la mémoire fondatrice d'un peuple — le point de convergence de traditions très diverses qui y ont vu le lieu où leur histoire devenait intelligible.</p>
+        <p>Ce qui est peut-être le plus remarquable dans toute cette opération de mémoire : dans des siècles d'amplification hagiographique, les rédacteurs n'ont pas pu — ou voulu — effacer les détails les plus humains et les plus troublants. Le meurtre impulsif. La panique du lendemain. Le bégaiement. L'épuisement organisationnel. La colère incontrôlée au rocher. La mort solitaire au seuil de tout ce qu'il avait cherché, enterré par Dieu dans un endroit que personne ne retrouvera jamais.</p>
+        <p>Ce sont ces rugosités-là — ces détails qui résistent à la mise en gloire — qui constituent paradoxalement l'argument historique le plus fort pour un substrat réel. On n'invente pas un héros avec ces fragilités-là. On les conserve parce qu'elles étaient là avant la légende, et parce que la grandeur qu'on voulait lui attribuer était, au fond, inséparable de sa fragilité d'homme.</p>
+        <p>Moïse est ainsi peut-être le premier personnage de toute la littérature universelle à être simultanément prophète cosmique et homme ordinaire — non malgré ses fragilités mais précisément à travers elles. Et c'est cette double nature — si peu flatteuse pour une hagiographie, si vraie pour une réalité humaine — qui, plus que tout argument archéologique, plaide pour l'existence réelle de l'homme derrière le mythe.</p>
+      </div>
+
+      <!-- TIMELINE FINALE -->
+      <div class="tableau-wrapper" style="margin-top:3rem;">
+        <div class="tableau-titre">Chronologie du dossier mosaïque — de l'histoire à la mémoire canonique</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-epoch">~XIVe s. av. J.-C. · Attestations égyptiennes</div>
+          <div class="timeline-titre">Les Shasu de YHW — première trace possible</div>
+          <div class="timeline-corps">Listes topographiques de Soleb et Amarah-Ouest mentionnent « le pays des Shasu de YHW » — population nomade méridionale associée à une divinité portant un nom proche du tétragramme. Géographie : Sinaï, Édom, nord-arabique — précisément le territoire des Midianites et Kénites.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~XIIIe s. av. J.-C. · Ramsès II–Merneptah</div>
+          <div class="timeline-titre">Le probable contexte historique de l'Exode</div>
+          <div class="timeline-corps">Pi-Ramsès (Tell el-Dab'a), main-d'œuvre servile étrangère dans le delta, Papyrus Anastasi VI sur les Shasu traversant la frontière orientale. La Stèle de Merneptah (~1208) atteste Israël déjà en Canaan — borne supérieure d'un Exode qu'on placerait conventionnellement sous Ramsès II.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~XIIe–XIe s. av. J.-C. · Tradition orale tribale</div>
+          <div class="timeline-titre">Mémoire communicative — transmission orale</div>
+          <div class="timeline-corps">L'expérience du groupe de Moïse se propage oralement dans la confédération israélite naissante. Des clans qui n'ont jamais vu l'Égypte adoptent le récit de l'Exode comme leur propre mémoire fondatrice — mécanisme de la mémoire culturelle selon Assmann.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~IXe–VIIIe s. av. J.-C. · Source Yahviste (J)</div>
+          <div class="timeline-titre">Première grande mise par écrit — Juda</div>
+          <div class="timeline-corps">La source J, probablement dans le royaume de Juda, rédige le récit de Moïse en utilisant le nom Yahvé depuis les origines. Elle produit le portrait le plus humain de Moïse — le meurtre, la fuite, le bégaiement, la colère au rocher. Ces détails réalistes trahissent la proximité à une tradition ancienne.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~VIIe s. av. J.-C. · Source Deutéronomiste (D)</div>
+          <div class="timeline-titre">Réforme de Josias — Moïse comme modèle législatif</div>
+          <div class="timeline-corps">La « découverte » du livre de la Loi sous Josias (~621) — très probablement un premier Deutéronome — relance une réforme religieuse massive. Moïse est projeté comme autorité unique de toute la Torah. Le Décalogue deutéronomique (Dt 5) est réécrit avec une motivation sociale nouvelle du Shabbat.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~VIe–Ve s. av. J.-C. · Source Sacerdotale (P) · Exil babylonien</div>
+          <div class="timeline-titre">Source P — la déclaration théologique la plus honnête</div>
+          <div class="timeline-corps">P produit Exode 6,2–3 — la déclaration explicite que les patriarches ne connaissaient pas le nom Yahvé. Théologie de la révélation progressive : Elohim → El Shaddaï → Yahvé. La source P amplifie considérablement la scène du Sinaï et la théophanie cosmique. Le Redaktor final coud J, E, P et D sans harmoniser les contradictions.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION CHAPITRES -->
+        <nav class="nav-chapitres">
+      <a href="chapitre-04-patriarches.html" class="nav-btn">← Chapitre IV</a>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <a href="chapitre-06-israel-tribus.html" class="nav-btn">Chapitre VI →</a>
+    </nav>
+
+  </article>
+</main>
+
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+
+  if (scrolled > 400) {
+    btnTop.classList.add('visible');
+  } else {
+    btnTop.classList.remove('visible');
+  }
+
+  highlightActiveSection();
+});
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menu-toggle');
+  if (sidebar.classList.contains('open') &&
+      !sidebar.contains(e.target) &&
+      !toggle.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+// Overlay mobile
+const overlay = document.getElementById('sidebar-overlay');
+if (overlay) {
+  overlay.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    overlay.classList.remove('visible');
+  });
+}
+
+// Update toggleSidebar to show overlay
+const origToggle = window.toggleSidebar;
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  if (overlay) overlay.classList.toggle('visible');
+};
+
+</script>
+
+</body>
+</html>

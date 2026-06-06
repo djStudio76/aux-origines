@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre VIII — L'Âge prophétique · Aux Origines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ BARRE DE PROGRESSION ═══ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav { padding: 1rem 0; flex: 1; }
+
+.chapitre-item {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,237,224,0.55);
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1.4;
+}
+
+.chapitre-item:hover { color: var(--or-pale); background: rgba(200,148,58,0.06); }
+
+.chapitre-item.actif {
+  color: var(--or-pale);
+  background: rgba(200,148,58,0.1);
+  border-left: 2px solid var(--or);
+}
+
+.chap-numero {
+  display: block;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--or);
+  opacity: 0.6;
+  margin-bottom: 0.15rem;
+}
+
+.section-item {
+  display: block;
+  padding: 0.3rem 1.5rem 0.3rem 2.2rem;
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.38);
+  text-decoration: none;
+  transition: color 0.2s;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.section-item:hover { color: rgba(245,237,224,0.7); }
+.section-item.active-section { color: var(--or-pale); }
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.1);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══ BOUTON MENU MOBILE ═══ */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 200;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 3px;
+  width: 40px; height: 40px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══ ZONE PRINCIPALE ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══ FRONTISPICE ═══ */
+.chapter-hero {
+  position: relative;
+  padding: 5rem 3rem 4rem;
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-ornement {
+  font-family: var(--font-titre);
+  color: var(--or);
+  opacity: 0.3;
+  letter-spacing: 1.2em;
+  font-size: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.hero-numero {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 1.2rem;
+}
+
+.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 400;
+  color: var(--encre);
+  line-height: 1.15;
+  margin-bottom: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-epigraphe {
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  padding: 1.5rem 2rem;
+  border: 1px solid rgba(200,148,58,0.25);
+  background: rgba(200,148,58,0.04);
+  border-radius: 3px;
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--encre-douce);
+  line-height: 1.7;
+  text-align: left;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  margin-top: 0.8rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+  font-style: normal;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto 1rem;
+  max-width: 300px;
+}
+
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--or), transparent);
+  opacity: 0.35;
+}
+
+.deco-ligne-symbole {
+  color: var(--or);
+  opacity: 0.5;
+  font-size: 0.8rem;
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--or) 30%, var(--or-vif) 50%, var(--or) 70%, transparent);
+  opacity: 0.2;
+}
+
+/* ═══ CONTENU ═══ */
+.contenu {
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  padding: 3rem 2.5rem 6rem;
+}
+
+/* ═══ SECTIONS ═══ */
+.section {
+  margin-bottom: 3.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+.section-numero {
+  font-family: var(--font-titre);
+  font-size: 2.2rem;
+  color: var(--or);
+  opacity: 0.18;
+  line-height: 1;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--encre);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.88rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ═══ PARAGRAPHES ═══ */
+p {
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  hyphens: auto;
+  text-align: justify;
+}
+
+p:last-child { margin-bottom: 0; }
+
+p::first-letter {
+  float: left;
+  font-family: var(--font-titre);
+  font-size: 3.2rem;
+  line-height: 0.75;
+  margin-right: 0.12em;
+  margin-top: 0.12em;
+  color: var(--or);
+  font-weight: 700;
+}
+
+.section p + p::first-letter { float: none; font-size: inherit; color: inherit; line-height: inherit; margin: 0; }
+
+h3 {
+  font-family: var(--font-titre);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brun);
+  margin: 2.2rem 0 0.9rem;
+}
+
+h4 {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--encre-douce);
+  margin: 1.8rem 0 0.7rem;
+}
+
+strong { color: var(--encre); font-weight: 600; }
+
+em.terme-cle {
+  color: var(--brun);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.heb {
+  font-size: 1.3rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.translitt {
+  font-style: italic;
+  color: var(--brun-clair);
+  font-size: 0.95em;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem 1rem 1.8rem;
+  border-left: 3px solid var(--or);
+  background: rgba(200,148,58,0.05);
+  font-style: italic;
+  color: var(--encre-douce);
+  border-radius: 0 3px 3px 0;
+}
+
+blockquote p { margin-bottom: 0.3rem; font-size: 1.02rem; }
+blockquote p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+blockquote cite {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-titre);
+  letter-spacing: 0.08em;
+  color: var(--or);
+  margin-top: 0.6rem;
+  font-style: normal;
+}
+
+/* ═══ NOTE MÉTHODOLOGIQUE ═══ */
+.note-methodo {
+  margin: 0 0 2.5rem 0;
+  padding: 1.3rem 1.6rem;
+  background: rgba(200,148,58,0.07);
+  border: 1px solid rgba(200,148,58,0.22);
+  border-radius: 4px;
+}
+
+.note-methodo-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.7rem;
+  opacity: 0.85;
+}
+
+.note-methodo p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.7;
+  margin-bottom: 0.6rem;
+}
+.note-methodo p::first-letter { float: none; font-size: inherit; color: inherit; }
+.note-methodo p:last-child { margin-bottom: 0; }
+
+/* ═══ TABLEAUX ═══ */
+.tableau-wrapper {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border-radius: 4px;
+  border: 1px solid rgba(139,94,60,0.2);
+}
+
+.tableau-titre {
+  padding: 0.65rem 1.2rem;
+  background: rgba(26,18,8,0.06);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+thead th {
+  padding: 0.65rem 1rem;
+  background: rgba(26,18,8,0.85);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 400;
+}
+
+tbody tr { border-bottom: 1px solid rgba(139,94,60,0.1); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even) { background: rgba(200,148,58,0.03); }
+
+tbody td {
+  padding: 0.65rem 1rem;
+  color: var(--encre-douce);
+  vertical-align: top;
+}
+
+tbody td:first-child {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+/* ═══ TIMELINE ═══ */
+.timeline {
+  margin: 2rem 0;
+  padding-left: 2rem;
+  border-left: 2px solid rgba(200,148,58,0.2);
+}
+
+.timeline-item {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.55rem;
+  top: 0.55rem;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--or);
+  opacity: 0.5;
+}
+
+.timeline-epoch {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.3rem;
+}
+
+.timeline-titre {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-corps {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.65;
+}
+
+/* ═══ BOÎTE SYNTHÈSE ═══ */
+.synthese-bloc {
+  margin: 3rem 0;
+  padding: 2rem 2.2rem;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.synthese-bloc::before {
+  content: '✦';
+  position: absolute;
+  top: -1rem; right: 1rem;
+  font-size: 5rem;
+  color: var(--or);
+  opacity: 0.05;
+  font-family: var(--font-titre);
+}
+
+.synthese-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.synthese-bloc p {
+  color: var(--parchemin-fonce);
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  text-align: left;
+}
+
+.synthese-bloc p::first-letter { float: none; font-size: inherit; color: inherit; }
+.synthese-bloc strong { color: var(--or-pale); }
+
+/* ═══ ENCADRÉS ═══ */
+.encadre {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(200,148,58,0.22);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encadre-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1.3rem;
+  background: rgba(200,148,58,0.08);
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+}
+
+.encadre-icone {
+  color: var(--or);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.encadre-label {
+  font-family: var(--font-titre);
+  font-size: 0.63rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+.encadre-body {
+  padding: 1.2rem 1.5rem;
+}
+
+.encadre-body p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  margin-bottom: 0.7rem;
+  text-align: left;
+}
+.encadre-body p::first-letter { float: none; font-size: inherit; color: inherit; }
+.encadre-body p:last-child { margin-bottom: 0; }
+
+/* ═══ GRILLE DEUX COLONNES ═══ */
+.deux-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin: 2rem 0;
+}
+
+.col-card {
+  padding: 1.4rem 1.5rem;
+  border: 1px solid rgba(200,148,58,0.2);
+  border-radius: 4px;
+  background: var(--parchemin-pale);
+}
+
+.col-card-titre {
+  font-family: var(--font-titre);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--brun);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  padding-bottom: 0.5rem;
+}
+
+.col-card p {
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+  line-height: 1.6;
+  margin-bottom: 0.4rem;
+  text-align: left;
+}
+.col-card p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+/* ═══ GRILLE PROPHÈTES ═══ */
+.prophete-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.prophete-card {
+  padding: 1.3rem 1.4rem;
+  border: 1px solid rgba(139,94,60,0.18);
+  border-radius: 4px;
+  background: var(--parchemin-pale);
+  position: relative;
+  overflow: hidden;
+}
+
+.prophete-card::before {
+  content: attr(data-siecle);
+  position: absolute;
+  top: 0.5rem; right: 0.7rem;
+  font-family: var(--font-titre);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+  opacity: 0.6;
+}
+
+.prophete-nom {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brun);
+  margin-bottom: 0.2rem;
+}
+
+.prophete-heb {
+  font-size: 1.1rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--or);
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.prophete-dates {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.prophete-desc {
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+  line-height: 1.55;
+}
+
+/* ═══ DÉBAT ═══ */
+.debat-bloc {
+  margin: 2rem 0;
+  border: 1px solid rgba(139,94,60,0.18);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.debat-voix {
+  padding: 1.2rem 1.5rem;
+}
+
+.debat-voix.question {
+  background: rgba(26,18,8,0.04);
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+}
+
+.debat-voix.reponse {
+  background: rgba(200,148,58,0.04);
+}
+
+.debat-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.75;
+  margin-bottom: 0.6rem;
+}
+
+.debat-voix p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  margin-bottom: 0.6rem;
+  text-align: left;
+  line-height: 1.65;
+}
+.debat-voix p::first-letter { float: none; font-size: inherit; color: inherit; }
+.debat-voix p:last-child { margin-bottom: 0; }
+
+/* ═══ SOURCE ARCHÉOLOGIQUE ═══ */
+.source-arche {
+  margin: 0.8rem 0;
+  padding: 0.9rem 1.2rem;
+  background: rgba(26,18,8,0.04);
+  border-radius: 3px;
+  border: 1px solid rgba(139,94,60,0.12);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.source-icone {
+  font-size: 1.1rem;
+  color: var(--or);
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.source-corps { flex: 1; }
+
+.source-titre {
+  font-family: var(--font-titre);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--brun);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
+.source-texte {
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+  line-height: 1.55;
+}
+
+/* ═══ ORNEMENT ═══ */
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+/* ═══ BTN RETOUR EN HAUT ═══ */
+#btn-top {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-family: var(--font-titre);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+
+#btn-top.visible { opacity: 0.7; }
+#btn-top:hover { opacity: 1; }
+
+/* ═══ NAV CHAPITRES ═══ */
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.25);
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover { background: rgba(200,148,58,0.08); color: var(--brun); border-color: var(--or); }
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.7rem;
+  color: var(--or);
+  opacity: 0.5;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+
+  #main { margin-left: 0; }
+
+  #menu-toggle { display: flex; }
+
+  .chapter-hero { padding: 4rem 1.5rem 3rem; }
+
+  .contenu { padding: 2rem 1.2rem 4rem; }
+
+  .deux-col { grid-template-columns: 1fr; }
+
+  .prophete-grille { grid-template-columns: 1fr; }
+
+  #btn-top { bottom: 1.2rem; right: 1.2rem; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE AMÉLIORÉ — PUBLICATION WEB
+═══════════════════════════════════════════ */
+@media (max-width: 680px) {
+  html { font-size: 16px; }
+  
+  .chapter-hero {
+    min-height: 50vh;
+    padding: 4rem 1.5rem 3rem;
+  }
+  
+  .hero-titre {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+  }
+  
+  .tableau-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 500px;
+  }
+  
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .synthese {
+    padding: 1.8rem 1.2rem;
+  }
+  
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  blockquote {
+    padding-left: 1rem;
+    margin-left: 0;
+  }
+}
+
+/* Scrollbar sidebar sur tous les navigateurs */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Overlay mobile pour fermer la sidebar */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Lien retour accueil dans sidebar */
+.sidebar-home {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.65;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<button id="menu-toggle" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<!-- ══════════════════════════════
+     SIDEBAR NAVIGATION
+══════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique interactif</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la cosmogonie à la naissance d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="chapitre-01-cosmogonie.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-02-origines-mythiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-03-langues-semitiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-05-moise-exode.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-06-israel-tribus.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-07-les-royaumes.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-11-palestine-1948.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     CONTENU PRINCIPAL
+══════════════════════════════ -->
+<main id="main">
+
+  <!-- FRONTISPICE -->
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre VIII</div>
+    <h1 class="hero-titre">L'Âge prophétique</h1>
+    <p class="hero-sous-titre">Élie, Amos, Osée, Isaïe, Jérémie, Ézéchiel — la révolution de la conscience morale dans l'Antiquité</p>
+    <blockquote class="hero-epigraphe">
+      <span class="heb">הִגִּיד לְךָ אָדָם מַה־טּוֹב וּמָה־יְהוָה דּוֹרֵשׁ מִמְּךָ</span><br>
+      <em>Higgid lekha adam mah-tov uma-Yahvé doresh mimekha</em><br>
+      « On t'a fait connaître, ô homme, ce qui est bon. Et que demande Yahvé de toi ? Rien d'autre que de pratiquer la justice, d'aimer la bonté, et de marcher humblement avec ton Dieu. »
+      <cite>— Michée 6, 8</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <!-- CORPS -->
+  <article class="contenu">
+
+    <!-- SECTION 0 — MÉTHODOLOGIQUE -->
+    <section class="section" id="s0">
+      <div class="note-methodo">
+        <div class="note-methodo-label">⚑ Posture méthodologique — Historien · Bibliste · Théologien · Philologue</div>
+        <p>Ce chapitre est celui où l'histoire et la théologie se nouent le plus étroitement. Le phénomène prophétique hébraïque est sans équivalent rigoureux dans l'Antiquité — ni les <em>nabi</em> mésopotamiens, ni les devins égyptiens, ni les sibylles grecques ne constituent un parallèle exact. Ce que nous appelons la <strong>prophétie classique</strong> d'Israël — du VIIIe au VIe siècle av. J.-C. — est une mutation intellectuelle et théologique d'une ampleur extraordinaire, dont les effets ont structuré le judaïsme, le christianisme et l'islam.</p>
+        <p>Quatre postures s'imposent simultanément. L'<strong>historien</strong> replace chaque prophète dans son contexte géopolitique précis — pression assyrienne, chute du Nord, réforme deutéronomiste, catastrophe babylonienne. Sans ce contexte, les oracles restent des formules abstraites. Le <strong>bibliste</strong> rappelle que les livres prophétiques ne sont pas des transcriptions directes mais des recueils composites, recopiés, édités, augmentés pendant des générations — distinguer les strates rédactionnelles est indispensable à toute lecture honnête. Le <strong>théologien</strong> identifie les ruptures conceptuelles : quand Amos invente la notion de justice universelle, quand Osée forge la métaphore conjugale de l'Alliance, quand le Deutéro-Isaïe proclame le monothéisme universel — ces ruptures sont des événements intellectuels réels, pas seulement des broderies littéraires. Le <strong>philologue</strong> éclaire les termes décisifs : <em>nabi</em>, <em>roeh</em>, <em>khozeh</em>, <em>ruah</em> — les mots que la Bible hébraïque utilise pour désigner les prophètes et leur inspiration.</p>
+        <p>Une question transversale structure tout le chapitre&nbsp;: en quoi la tradition prophétique hébraïque constitue-t-elle une <em>originalité absolue</em> dans l'histoire des religions — et pourquoi cette originalité a-t-elle survécu à la catastrophe de 587 pour devenir, paradoxalement, l'un de ses fruits les plus durables ?</p>
+      </div>
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION I — QU'EST-CE QU'UN PROPHÈTE -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-numero">I</span>
+        <div>
+          <h2 class="section-titre">Qu'est-ce qu'un prophète ?</h2>
+          <p class="section-sous-titre">Nabi, roeh, khozeh — la terminologie · L'institution prophétique · Ce que la prophétie n'est pas</p>
+        </div>
+      </div>
+
+      <p>Le mot français « prophète » vient du grec <em class="terme-cle">prophètès</em> — <em>pro-phèmi</em>, « parler en faveur de, parler au nom de ». Le grec traduit lui-même l'hébreu <em class="terme-cle">nabi</em> (<span class="heb">נָבִיא</span>), terme dont l'étymologie est débattue. Deux hypothèses principales s'affrontent. La première rattache <em>nabi</em> à une racine akkadienne <em>nabû</em> — « appeler, nommer », d'où « celui qui est appelé » par la divinité. La seconde, plus simple, y voit une forme hébraïque signifiant « celui qui parle, qui annonce, qui proclame ». Dans les deux cas, l'accent porte non sur la prédiction de l'avenir — erreur courante dans la réception moderne — mais sur la parole transmise, la médiation entre le divin et le communauté humaine.</p>
+
+      <p>L'hébreu biblique connaît deux autres termes plus anciens, apparemment antérieurs à <em>nabi</em>. Le <em class="terme-cle">roeh</em> (<span class="heb">רֹאֶה</span>) — « le voyant », de la racine <em>ra'ah</em>, voir — désigne une figure qui reçoit des visions. Le <em class="terme-cle">khozeh</em> (<span class="heb">חֹזֶה</span>), de <em>khazah</em>, également voir mais avec une nuance de vision intérieure ou extatique, est souvent rendu par « le visionnaire ». Un passage de 1 Samuel 9,9 — note éditoriale vraisemblablement tardive — confirme explicitement cette évolution sémantique&nbsp;: <em>« Celui qui s'appelle aujourd'hui nabi s'appelait autrefois roeh. »</em> La terminologie évolue, mais les fonctions se recoupent.</p>
+
+      <h3>Les formes institutionnelles de la prophétie</h3>
+
+      <p>Avant les grands prophètes écrivants du VIIIe siècle, il faut comprendre que la prophétie en Israël n'est pas initialement une vocation individuelle solitaire — c'est une institution sociale avec plusieurs formes d'organisation. Les <em class="terme-cle">fils des prophètes</em> (<em>bené ha-nebiim</em>) forment des groupes, des confréries prophétiques, qui vivent ensemble, parfois dans des états d'extase collective — danse, musique, transe. Saül lui-même, après son onction, tombe dans une telle extase prophétique, ce qui donne naissance au proverbe populaire « Saül est-il aussi parmi les prophètes ? » (1 Samuel 10,12). Ce prophétisme de groupe, extatique, collectif, est le prophétisme pré-classique — il n'a pas encore la dimension éthique et théologique qui caractérisera Amos ou Isaïe.</p>
+
+      <p>Le prophète de cour est une autre figure — attaché au roi, consulté avant les batailles, les décisions politiques. Nathan auprès de David, Gad auprès de David, Ahiya de Silo auprès de Jéroboam Ier — ces prophètes exercent une influence directe sur les décisions monarchiques. Ils peuvent confirmer le roi ou le condamner — Nathan confrontant David après l'affaire de Bethsabée et d'Urie : « Tu es cet homme-là » (2 Samuel 12,7) est l'un des moments les plus dramatiques de cette prophétie de cour.</p>
+
+      <div class="debat-bloc">
+        <div class="debat-voix question">
+          <div class="debat-label">Daniel — Question fondamentale</div>
+          <p>Comment distingue-t-on, dans la Bible elle-même, un « vrai » prophète d'un « faux » prophète ? Le texte pose-t-il des critères ? Et les prophètes ne se contredisent-ils pas parfois directement ?</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Orient Scholar — Bibliste · Historien des religions</div>
+          <p>La question est centrale et la Bible y répond avec une franchise intellectuelle déconcertante. Deutéronome 18,21–22 propose un critère pragmatique : si la parole du prophète ne se réalise pas, c'est un faux prophète. Critère commode <em>après</em> les faits — mais inutilisable <em>avant</em>. Jérémie lui-même le reconnaît implicitement quand il affronte le prophète Hanania qui lui contredit frontalement — et l'un des deux mourait dans l'année, mais personne ne savait lequel avant.</p>
+          <p>La tradition biblique développe d'autres critères : le vrai prophète annonce la catastrophe plutôt que le salut facile — car les faux prophètes ont tendance à dire ce que le pouvoir et le peuple veulent entendre. Jérémie formule ce principe avec une ironie mordante&nbsp;: les prophètes qui crient « Paix ! Paix ! » alors qu'il n'y a pas de paix. Ce critère du <em>confort ou de l'inconfort</em> est heuristiquement intéressant — le vrai prophète est le plus souvent celui qui dérange.</p>
+          <p>Mais la contradiction entre prophètes est bien réelle. L'exemple le plus frappant est la relation entre Élie/Élisée et le prophète Osée, un siècle plus tard. Élisée ordonne l'élimination sanglante de la maison d'Achab par Jéhu — des dizaines de meurtres accomplis en son nom. Osée, un siècle après, condamne explicitement ce même massacre&nbsp;: « Je punirai la maison de Jéhu pour le sang de Jezréel » (Osée 1,4). La tradition prophétique ne forme pas un bloc uniforme — elle se corrige, elle évolue, elle se conteste elle-même. C'est une de ses richesses les plus remarquables.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION II — ÉLIE -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-numero">II</span>
+        <div>
+          <h2 class="section-titre">Élie le Tishbite — le prophète de feu</h2>
+          <p class="section-sous-titre">IXe siècle · La crise omride · Le Carmel · La voix du silence · La translation</p>
+        </div>
+      </div>
+
+      <p>Élie surgit dans le texte biblique sans introduction, sans généalogie, sans préambule — un surgissement brutal qui est lui-même la marque du prophète : <em>« Élie le Tishbite, de Tishbé en Galaad, dit à Achab : Yahvé, le Dieu d'Israël, est vivant... il n'y aura ces années-ci ni rosée ni pluie, sinon à ma parole. »</em> (1 Rois 17,1). Le prophète arrive de nulle part et sa parole seule compte. Ce surgissement ex nihilo contraste radicalement avec les récits de vocation détaillés d'Isaïe ou Jérémie — Élie n'a pas de vocation, il <em>est</em> la vocation.</p>
+
+      <p>Le contexte est la crise omride — Omri fonde Samarie vers 880 av. J.-C., son fils Achab (~874–853) épouse Jézabel, princesse phénicienne de Sidon. Jézabel n'est pas simplement une femme étrangère à la foi de ses sujets — elle conduit une politique active d'implantation du culte de Baal dans le royaume du Nord. Elle finance quatre cent cinquante prophètes de Baal et quatre cents prophètes d'Ashérah, fait massacrer les prophètes de Yahvé, confisque la vigne de Nabot par un faux procès judiciaire organisé à son instigation. C'est un programme d'assimilation religieuse que le bibliste allemand Albrecht Alt interprétait comme une tentative de légitimer la monarchie omride par le prestige culturel phénicien. Face à ce programme se dresse Élie.</p>
+
+      <h3>Le défi du Carmel — une scène de théologie dramatique</h3>
+
+      <p>Le récit du mont Carmel (1 Rois 18) est la scène la plus dramatiquement construite de tous les récits prophétiques. Quatre cent cinquante prophètes de Baal contre Élie seul. Deux taureaux sur deux autels. Chaque camp invoque son dieu pour enflammer le sacrifice. Les prophètes de Baal dansent, se lacèrent de coups d'épées et de lances, crient de l'aube jusqu'au milieu de l'après-midi — rien. Élie les raille avec une ironie mordante qui anticipe le sarcasme philosophique des siècles suivants&nbsp;:</p>
+
+      <blockquote>
+        <p>« Criez plus fort ! Car il est dieu — peut-être qu'il est absorbé, ou en voyage, ou en chemin, ou peut-être dort-il et se réveillera-t-il ! »</p>
+        <cite>— 1 Rois 18, 27</cite>
+      </blockquote>
+
+      <p>Élie arrose ensuite son autel d'eau à trois reprises — délibérément, pour rendre le miracle plus impossible — invoque Yahvé, et le feu descend et consume tout. Les prophètes de Baal sont massacrés au torrent du Qishon. Victoire totale, spectaculaire, incontestable.</p>
+
+      <h3>La voix du silence — la théologie de Horeb</h3>
+
+      <p>Mais le texte refuse de s'en tenir à ce triomphe. Immédiatement après le Carmel, Jézabel menace de le tuer et Élie s'effondre. La trajectoire psychologique est d'une vérité saisissante — le prophète au faîte de sa puissance est saisi par l'abattement le plus profond. Il s'enfonce dans le désert, s'asseoit sous un genévrier et demande la mort&nbsp;: <em>« C'est assez. Maintenant, Yahvé, prends mon âme. »</em> Un ange le touche deux fois — galette et jarre d'eau — et il marche quarante jours jusqu'à Horeb, le Sinaï. La répétition du chiffre quarante n'est pas accidentelle : c'est le temps du désert par excellence, de Moïse à Jésus.</p>
+
+      <p>Sur le Horeb, Yahvé se manifeste — et c'est ici que se trouve l'une des formulations théologiques les plus profondes de toute la Bible hébraïque. Yahvé ne se manifeste pas dans le vent violent qui fend les montagnes, ni dans le tremblement de terre, ni dans le feu — mais dans ce que le texte hébreu nomme <em class="terme-cle">qol demamah daqah</em> (<span class="heb">קוֹל דְּמָמָה דַקָּה</span>)&nbsp;:</p>
+
+      <blockquote>
+        <p>« Après le feu — une voix de fin silence. »</p>
+        <cite>— <span class="heb">קוֹל דְּמָמָה דַקָּה</span> · <em class="translitt">Qol demamah daqah</em> · 1 Rois 19, 12</cite>
+      </blockquote>
+
+      <p>La traduction est délicate. <em>Qol</em> : voix, son. <em>Demamah</em> : silence, calme, repos. <em>Daqah</em> : mince, fin, ténu. La plupart des traductions proposent « une voix douce et subtile » ou « un son de fin silence ». Mais le texte joue sur un paradoxe grammatical — une voix <em>qui est</em> du silence. Ce n'est pas une voix après le silence, c'est une voix-silence. La présence divine se retire du fracas pour habiter l'interstice entre le bruit et l'absence. Après le Carmel — la violence, le feu, la triomphe spectaculaire — la révélation authentique se loge dans ce qu'on ne peut pas saisir.</p>
+
+      <p>Ce paradoxe sera l'une des racines de la théologie apophatique — la théologie du silence et de l'ineffable — qui traversera toute la mystique juive (Maïmonide, kabbale), chrétienne (Denys l'Aréopagite, Maître Eckhart) et islamique (soufisme).</p>
+
+      <h3>La translation — Élie ne meurt pas</h3>
+
+      <p>La fin d'Élie est unique dans toute la Bible hébraïque — il ne meurt pas. <em>« Un char de feu et des chevaux de feu les séparèrent l'un de l'autre, et Élie monta au ciel dans un tourbillon. »</em> (2 Rois 2,11). Élisée le voit monter et ramasse le manteau qui tombe — symbole du double esprit transmis.</p>
+
+      <p>Cette translation va générer une tradition théologique extraordinairement féconde. Dans le judaïsme, Élie deviendra le précurseur du Messie — Malachie 3,23–24 l'annonce explicitement : <em>« Voici que je vous enverrai le prophète Élie avant que vienne le grand et redoutable jour de Yahvé. »</em> La chaise vide du séder de Pâque lui est réservée, la coupe de vin ouverte pour lui lors de la Havdalah. Dans le Nouveau Testament, Élie et Moïse apparaissent à la Transfiguration — les deux figures emblématiques de la Loi et des Prophètes encadrant Jésus. Dans la tradition islamique, Ilyâs (<span class="heb">إِلْيَاسَ</span>) est mentionné comme prophète dans le Coran (37,123–132), et la tradition le situe parfois dans les confins célestes avec Khidr, figure d'immortalité.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION III — ÉLISÉE -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-numero">III</span>
+        <div>
+          <h2 class="section-titre">Élisée — le prophète thaumaturge et le paradoxe du manteau</h2>
+          <p class="section-sous-titre">Le double esprit · Les miracles · L'onction de Jéhu · Le massacre condamné par Osée</p>
+        </div>
+      </div>
+
+      <p>Élisée (<em class="translitt">Elisha</em> — <span class="heb">אֱלִישָׁע</span>, « El sauve ») succède à Élie en recueillant son manteau qui tombe au moment de la translation. Il a demandé une double portion de l'esprit d'Élie — il l'obtient. Ses récits sont plus nombreux et plus miraculeux encore que ceux d'Élie : la guérison de Naaman le général araméen lépreux (2 Rois 5), la multiplication des pains pour des hommes affamés, la résurrection du fils de la Shunamite, l'huile de la veuve qui ne s'épuise pas, le fer de hache qui flotte sur l'eau. Ces miracles du quotidien — compassion concrète pour des gens ordinaires — donnent à Élisée une tonalité différente de la grandeur théologique d'Élie.</p>
+
+      <h3>L'onction de Jéhu — le prophète comme agent du coup d'État</h3>
+
+      <p>Élisée est aussi un prophète politique de première importance. Sur son ordre, un de ses disciples oint Jéhu fils de Josaphat comme roi d'Israël, avec une mission précise : exterminer la maison d'Achab. Ce que Jéhu accomplit avec une efficacité terrifiante. Il exécute Joram fils d'Achab, fait jeter Jézabel par une fenêtre — les chiens la mangent dans le champ de Jezréel comme Élie l'avait prédit —, fait massacrer les soixante-dix fils d'Achab, décapite leur chef, organise enfin un rassemblement des prêtres de Baal dans leur temple, ferme les portes, et les extermine tous. La réforme d'Élie est accomplie par la terreur politique.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">◈</span>
+          <span class="encadre-label">Le paradoxe Élisée/Osée — la tradition prophétique contre elle-même</span>
+        </div>
+        <div class="encadre-body">
+          <p>Un siècle après le massacre de Jezréel commandité par Élisée, le prophète Osée le condamne explicitement&nbsp;: <em>« Je punirai la maison de Jéhu pour le sang de Jezréel. »</em> (Osée 1,4). Le massacre ordonné par un prophète est condamné par un autre prophète. Cette auto-contradiction interne à la tradition prophétique n'est pas un embarras — c'est une preuve de vitalité. La prophétie hébraïque n'est pas un code figé, c'est une réflexion vivante qui se corrige, évolue, révise ses propres jugements. Il n'existe pas d'équivalent de ce type d'auto-critique institutionnelle dans aucune autre tradition religieuse du Proche-Orient ancien.</p>
+          <p>Du point de vue historien, Osée prophétise dans un contexte géopolitique radicalement différent — la montée assyrienne a modifié l'évaluation de la violence politique. Du point de vue théologien, c'est l'éthique qui prend le dessus sur le commandement rituel et militaire. Du point de vue bibliste, les deux strates narratives témoignent de deux moments distincts de la réflexion israélite sur la violence sacrée.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IV — AMOS -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-numero">IV</span>
+        <div>
+          <h2 class="section-titre">Amos — la révolution de la justice sociale</h2>
+          <p class="section-sous-titre">~760 av. J.-C. · Le berger de Teqoa · Yahvé juge son propre peuple · L'éthique contre le rite</p>
+        </div>
+      </div>
+
+      <p>Amos est le premier grand prophète dont les oracles aient été recueillis et organisés en livre — et c'est à ce titre qu'il constitue une rupture intellectuelle majeure dans l'histoire d'Israël. Il est berger de Teqoa, dans les hautes terres de Juda, à une vingtaine de kilomètres au sud de Jérusalem. Il prophétise pourtant dans le Royaume du Nord — à Béthel, le sanctuaire royal — sous le règne de Jéroboam II (~786–746 av. J.-C.), période de grande prospérité matérielle pour le Nord mais de profondes inégalités sociales.</p>
+
+      <h3>Le portrait sociologique d'Israël selon Amos</h3>
+
+      <p>Amos est un observateur d'une précision sociologique étonnante. Il décrit les classes aisées de Samarie se couchant sur des lits d'ivoire, buvant le vin des premiers pressoirs, s'oignant des meilleures huiles — pendant qu'elles vendent le juste pour de l'argent et le pauvre pour une paire de sandales. Il nomme les femmes riches de Samarie « vaches de Basan » — grasses, indolentes, opprimant les faibles et criant à leurs maris&nbsp;: « Apporte à boire ! » Son vocabulaire est un répertoire du luxe levantino-phénicien de son époque, qui concorde précisément avec ce que l'archéologie a retrouvé à Samarie — les ivoires de Samarie fouillés par Kathleen Kenyon en 1931–35, confirmant l'opulence que le prophète dénonce.</p>
+
+      <h3>La révolution théologique d'Amos</h3>
+
+      <p>Mais la portée d'Amos dépasse largement la critique sociale. Sa révolution est théologique — et elle est double. Premièrement, Yahvé n'est plus seulement le dieu tribal d'Israël qui protège son peuple contre ses ennemis. Il juge son propre peuple selon les mêmes critères de justice qu'il applique aux nations environnantes. Le livre s'ouvre avec une série d'oracles contre les nations voisines — Damas, Gaza, Tyr, Édom, Ammon, Moab, Juda — avant de retourner la foudre contre Israël lui-même, dans un crescendo rhétorique dévastateur qui piège l'auditoire dans son propre consentement. Deuxièmement, le culte sans éthique est une abomination — non seulement inutile mais activement offensant pour Yahvé&nbsp;:</p>
+
+      <blockquote>
+        <p>« Je hais, je méprise vos fêtes, je ne puis sentir vos assemblées solennelles. Quand vous m'offrez des holocaustes et des oblations, je ne les agrée pas... Ôtez loin de moi le bruit de vos cantiques, je n'écouterai pas le son de vos luths. Mais que la justice coule comme l'eau, et la droiture comme un torrent qui ne tarit pas. »</p>
+        <cite>— Amos 5, 21–24</cite>
+      </blockquote>
+
+      <p>Ce passage est peut-être le plus cité de tout le livre des prophètes — et pour cause. Il redéfinit radicalement la relation à Dieu&nbsp;: non plus par le rite et le sacrifice, mais par la justice sociale. <em>Mishpat</em> et <em>tsedaqah</em> — justice et droiture — sont les deux maîtres-mots d'Amos, et ils définissent le critère de la relation à Yahvé. C'est une révolution qui anticipera les philosophes grecs de plusieurs générations.</p>
+
+      <p>Pour Amos, la destruction du Royaume du Nord est inévitable et méritée — non pour apostasie religieuse au sens cultuel, mais pour injustice sociale. Cette équation entre péché social et catastrophe historique sera le cadre interprétatif dans lequel toute la tradition prophétique lira les événements des deux siècles suivants.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION V — OSÉE -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-numero">V</span>
+        <div>
+          <h2 class="section-titre">Osée — la métaphore conjugale de l'Alliance</h2>
+          <p class="section-sous-titre">~750–720 av. J.-C. · Gomer et Israël · L'amour blessé de Yahvé · Le désert comme lieu de réconciliation</p>
+        </div>
+      </div>
+
+      <p>Osée prophétise dans le Royaume du Nord de ~750 à 720 av. J.-C. — il voit la chute finale de Samarie approcher et il en est le témoin désespéré. Ce qui rend Osée unique dans toute la littérature prophétique, c'est que sa vie personnelle est sa métaphore prophétique. Yahvé lui ordonne d'épouser Gomer — une femme décrite comme infidèle, qui le quitte pour d'autres amants, qu'Osée reprend et rachète après ses errances. Cette biographie personnelle est l'allégorie vivante de la relation Yahvé-Israël.</p>
+
+      <h3>La métaphore conjugale — une innovation théologique majeure</h3>
+
+      <p>Osée introduit dans la littérature religieuse mondiale une métaphore qui n'avait pas encore été utilisée pour désigner la relation entre une divinité et son peuple&nbsp;: le mariage. Yahvé est l'époux, Israël l'épouse infidèle qui « court après les Baals ». La trahison n'est pas seulement cultuelle — elle est conjugale, émotionnelle, affective. Ce n'est pas un contrat juridique brisé, c'est un cœur blessé. L'amour divin porte les marques de la trahison humaine.</p>
+
+      <blockquote>
+        <p>« C'est pourquoi je vais la séduire, la conduire au désert et parler à son cœur. Je lui rendrai ses vignes de là, et la vallée d'Acor comme une porte d'espérance. Elle répondra là comme aux jours de sa jeunesse, comme au jour où elle montait du pays d'Égypte. »</p>
+        <cite>— Osée 2, 16–17</cite>
+      </blockquote>
+
+      <p>Ce passage révèle la structure profonde de la théologie d'Osée : le désert n'est plus seulement le lieu de l'errance punitif — il devient le lieu de la re-séduction, du recommencement, de la réconciliation intime entre Dieu et son peuple. L'Exode n'est pas une donnée du passé — c'est la matrice d'une nouvelle alliance à venir. Cette lecture du désert comme espace de grâce sera reprise par Jérémie, puis par le Deutéro-Isaïe.</p>
+
+      <h3>Osée et la connaissance de Dieu</h3>
+
+      <p>Un autre concept central d'Osée est la <em class="terme-cle">da'at Elohim</em> (<span class="heb">דַּעַת אֱלֹהִים</span>) — la connaissance de Dieu. Dans le contexte sémitique, <em>da'at</em> n'est pas une connaissance intellectuelle abstraite — c'est la connaissance intime au sens biblique le plus fort, la même racine que celle utilisée pour la relation conjugale. Connaître Dieu signifie l'avoir vécu de l'intérieur, dans la relation, dans la fidélité pratique. Cette notion de connaissance-relation anticipera les développements de la mystique juive médiévale.</p>
+
+      <p>Osée est aussi le prophète qui pose la question de la responsabilité du sacerdoce dans la dégradation religieuse&nbsp;: <em>« Mon peuple est détruit faute de connaissance — parce que tu as rejeté la connaissance, je te rejetterai du sacerdoce. »</em> (Osée 4,6). Les prêtres, gardiens de la Torah, ont failli à leur mission. C'est une critique institutionnelle qui annonce les grandes réformes deutéronomistes de Josias.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VI — ISAÏE -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-numero">VI</span>
+        <div>
+          <h2 class="section-titre">Isaïe de Jérusalem — la théophanie et la théologie du Reste</h2>
+          <p class="section-sous-titre">~740–700 av. J.-C. · La vocation · Le Saint d'Israël · La crise assyrienne · She'ar Yashuv</p>
+        </div>
+      </div>
+
+      <p>Isaïe fils d'Amots prophétise à Jérusalem sous quatre rois de Juda — Ozias, Yotam, Achaz, Ézéchias — soit une carrière prophétique couvrant environ quarante ans, de ~740 à ~700 av. J.-C. C'est le prophète le plus complexe de toute la tradition hébraïque, en partie parce que le livre qui porte son nom est lui-même composite — question sur laquelle le bibliste doit être rigoureux.</p>
+
+      <h3>La vocation — la théophanie du trône</h3>
+
+      <p>La vocation d'Isaïe (chapitre 6) est la scène de théophanie la plus grandiose de toute la littérature prophétique. L'année de la mort du roi Ozias — un repère chronologique précis — Isaïe voit le Seigneur assis sur un trône très élevé, sa robe remplissant le Temple. Des séraphins à six ailes crient l'un à l'autre&nbsp;:</p>
+
+      <blockquote>
+        <p>« Saint, saint, saint est Yahvé Tsebaot — toute la terre est pleine de sa gloire. »</p>
+        <cite>— <span class="heb">קָדוֹשׁ קָדוֹשׁ קָדוֹשׁ יְהוָה צְבָאוֹת</span> · Isaïe 6, 3</cite>
+      </blockquote>
+
+      <p>Le <em class="terme-cle">Trisagion</em> — triple « Saint » — est l'une des formules liturgiques les plus universellement reprises de toute la Bible : dans le Kadosh de la liturgie juive, dans le Sanctus de la messe chrétienne, dans le Subbouh qoddous arabe de la prière islamique. Le seuil tremble, la maison se remplit de fumée. Isaïe crie&nbsp;: « Malheur à moi ! Je suis perdu — car je suis un homme aux lèvres impures vivant au milieu d'un peuple aux lèvres impures, et mes yeux ont vu le Roi, Yahvé Tsebaot. » Un séraphin touche ses lèvres avec un charbon ardent pris sur l'autel — purification. Puis la voix divine&nbsp;: « Qui enverrai-je ? Qui marchera pour nous ? » Et la réponse d'Isaïe&nbsp;: « Me voici — envoie-moi. »</p>
+
+      <p>Cette séquence — vision, terreur, purification, appel, réponse — devient le schéma canonique de la vocation prophétique, repris avec des variations par Jérémie, Ézéchiel, et dans un tout autre contexte, par Paul de Tarse sur le chemin de Damas.</p>
+
+      <h3>Le Saint d'Israël — une innovation théonymique</h3>
+
+      <p>Isaïe introduit un titre divin qui lui est propre et qui n'apparaît que rarement avant lui&nbsp;: <em class="terme-cle">Qedosh Yisra'el</em> (<span class="heb">קְדוֹשׁ יִשְׂרָאֵל</span>), le Saint d'Israël. Le terme <em>qadosh</em> — saint, séparé, radicalement autre — exprime la transcendance absolue de Yahvé, son altérité irréductible par rapport à tout ce qui est humain et créaturel. Ce n'est pas la sainteté morale au sens moderne — c'est l'écart ontologique entre le divin et le humain. Cette insistance sur la transcendance radicale de Yahvé est le fond théologique des oracles d'Isaïe.</p>
+
+      <h3>La crise assyrienne et la théologie de Sion</h3>
+
+      <p>Les années 735–701 sont pour Juda des années de crise sans précédent. La montée de Tiglath-Pileser III, puis de Sennachérib, soumet toute la région au tribut ou à la destruction. En 701, Sennachérib ravage quarante-six villes fortifiées de Juda, déporte deux cent mille personnes selon ses propres annales inscrites sur le Prisme de Taylor conservé au British Museum — mais ne prend pas Jérusalem. Ézéchias résiste, prie, et la ville est épargnée. La Bible en donne une explication miraculeuse — l'ange de Yahvé frappe l'armée assyrienne. Quelle que soit la réalité historique, le fait que Jérusalem n'ait pas été détruite en 701 a eu des conséquences théologiques considérables : elle a créé la conviction que Sion était inviolable, que Yahvé protégerait toujours sa ville. Cette théologie de l'inviolabilité de Sion sera précisément ce que Jérémie devra déconstruire un siècle plus tard.</p>
+
+      <h3>She'ar Yashuv — la théologie du Reste</h3>
+
+      <p>Une des contributions les plus originales d'Isaïe est sa théologie du <em class="terme-cle">she'ar</em> — le Reste. Après la catastrophe — la destruction, la déportation, le jugement — il restera un petit groupe fidèle. Isaïe donne d'ailleurs à son fils le nom symbolique <em>She'ar Yashuv</em> (<span class="heb">שְׁאָר יָשׁוּב</span>) — « un reste reviendra ». Ce concept est d'une fécondité théologique extraordinaire. Il permet d'intégrer la catastrophe sans nier la promesse — la catastrophe est réelle, le jugement est réel, et <em>pourtant</em> il demeure une possibilité de continuation. Ce ne sera pas l'entièreté du peuple — le tout sera détruit — mais le Reste sera sauvé et deviendra la semence d'un recommencement. Cette structure théologique anticipatrice sera reprise par Jérémie, par le Deutéro-Isaïe, et constituera l'un des piliers de la théologie du retour d'exil.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VII — MICHÉE -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-numero">VII</span>
+        <div>
+          <h2 class="section-titre">Michée — la formule absolue</h2>
+          <p class="section-sous-titre">~730–700 av. J.-C. · La voix des campagnes · Bethléem messianique · Michée 6,8</p>
+        </div>
+      </div>
+
+      <p>Michée de Moresheth prophétise contemporainement à Isaïe, sous les mêmes règnes — Yotam, Achaz, Ézéchias. Mais sa perspective est radicalement différente. Isaïe est un homme de cour, de Jérusalem, d'une famille influente — ses oracles portent la marque de qui a accès aux couloirs du pouvoir. Michée vient des campagnes de la Shefelah, la plaine de basse Judée — il est la voix des paysans, des fermiers écrasés par les latifundia des élites urbaines, des victimes des réquisitions militaires et des abus fonciers.</p>
+
+      <h3>La prophétie contre Jérusalem</h3>
+
+      <p>Ce que les théologiens de la cour et de Sion ne peuvent pas se permettre de dire, Michée le dit sans détour&nbsp;: <em>« C'est pour cela que, à cause de vous, Sion sera labourée comme un champ, Jérusalem deviendra un tas de ruines, et la montagne du Temple, une hauteur couverte de forêts. »</em> (Michée 3,12). Cette prophétie est tellement scandaleuse dans le contexte de la théologie de l'inviolabilité de Sion que la tradition rabbinique postérieure la citera pour justifier la non-exécution de Jérémie — car Michée avait dit la même chose avant lui sans être tué, donc Jérémie ne devait pas l'être non plus (Jérémie 26,18). Michée a sauvé la vie de Jérémie — un siècle après sa mort — par le seul fait d'avoir prophétisé.</p>
+
+      <h3>Bethléem — la prophétie messianique</h3>
+
+      <p>Michée 5,1 est l'un des textes prophétiques les plus commentés de toute la Bible&nbsp;: <em>« Et toi, Bethléem Éphrata, petit parmi les clans de Juda, de toi sortira pour moi celui qui dominera sur Israël, et son origine est depuis les temps anciens, depuis les jours d'éternité. »</em> Le contexte immédiat est la crise assyrienne — l'espoir d'un roi davidique idéal qui viendra de Bethléem, ville natale de David. Dans le contexte du Nouveau Testament, ce verset sera lu comme une prophétie de la naissance à Bethléem. La question exégétique — lecture contextuelle davidique ou lecture eschatologique messianique ? — divise les traditions depuis deux millénaires.</p>
+
+      <h3>La formule de Michée 6,8 — une synthèse éthique universelle</h3>
+
+      <p>Mais le passage le plus fameux est sans doute Michée 6,8 — que le Talmud (traité Makkot 24a) cite comme la distillation de toute la Torah en un seul verset. Après une séquence où Yahvé entre en procès avec son peuple — <em>« Peuple, qu'est-ce que je t'ai fait ? En quoi t'ai-je fatigué ? Réponds-moi. »</em> — vient la formule&nbsp;:</p>
+
+      <blockquote>
+        <p>« On t'a fait connaître, ô homme, ce qui est bon. Et que demande Yahvé de toi ? Rien d'autre que de pratiquer la justice (<em class="translitt">asot mishpat</em>), d'aimer la bonté (<em class="translitt">ahavat khesed</em>), et de marcher humblement avec ton Dieu (<em class="translitt">hatznea lekhet im Elohekha</em>). »</p>
+        <cite>— <span class="heb">הִגִּיד לְךָ אָדָם מַה־טּוֹב</span> · Michée 6, 8</cite>
+      </blockquote>
+
+      <p>Trois termes capitaux. <em>Mishpat</em> — la justice, l'ordre légal correct. <em>Khesed</em> — terme intraduisible, à la fois bonté, loyauté, amour fidèle, grâce — le mot le plus riche de tout le vocabulaire émotionnel de l'hébreu biblique. <em>Hatznea lekhet</em> — marcher humblement, avec discrétion, sans ostentation. La formule est à la fois minimale et totale. Minimale parce qu'elle réduit toute l'observance à trois attitudes. Totale parce que ces trois attitudes englobent la relation sociale, la relation affective et la relation à Dieu. Le Talmud ne s'y trompera pas en la considérant comme le résumé ultime de l'éthique biblique.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION VIII — PROPHÈTES MINEURS -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-numero">VIII</span>
+        <div>
+          <h2 class="section-titre">Sophonie, Nahoum, Habacuc — le VIIe siècle entre deux catastrophes</h2>
+          <p class="section-sous-titre">~640–600 av. J.-C. · La réforme de Josias · La chute de Ninive · La question du mal</p>
+        </div>
+      </div>
+
+      <p>Le VIIe siècle av. J.-C. est en Juda une période paradoxale — le règne de Manassé (~698–643) est présenté par les rédacteurs deutéronomistes comme le règne le plus impie de toute la monarchie de Juda, celui dont la faute sera irrémédiable et déclenchera inévitablement la destruction de 587. Dans le même temps, c'est sous le règne de son petit-fils Josias (~640–609) que la grande réforme religieuse du deutéronomisme transforme fondamentalement le culte et la théologie d'Israël. Trois prophètes ponctuent ce siècle difficile.</p>
+
+      <h3>Sophonie — le Jour de Yahvé</h3>
+
+      <p>Sophonie prophétise sous Josias, vraisemblablement avant la réforme de 622. Son livre s'ouvre avec l'une des visions de destruction les plus radicales de toute la Bible — un « balayage total » (<em class="translitt">asoph aseph hakol</em>) qui effacera hommes, animaux, oiseaux, poissons. Le concept central est le <em class="terme-cle">Yom Yahvé</em> — le Jour de Yahvé, jour de colère, de détresse, de ruine et de dévastation. Son <em>Dies Irae</em> inspirera directement la séquence médiévale du même nom dans la liturgie funèbre catholique, texte qui débutera par&nbsp;: <em>Dies irae, dies illa / Solvet saeclum in favilla.</em> Mais Sophonie n'est pas que destruction — son chapitre 3 se termine sur une vision de rassemblement des peuples, de purification des lèvres de l'humanité, d'un Dieu qui « exulte de joie à cause de toi, qui se tait dans son amour, qui se réjouit à cause de toi avec des cris de joie » — une des images les plus tendres de toute la théologie prophétique.</p>
+
+      <h3>Nahoum — le chant sur la chute de Ninive</h3>
+
+      <p>Nahoum est unique : il est l'un des rares prophètes dont l'oracle entier porte sur un ennemi d'Israël, la chute de Ninive — capitale de l'Empire assyrien qui a détruit le Royaume du Nord en 722 et humilié Juda en 701. Son livre est un poème d'une violence rhétorique et d'une puissance littéraire extraordinaires — un chef-d'œuvre de la poésie hébraïque de guerre. Nahoum anticipe la chute de Ninive en 612 av. J.-C. par la coalition médo-babylonienne. Du point de vue théologique, son oracle est l'affirmation que la justice de Yahvé finit toujours par atteindre même les plus grands empires. Du point de vue éthique, il est le seul livre de la Bible à ne contenir aucune invitation au repentir destinée à Israël — pure exultation sur la défaite de l'oppresseur.</p>
+
+      <h3>Habacuc — le prophète qui questionne Dieu</h3>
+
+      <p>Habacuc (~600 av.) est le prophète philosophe. Son livre commence par une question frontale à Yahvé — probablement la question la plus directe qu'un prophète ose poser dans toute la Bible&nbsp;: <em>« Jusqu'à quand, Yahvé, crierai-je sans que tu entendes ? »</em> Yahvé répond qu'il envoie les Babyloniens comme instrument de jugement. Habacuc riposte&nbsp;: mais les Babyloniens sont pires qu'Israël — pourquoi un Dieu saint se sert-il d'un plus injuste pour punir un moins injuste ? Et il attend la réponse, installé sur sa tour de guet. La réponse divine — <em>« le juste vivra par sa fidélité »</em> (<em class="translitt">tsaddiq be'emunatoh yikhyeh</em>, Habacuc 2,4) — sera l'un des versets les plus commentés de toute la Bible : Paul de Tarse en fera le fondement de sa théologie de la justification par la foi (Romains 1,17 ; Galates 3,11), Martin Luther l'interprètera comme le pivot de la Réforme protestante. Un verset de sept mots hébreux a changé l'histoire du christianisme occidental.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION IX — JÉRÉMIE -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-numero">IX</span>
+        <div>
+          <h2 class="section-titre">Jérémie — le prophète en procès avec Dieu et avec lui-même</h2>
+          <p class="section-sous-titre">~627–586 av. J.-C. · Les confessions · La Nouvelle Alliance · Les Lamentations · Anathoth</p>
+        </div>
+      </div>
+
+      <p>Jérémie est la figure prophétique la plus humainement complexe de toute la Bible — on ne peut que le mentionner avec le respect qu'on doit aux gens qui ont vraiment souffert. Sa vocation remonte à 627 av. J.-C., sous le règne de Josias — il prophétise jusqu'après la destruction de Jérusalem en 586, emporté malgré lui en Égypte où il disparaît. Quarante ans de prophétie, dont vingt ans de conflit ouvert avec le pouvoir, l'emprisonnement, le jeté dans une citerne pour le faire mourir, la désillusion profonde vis-à-vis de la réforme de Josias et de son échec.</p>
+
+      <h3>Les confessions — la plainte prophétique la plus personnelle</h3>
+
+      <p>Ce qui distingue fondamentalement Jérémie des autres prophètes est l'existence dans son livre d'une série de passages appelés les <em class="terme-cle">confessions</em> — des plaintes adressées à Yahvé dans lesquelles il expose sa souffrance, son découragement, sa tentation d'abandon, et parfois une révolte ouverte contre sa vocation. Ces textes sont sans équivalent dans toute la littérature prophétique&nbsp;:</p>
+
+      <blockquote>
+        <p>« Tu m'as séduit, Yahvé, et je me suis laissé séduire. Tu t'es emparé de moi et tu l'as emporté... Je disais&nbsp;: je ne penserai plus à lui, je ne parlerai plus en son nom. Mais il y avait dans mon cœur comme un feu dévorant, enfermé dans mes os. Je m'épuisais à le contenir — et je n'en pouvais plus. »</p>
+        <cite>— Jérémie 20, 7–9</cite>
+      </blockquote>
+
+      <p>Cette image — la parole prophétique comme feu que l'on ne peut pas retenir, qui brûle de l'intérieur — est la métaphore la plus exacte de la vocation telle que Jérémie la vit : non pas une grâce, mais une contrainte qui le détruit tout en le rendant inévitable. La malédiction du jour de sa naissance (Jérémie 20,14–18) est d'une violence poétique comparable aux passages les plus sombres de Job — et n'est pas sans rappeler les « maudits soient les jours » qui ponctuent la littérature de la détresse humaine dans toutes les traditions.</p>
+
+      <h3>La Nouvelle Alliance — la prophétie la plus influente</h3>
+
+      <p>Mais Jérémie n'est pas seulement le prophète du deuil. Au cœur de la catastrophe — entre la première déportation de 597 et la destruction finale de 587 — il formule l'une des prophéties les plus importantes de toute la Bible hébraïque, celle de la Nouvelle Alliance (<em class="terme-cle">berit khadasha</em>, <span class="heb">בְּרִית חֲדָשָׁה</span>)&nbsp;:</p>
+
+      <blockquote>
+        <p>« Voici, les jours viennent, dit Yahvé, où je conclurai avec la maison d'Israël et la maison de Juda une alliance nouvelle — non comme l'alliance que j'ai faite avec leurs pères... Je mettrai ma loi au-dedans d'eux, je l'écrirai sur leur cœur. Et je serai leur Dieu, et ils seront mon peuple. »</p>
+        <cite>— Jérémie 31, 31–33</cite>
+      </blockquote>
+
+      <p>L'alliance ancienne était extérieure — inscrite sur des tables de pierre, codifiée en lois, sanctionnée par des rituels. La Nouvelle Alliance sera intérieure — gravée dans le cœur, immédiate, personnelle, sans intermédiaire. Cette prophétie sera l'une des plus citées du Nouveau Testament — l'Épître aux Hébreux en fait le pivot de la théologie chrétienne de la Nouvelle Alliance. Elle sera aussi fondamentale pour le mystique juif qui voit dans l'intériorisation de la Torah l'idéal de la vie spirituelle.</p>
+
+      <h3>La theologie politique — Babylone comme instrument de Yahvé</h3>
+
+      <p>Sur le plan politique, Jérémie tient une position qui lui vaut l'accusation de trahison nationale — il préconise la soumission à Babylone. Nabuchodonosor est l'instrument de Yahvé. Résister est non seulement vain mais théologiquement erroné — c'est résister à la volonté divine. Il envoie un joug en bois à Sédécias pour lui signifier qu'il doit se soumettre. Le prophète Hanania brise ce joug symboliquement — Jérémie revient avec un joug de fer. Il écrit aux exilés déjà à Babylone&nbsp;: <em>« Construisez des maisons, habitez-les, plantez des jardins, mangez leurs fruits. Cherchez la paix de la ville où je vous ai déportés, et priez Yahvé pour elle — car de sa paix dépend votre paix. »</em> (Jérémie 29,5–7). Ce texte remarquable pose pour la première fois le principe de la fidélité possible à une patrie d'exil — fondement de la diaspora juive pendant deux millénaires.</p>
+
+      <h3>Les Lamentations — le deuil de Jérusalem</h3>
+
+      <p>Le livre des Lamentations (<em class="terme-cle">Eikhah</em> — <span class="heb">אֵיכָה</span>, « Comment ? ») est attribué à Jérémie par la tradition, bien que la question de l'attribution soit débattue. C'est un poème de deuil organisé en acrostiche alphabétique — chaque verset commence par une lettre successive de l'alphabet hébreu — structure formelle qui exprime l'épuisement total : l'alphabet entier mis au service du désespoir, comme si l'on avait dit tout ce qu'il est possible de dire.</p>
+
+      <blockquote>
+        <p>« Comment la cité populeuse est-elle assise solitaire ! Elle qui était grande parmi les nations est comme une veuve. Elle qui était princesse parmi les provinces est devenue tributaire. Elle pleure dans la nuit, ses larmes sur ses joues — il n'y a personne pour la consoler. »</p>
+        <cite>— Lamentations 1, 1–2</cite>
+      </blockquote>
+
+      <p>Et pourtant, au cœur du troisième chapitre — le plus long, structuré lui-même en triple acrostiche — surgit une lueur qui reste l'une des affirmations les plus connues de toute la littérature religieuse hébraïque&nbsp;: <em>« Les bontés de Yahvé ne sont pas épuisées, ses compassions ne sont pas à bout. Elles se renouvellent chaque matin. Grande est ta fidélité. »</em> (<em class="translitt">Hadashim labeqarim, rabbah emunatekha</em> — Lamentations 3,22–23). Dans l'abîme du deuil, la confiance persist. Ce n'est pas de l'optimisme — c'est de la foi enracinée dans la destruction.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION X — ÉZÉCHIEL -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-numero">X</span>
+        <div>
+          <h2 class="section-titre">Ézéchiel — la gloire qui s'en va et les ossements qui revivent</h2>
+          <p class="section-sous-titre">~593–571 av. J.-C. · La Merkabah · Le kavod qui quitte le Temple · La vallée des ossements</p>
+        </div>
+      </div>
+
+      <p>Ézéchiel est le prophète en exil. Prêtre de Jérusalem déporté avec la première vague de 597 av. J.-C., il prophétise à Tel Abib sur le canal Kebar en Babylonie — parmi les exilés. Il voit la destruction de 587 de loin, sans pouvoir agir, et c'est depuis cette distance forcée qu'il développe la théologie la plus radicale de toute la prophétie hébraïque.</p>
+
+      <h3>La Merkabah — la vision inaugurale</h3>
+
+      <p>Le premier chapitre d'Ézéchiel est l'un des textes les plus ésotériques de toute la Bible — et l'un des plus influents dans la mystique juive ultérieure. Le prophète voit une tempête venant du nord, un nuage avec du feu, et au milieu, quatre créatures vivantes aux faces multiples (face d'homme, de lion, de bœuf, d'aigle), aux ailes entrelacées, accompagnées de roues dans des roues tournant dans toutes les directions. Au-dessus d'elles, un firmament de cristal, et au-dessus encore, quelque chose qui ressemble à un trône de saphir, et sur le trône, une forme humaine de feu et d'éclat. C'est la <em class="terme-cle">Merkabah</em> — le char divin.</p>
+
+      <p>Cette vision est tellement complexe et potentiellement dangereuse théologiquement que le Talmud (Hagiga 2,1) interdit de l'enseigner à moins de deux auditeurs, voire en public. Elle donnera naissance à toute une tradition mystique — la <em>mystique de la Merkabah</em> ou <em>mystique du char</em> (Maaseh Merkabah) — qui sera la forme la plus ancienne du mysticisme juif, antérieure à la kabbale de plusieurs siècles.</p>
+
+      <h3>Le kavod qui quitte le Temple</h3>
+
+      <p>La contribution théologique la plus décisive d'Ézéchiel est sa réponse à la question cruciale que pose la destruction du Temple&nbsp;: Yahvé était-il dans le Temple quand il a brûlé ? Sa réponse est d'une audace remarquable — non. La gloire de Yahvé (<em class="terme-cle">kavod Yahvé</em>, <span class="heb">כְּבוֹד יְהוָה</span>) quitte le Temple avant sa destruction, en plusieurs étapes décrites avec précision dans les chapitres 10 et 11. D'abord elle se lève du chérubin vers le seuil du Temple. Puis elle se déplace vers la porte orientale. Puis vers la montagne à l'est de la ville — le mont des Oliviers. La gloire divine évacue sa demeure avant qu'elle brûle.</p>
+
+      <p>Ce n'est pas une défaite — c'est un départ volontaire. Yahvé n'est pas la victime de Nabuchodonosor. Il est l'acteur premier de la catastrophe — non parce qu'il est détruit mais parce qu'il a voulu ne plus habiter un Temple souillé. Cette théologie résout le problème de la défaite divine en le transformant en geste de souveraineté. Et elle prépare logiquement le retour — si la gloire est partie volontairement, elle peut revenir.</p>
+
+      <h3>La vallée des ossements desséchés — la résurrection d'Israël</h3>
+
+      <p>La vision la plus célèbre d'Ézéchiel est la vallée des ossements (chapitre 37). Le prophète est déposé en esprit au milieu d'une vallée pleine d'ossements — nombreux, très secs. Yahvé lui demande&nbsp;: « Ces ossements peuvent-ils revivre ? » Et Ézéchiel répond prudemment&nbsp;: « Seigneur Yahvé, toi tu le sais. » Il lui est ordonné de prophétiser sur les ossements&nbsp;:</p>
+
+      <blockquote>
+        <p>« Je vous ferai entrer en vous un souffle, et vous vivrez. Je vous donnerai des nerfs, et je ferai croître sur vous de la chair, je vous couvrirai de peau, et je mettrai en vous un souffle, et vous vivrez. Et vous saurez que je suis Yahvé. »</p>
+        <cite>— Ézéchiel 37, 5–6</cite>
+      </blockquote>
+
+      <p>Les ossements se rassemblent, se couvrent de nerfs, de chair, de peau — mais pas encore de souffle. Puis le vent des quatre points cardinaux souffle sur eux, et ils vivent — une immense armée qui se lève. La signification est expliquée par le texte lui-même&nbsp;: ces ossements, c'est toute la maison d'Israël qui dit&nbsp;: « Nos os sont desséchés, notre espérance est perdue. » La résurrection des ossements est la métaphore de la restauration nationale d'un peuple qui se croit mort. Du point de vue théologien, c'est la première formulation biblique claire d'une résurrection collective — non pas individuelle — comme promesse de Yahvé. Elle sera l'une des racines de la doctrine de la résurrection qui se développera dans le judaïsme du Second Temple et sera centrale dans le christianisme.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XI — DEUTÉRO-ISAÏE -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-numero">XI</span>
+        <div>
+          <h2 class="section-titre">Le Deutéro-Isaïe — la révolution monothéiste universelle</h2>
+          <p class="section-sous-titre">Isaïe 40–55 · ~550–540 av. J.-C. · Le Serviteur souffrant · Cyrus le Messie · Le monothéisme éthique</p>
+        </div>
+      </div>
+
+      <p>La question de l'unité du livre d'Isaïe est l'une des grandes batailles de la critique biblique depuis Johann Christoph Döderlein en 1775 et plus rigoureusement Wilhelm Gesenius en 1821. La discontinuité est si marquée entre les chapitres 1–39 et 40–66 que la quasi-totalité des biblistes reconnaissent au moins deux auteurs distincts — le Deutéro-Isaïe (chapitres 40–55) écrivant en exil babylonien vers 550–540 av. J.-C., et probablement un Trito-Isaïe (chapitres 56–66) encore plus tardif. C'est une question de méthode historico-critique, non de foi&nbsp;: même la tradition rabbinique médiévale reconnaissait des ruptures stylistiques et thématiques considérables.</p>
+
+      <div class="debat-bloc">
+        <div class="debat-voix question">
+          <div class="debat-label">Daniel — Question critique</div>
+          <p>La tradition juive et chrétienne maintient l'unité du livre d'Isaïe. N'y a-t-il pas quelque chose d'anachronique à projeter nos catégories de « vrai auteur » sur un texte antique qui fonctionnait différemment ? Et quel est l'enjeu réel de cette distinction ?</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Orient Scholar — Bibliste · Historien des religions</div>
+          <p>La question est légitime et ne touche pas uniquement à la méthode. Tu as raison que les auteurs antiques fonctionnaient avec une économie de l'autorité radicalement différente de la nôtre — attacher son oracle à un grand nom du passé était une forme de légitimation normale, pas de fraude. Le pseudépigraphe est un genre littéraire respecté dans l'Antiquité.</p>
+          <p>Mais l'enjeu réel est théologique et non seulement littéraire. Si le « premier Isaïe » vivant au VIIIe siècle a pu nommer Cyrus le Perse par son nom deux siècles avant sa naissance (Isaïe 44,28 ; 45,1), c'est une prophétie de prédiction extraordinaire qui confirmerait la thèse de la révélation surnaturelle. Si le Deutéro-Isaïe écrit en exil au moment même où Cyrus monte en puissance, c'est une lecture prophétique du présent politique — tout aussi remarquable théologiquement, mais différemment. Pour le croyant, les deux lectures peuvent coexister. Pour l'historien, la seconde est méthodologiquement préférable. Ce que les deux approches s'accordent à reconnaître, c'est la puissance intellectuelle extraordinaire du texte lui-même.</p>
+        </div>
+      </div>
+
+      <h3>L'exorde de consolation — Isaïe 40</h3>
+
+      <p>Le Deutéro-Isaïe s'ouvre sur un des passages les plus célèbres de toute la Bible&nbsp;:</p>
+
+      <blockquote>
+        <p>« Consolez, consolez mon peuple, dit votre Dieu. Parlez au cœur de Jérusalem, et criez-lui que son temps de service est accompli, que sa faute est expiée... Une voix crie dans le désert&nbsp;: Préparez le chemin de Yahvé, rendez droits ses sentiers dans la steppe... La gloire de Yahvé sera révélée, et toute chair la verra ensemble. »</p>
+        <cite>— Isaïe 40, 1–5</cite>
+      </blockquote>
+
+      <p>Ce passage est lu dans la liturgie juive du shabbat qui précède le 9 Av — <em>Shabbat Nakhamu</em>, le shabbat de consolation. Il ouvrira le mouvement oratorio de Haendel <em>Le Messie</em> par la voix de ténor. Il sera cité dans les quatre évangiles pour introduire la figure de Jean-Baptiste. Rares sont les textes dont la postérité couvre autant de territoires culturels et religieux.</p>
+
+      <h3>Cyrus — le Messie des nations</h3>
+
+      <p>La déclaration la plus audacieuse du Deutéro-Isaïe est probablement la désignation de Cyrus II de Perse comme <em class="terme-cle">mashiah</em> de Yahvé — son oint, son messie. C'est la première et unique fois dans toute la Bible hébraïque que le titre messianique est appliqué à un non-Israélite, à un roi étranger qui n'a jamais entendu parler de Yahvé&nbsp;:</p>
+
+      <blockquote>
+        <p>« Ainsi dit Yahvé à son oint, à Cyrus, dont j'ai tenu la main droite, pour abattre devant lui les nations... C'est moi qui dis de Cyrus&nbsp;: il est mon berger et il accomplira tout ce que je veux. »</p>
+        <cite>— Isaïe 45, 1 &amp; 44, 28</cite>
+      </blockquote>
+
+      <p>Cette déclaration est une révolution théologique de premier ordre. Yahvé n'est plus le dieu national d'Israël qui gère ses affaires tribales — il est le Dieu créateur de l'univers entier qui utilise tous les instruments de l'histoire universelle, y compris les rois étrangers, pour accomplir ses desseins. C'est le monothéisme universel déclaré explicitement — <em>« Il n'y a pas d'autre Dieu que moi »</em> est répété cinq fois dans ces chapitres — et éthique, car ce Dieu est juste, non arbitraire.</p>
+
+      <h3>Les Chants du Serviteur — la figure la plus débattue de la Bible</h3>
+
+      <p>Quatre passages du Deutéro-Isaïe sont désignés depuis Bernhard Duhm (1892) comme les « Chants du Serviteur » (<em class="translitt">Eved Yahvé</em>) — 42,1–4 ; 49,1–6 ; 50,4–9 ; 52,13–53,12. Ils décrivent une figure mystérieuse — le Serviteur de Yahvé — choisi pour restaurer Israël et apporter la lumière aux nations, et qui accomplit cette mission à travers la souffrance, le mépris, et quelque chose qui ressemble à une mort vicaire&nbsp;:</p>
+
+      <blockquote>
+        <p>« Il était méprisé et abandonné des hommes, homme de douleurs et habitué à la souffrance... C'est lui qui portait nos maladies et se chargeait de nos douleurs. Il a été transpercé à cause de nos crimes, écrasé à cause de nos fautes. »</p>
+        <cite>— Isaïe 53, 3–5</cite>
+      </blockquote>
+
+      <p>La question de l'identité du Serviteur est la plus débattue de toute l'exégèse biblique depuis deux mille ans. Pour l'exégèse juive, le Serviteur est Israël collectif, ou le prophète lui-même, ou une figure royale idéale. Pour la tradition chrétienne depuis le Nouveau Testament, le Serviteur souffrant est l'une des prophéties les plus directes de la passion du Christ. Du point de vue historico-critique, l'identité reste ouverte — et c'est peut-être volontaire. Ces textes ont une polysémie constitutive qui leur a permis d'être lus, commentés, chantés par des générations de lecteurs dans des contextes radicalement différents.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XII — TABLEAU COMPARATIF -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <span class="section-numero">XII</span>
+        <div>
+          <h2 class="section-titre">Tableau comparatif des prophètes classiques</h2>
+          <p class="section-sous-titre">IXe–VIe siècles · Contexte · Contribution théologique · Originalité spécifique</p>
+        </div>
+      </div>
+
+      <p>La tradition prophétique hébraïque s'étend sur quatre siècles — du IXe siècle (Élie) au VIe siècle (Deutéro-Isaïe). Pour en saisir la cohérence et les ruptures, un tableau comparatif s'impose.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Tableau — Les grands prophètes hébreux · IXe–VIe siècle av. J.-C.</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Prophète</th>
+              <th>Période</th>
+              <th>Contexte</th>
+              <th>Apport central</th>
+              <th>Innovation décisive</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Élie</td>
+              <td>~870–845</td>
+              <td>Crise omride · Jézabel · Baal</td>
+              <td>La souveraineté exclusive de Yahvé</td>
+              <td><em>Qol demamah daqah</em> — Dieu dans le silence</td>
+            </tr>
+            <tr>
+              <td>Élisée</td>
+              <td>~845–800</td>
+              <td>Guerres araméennes · Nord</td>
+              <td>Le prophète thaumaturge et politique</td>
+              <td>Onction royale comme acte prophétique</td>
+            </tr>
+            <tr>
+              <td>Amos</td>
+              <td>~760–750</td>
+              <td>Jéroboam II · Prospérité inégale</td>
+              <td>La justice sociale comme exigence divine</td>
+              <td>Yahvé juge son propre peuple au même titre</td>
+            </tr>
+            <tr>
+              <td>Osée</td>
+              <td>~750–720</td>
+              <td>Chute du Nord imminente</td>
+              <td>L'Alliance comme métaphore conjugale</td>
+              <td><em>Da'at Elohim</em> — la connaissance intime de Dieu</td>
+            </tr>
+            <tr>
+              <td>Isaïe (I)</td>
+              <td>~740–700</td>
+              <td>Crises assyriennes · Achaz · Ézéchias</td>
+              <td>La sainteté transcendante · Le Reste</td>
+              <td><em>Qedosh Yisra'el</em> · La théologie de Sion</td>
+            </tr>
+            <tr>
+              <td>Michée</td>
+              <td>~730–700</td>
+              <td>Contemporain d'Isaïe · Campagnes</td>
+              <td>La distillation éthique de la Torah</td>
+              <td>Michée 6,8 — la formule absolue</td>
+            </tr>
+            <tr>
+              <td>Sophonie</td>
+              <td>~640–620</td>
+              <td>Josias · Avant la réforme</td>
+              <td>Le Jour de Yahvé cosmique</td>
+              <td>Tendresse divine au cœur du jugement</td>
+            </tr>
+            <tr>
+              <td>Nahoum</td>
+              <td>~615</td>
+              <td>Chute de Ninive imminente</td>
+              <td>Justice universelle contre l'oppresseur</td>
+              <td>Le seul livre prophétique sans appel au repentir</td>
+            </tr>
+            <tr>
+              <td>Habacuc</td>
+              <td>~600</td>
+              <td>Montée babylonienne</td>
+              <td>La question philosophique du mal</td>
+              <td><em>Tsaddiq be'emunatoh</em> — la foi malgré</td>
+            </tr>
+            <tr>
+              <td>Jérémie</td>
+              <td>~627–586</td>
+              <td>Destruction de Jérusalem</td>
+              <td>La Nouvelle Alliance intérieure</td>
+              <td>La loi écrite sur le cœur · l'intériorité</td>
+            </tr>
+            <tr>
+              <td>Ézéchiel</td>
+              <td>~593–571</td>
+              <td>Exil à Babylone</td>
+              <td>La gloire divine transcende le Temple</td>
+              <td>Merkabah · Résurrection nationale</td>
+            </tr>
+            <tr>
+              <td>Deutéro-Isaïe</td>
+              <td>~550–540</td>
+              <td>Fin de l'exil · Montée de Cyrus</td>
+              <td>Le monothéisme universel déclaré</td>
+              <td>Cyrus messie · Serviteur souffrant</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Ce tableau doit être lu comme une spirale, non comme une progression linéaire. Chaque prophète répond au contexte qui est le sien — mais il nourrit ses réponses des traditions qui l'ont précédé. Osée reprend et approfondit Amos. Jérémie reprend et intériorise Osée. Le Deutéro-Isaïe synthétise et universalise l'ensemble de cette tradition. Ce n'est pas une évolution vers un monothéisme éthique parfait selon un schéma hégélien — c'est une conversation à travers le temps, pleine de tensions, de contradictions, de reprises.</p>
+
+    </section>
+
+    <div class="ornement-sep">· · · ✦ · · ·</div>
+
+    <!-- SECTION XIII — SYNTHÈSE -->
+    <section class="section" id="s13">
+      <div class="section-header">
+        <span class="section-numero">XIII</span>
+        <div>
+          <h2 class="section-titre">Synthèse — L'originalité absolue de la prophétie hébraïque</h2>
+          <p class="section-sous-titre">Ce que la prophétie n'est pas · Ce qu'elle invente · Son legs aux trois traditions abrahamiques</p>
+        </div>
+      </div>
+
+      <p>Au terme de ce parcours sur quatre siècles, il est possible d'identifier ce qui fait de la prophétie hébraïque un phénomène unique dans l'histoire des religions — non pas supérieur aux autres traditions, mais radicalement différent dans sa structure, ses présuppositions et ses effets.</p>
+
+      <h3>Ce que la prophétie hébraïque n'est pas</h3>
+
+      <p>Elle n'est pas de la divination. Les devins mésopotamiens (<em>barû</em>) lisent les entrailles des animaux, observent les astres, interprètent les présages — pour prédire l'avenir et permettre aux hommes et aux rois de l'éviter. Le prophète hébraïque ne prédit pas l'avenir pour qu'on l'évite — il annonce les conséquences du présent pour que le peuple change maintenant. La différence est totale&nbsp;: l'un ferme le futur en le déterminant, l'autre l'ouvre en appelant à la conversion.</p>
+
+      <p>Elle n'est pas de la magie. Les prophètes peuvent accomplir des signes — mais les signes sont toujours secondaires à la parole. Ce qui compte n'est pas le prodige mais le message qu'il supporte. Quand Élie, après le triomphe du Carmel, s'effondre sous un genévrier — c'est la voix du silence qui est la révélation, pas le feu spectaculaire.</p>
+
+      <p>Elle n'est pas une technique. On ne devient pas prophète en apprenant une méthode, une discipline, un savoir. La vocation prophétique est irréductiblement personnelle et inattendue — un berger (Amos), un prêtre (Ézéchiel), un noble (Isaïe), un paysan (Michée). La sociologie prophétique traverse toutes les classes.</p>
+
+      <h3>Ce que la prophétie hébraïque invente</h3>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">✦ Les inventions de la prophétie hébraïque</div>
+        <p><strong>La critique du pouvoir au nom du droit.</strong> Pour la première fois dans l'histoire, une institution religieuse — indépendante du roi et du Temple — se constitue en instance de critique du pouvoir politique. Nathan confronte David. Élie confronte Achab. Jérémie défie les rois successifs jusqu'à sa propre arrestation. Cette indépendance prophétique par rapport au pouvoir n'a pas d'équivalent dans les civilisations environnantes, où le prêtre est le serviteur du roi.</p>
+        <p><strong>L'universel à partir du particulier.</strong> Le Dieu d'Israël devient progressivement, sous l'effet de la réflexion prophétique, le Dieu de toute l'humanité — non pas par abandon de l'élection d'Israël, mais par élargissement de son sens. Amos juge les nations voisines. Le Deutéro-Isaïe fait de Cyrus l'instrument de Yahvé. La lumière d'Israël est destinée à toutes les nations — <em>or goyim</em>, lumière des nations (Isaïe 49,6).</p>
+        <p><strong>L'éthique comme religion.</strong> Avant les prophètes, le rapport à Yahvé est essentiellement cultuel — sacrifice, rite, pèlerinage, calendrier liturgique. Amos, Michée, Jérémie substituent à cette définition une autre&nbsp;: le rapport à Yahvé passe par le rapport à l'autre humain. Pas le culte mais la justice. Pas le rite mais la fidélité. Cette redéfinition est une révolution anthropologique dont les effets se lisent encore dans la pensée morale occidentale.</p>
+        <p><strong>La possibilité de la catastrophe comme grâce.</strong> La destruction peut être une grâce — non pas qu'elle soit bonne en elle-même, mais parce qu'elle peut ouvrir à un recommencement. Le Reste d'Isaïe, la Nouvelle Alliance de Jérémie, la résurrection des ossements d'Ézéchiel, le retour d'exil du Deutéro-Isaïe — tous ces textes naissent dans la catastrophe et la convertissent en promesse. C'est la structure la plus originale et la plus durable de la pensée prophétique hébraïque.</p>
+      </div>
+
+      <h3>Le legs aux trois traditions abrahamiques</h3>
+
+      <p>Les prophètes hébreux constituent le patrimoine commun des trois grandes traditions monothéistes — et chacune en hérite différemment. Le <strong>judaïsme</strong> fait des prophètes les auteurs d'une section entière de la Bible — les Neviim, les Prophètes — indissociable de la Torah et des Écrits. La prophétie y est clôturée avec Malachie et ne reprend que dans les temps messianiques — ce qui fait de chaque moment historique une attente de ce retour prophétique. Le <strong>christianisme</strong> lit les prophètes comme un ensemble de prophéties préparant l'avènement de Jésus — les Chants du Serviteur, l'Emmanuel d'Isaïe, le berger de Bethléem de Michée. Cette lecture typologique — chaque prophétie comme figure d'un accomplissement à venir — est l'herméneutique fondamentale du Nouveau Testament. L'<strong>islam</strong> intègre les prophètes dans une liste continue de messagers divins (<em>rusul</em>) envoyés à travers les siècles — Yunus (Jonas), Ilyâs (Élie), Yaqub (Jacob), Ibrahim — tous porteurs du même message essentiel de soumission à Dieu (<em>islam</em>). La prophétie trouve son achèvement dans Muhammad, le Sceau des prophètes (<em>khatam al-nabiyyin</em>).</p>
+
+      <p>Ces trois lectures ne se contredisent pas au niveau de leur reconnaissance de l'importance du phénomène prophétique hébraïque. Elles divergent sur son sens et son achèvement. Mais elles s'accordent toutes à reconnaître que quelque chose d'unique s'est produit dans les hautes terres de Canaan, à Jérusalem, dans le désert du Jourdain et sur les rives du Kebar — pendant ces quatre siècles où des hommes et des femmes ont parlé au nom d'un Dieu invisible à des rois et à des peuples qui ne voulaient pas entendre.</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-epoch">~870–845 av. J.-C.</div>
+          <div class="timeline-titre">Élie et Élisée — le prophétisme de confrontation</div>
+          <div class="timeline-corps">Face à l'assimilation phénicienne du Nord, Élie affirme la souveraineté exclusive de Yahvé. Sa theologie du silence annonce la mysticité apophatique. Élisée institutionnalise la succession prophétique.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~760–720 av. J.-C.</div>
+          <div class="timeline-titre">Amos, Osée, Isaïe, Michée — la révolution éthique</div>
+          <div class="timeline-corps">Sous la pression assyrienne croissante, les quatre grands prophètes du VIIIe siècle inventent la prophétie classique — justice sociale (Amos), métaphore conjugale de l'Alliance (Osée), théologie de la sainteté et du Reste (Isaïe), formule éthique absolue (Michée).</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~722 av. J.-C.</div>
+          <div class="timeline-titre">Chute du Royaume du Nord — premier test théologique</div>
+          <div class="timeline-corps">La prophétie d'Amos se réalise. La destruction du Nord est interprétée comme conséquence de l'infidélité — pas comme défaite de Yahvé. Juda tire les conséquences, mais les oublie rapidement.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~640–600 av. J.-C.</div>
+          <div class="timeline-titre">Sophonie, Nahoum, Habacuc — entre réforme et catastrophe</div>
+          <div class="timeline-corps">Sophonie accompagne la réforme de Josias. Nahoum célèbre la chute de Ninive. Habacuc ouvre le débat philosophique sur le mal — <em>tsaddiq be'emunatoh</em> — qui traversera deux millénaires.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~627–586 av. J.-C.</div>
+          <div class="timeline-titre">Jérémie — la prophétie de l'intériorité</div>
+          <div class="timeline-corps">La Nouvelle Alliance écrite sur le cœur. Les Lamentations. La foi maintenue dans l'abîme. Jérémie est le prophète de la catastrophe vécue de l'intérieur — et de la promesse malgré tout.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-epoch">~593–550 av. J.-C.</div>
+          <div class="timeline-titre">Ézéchiel et Deutéro-Isaïe — la prophétie de l'exil</div>
+          <div class="timeline-corps">Ézéchiel théologise la gloire divine au-delà du Temple. Le Deutéro-Isaïe proclame le monothéisme universel et la vocation d'Israël comme lumière des nations. L'exil produit le meilleur de la prophétie.</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- NAVIGATION CHAPITRES -->
+        <nav class="nav-chapitres">
+      <a href="chapitre-07-les-royaumes.html" class="nav-btn">← Chapitre VII</a>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <a href="chapitre-09-exil-second-temple.html" class="nav-btn">Chapitre IX →</a>
+    </nav>
+
+  </article>
+</main>
+
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+  btnTop.classList.toggle('visible', scrolled > 400);
+  highlightActiveSection();
+});
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menu-toggle');
+  if (sidebar.classList.contains('open') &&
+      !sidebar.contains(e.target) &&
+      !toggle.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+// Overlay mobile
+const overlay = document.getElementById('sidebar-overlay');
+if (overlay) {
+  overlay.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    overlay.classList.remove('visible');
+  });
+}
+
+// Update toggleSidebar to show overlay
+const origToggle = window.toggleSidebar;
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  if (overlay) overlay.classList.toggle('visible');
+};
+
+</script>
+
+</body>
+</html>

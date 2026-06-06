@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre XI — Palestine &amp; 1948 · Aux Origines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+:root {
+  --parchemin:       #f5ede0;
+  --parchemin-fonce: #ede0ca;
+  --parchemin-pale:  #faf5ed;
+  --encre:           #1a1208;
+  --encre-douce:     #2d2010;
+  --brun:            #5c3d1e;
+  --brun-clair:      #8b5e3c;
+  --or:              #c8943a;
+  --or-pale:         #e8c97a;
+  --or-vif:          #d4a017;
+  --rouge-antique:   #8b1a1a;
+  --or-encre:        #6b4c1e;
+  --ombre:           rgba(26,18,8,0.12);
+  --ombre-forte:     rgba(26,18,8,0.25);
+  --font-titre:      'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  --font-deco:       'Cinzel Decorative', 'Cinzel', serif;
+  --font-corps:      'Crimson Pro', 'Garamond', 'Georgia', serif;
+  --sidebar-w:       280px;
+  --max-prose:       780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 18px; }
+
+body {
+  background: var(--parchemin-pale);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ BARRE DE PROGRESSION ═══ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--or), var(--or-vif), var(--or-pale));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--or);
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--or-encre);
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: var(--encre); }
+#sidebar::-webkit-scrollbar-thumb { background: var(--or-encre); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(200,148,58,0.25);
+}
+
+.sidebar-header .livre-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-header .livre-titre {
+  font-family: var(--font-deco);
+  font-size: 1rem;
+  color: var(--or-pale);
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.sidebar-header .livre-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.5);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sidebar-nav { padding: 1rem 0; flex: 1; }
+
+.chapitre-item {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,237,224,0.55);
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1.4;
+}
+
+.chapitre-item:hover { color: var(--or-pale); background: rgba(200,148,58,0.06); }
+
+.chapitre-item.actif {
+  color: var(--or-pale);
+  background: rgba(200,148,58,0.1);
+  border-left: 2px solid var(--or);
+}
+
+.chap-numero {
+  display: block;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--or);
+  opacity: 0.6;
+  margin-bottom: 0.15rem;
+}
+
+.section-item {
+  display: block;
+  padding: 0.3rem 1.5rem 0.3rem 2.2rem;
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: rgba(245,237,224,0.38);
+  text-decoration: none;
+  transition: color 0.2s;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.section-item:hover { color: rgba(245,237,224,0.7); }
+.section-item.active-section { color: var(--or-pale); }
+
+.sidebar-sep {
+  height: 1px;
+  background: rgba(200,148,58,0.1);
+  margin: 0.5rem 1.5rem;
+}
+
+/* ═══ BOUTON MENU MOBILE ═══ */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 200;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 3px;
+  width: 40px; height: 40px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══ ZONE PRINCIPALE ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══ FRONTISPICE ═══ */
+.chapter-hero {
+  position: relative;
+  padding: 5rem 3rem 4rem;
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-ornement {
+  font-family: var(--font-titre);
+  color: var(--or);
+  opacity: 0.3;
+  letter-spacing: 1.2em;
+  font-size: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.hero-numero {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 1.2rem;
+}
+
+.hero-titre {
+  font-family: var(--font-deco);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 400;
+  color: var(--encre);
+  line-height: 1.15;
+  margin-bottom: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.hero-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-epigraphe {
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  padding: 1.5rem 2rem;
+  border: 1px solid rgba(200,148,58,0.25);
+  background: rgba(200,148,58,0.04);
+  border-radius: 3px;
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--encre-douce);
+  line-height: 1.7;
+  text-align: left;
+}
+
+.hero-epigraphe cite {
+  display: block;
+  margin-top: 0.8rem;
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+  font-style: normal;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.deco-ligne {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto 1rem;
+  max-width: 300px;
+}
+
+.deco-ligne-trait {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--or), transparent);
+  opacity: 0.35;
+}
+
+.deco-ligne-symbole {
+  color: var(--or);
+  opacity: 0.5;
+  font-size: 0.8rem;
+}
+
+.hero-vague {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--or) 30%, var(--or-vif) 50%, var(--or) 70%, transparent);
+  opacity: 0.2;
+}
+
+/* ═══ CONTENU ═══ */
+.contenu {
+  max-width: var(--max-prose);
+  margin: 0 auto;
+  padding: 3rem 2.5rem 6rem;
+}
+
+/* ═══ SECTIONS ═══ */
+.section {
+  margin-bottom: 3.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+.section-numero {
+  font-family: var(--font-titre);
+  font-size: 2.2rem;
+  color: var(--or);
+  opacity: 0.18;
+  line-height: 1;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.section-titre {
+  font-family: var(--font-titre);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--encre);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+}
+
+.section-sous-titre {
+  font-family: var(--font-corps);
+  font-size: 0.88rem;
+  color: var(--brun-clair);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ═══ PARAGRAPHES ═══ */
+p {
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  hyphens: auto;
+  text-align: justify;
+}
+
+p:last-child { margin-bottom: 0; }
+
+p::first-letter {
+  float: left;
+  font-family: var(--font-titre);
+  font-size: 3.2rem;
+  line-height: 0.75;
+  margin-right: 0.12em;
+  margin-top: 0.12em;
+  color: var(--or);
+  font-weight: 700;
+}
+
+.section p + p::first-letter { float: none; font-size: inherit; color: inherit; line-height: inherit; margin: 0; }
+
+h3 {
+  font-family: var(--font-titre);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brun);
+  margin: 2.2rem 0 0.9rem;
+}
+
+h4 {
+  font-family: var(--font-corps);
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--encre-douce);
+  margin: 1.8rem 0 0.7rem;
+}
+
+strong { color: var(--encre); font-weight: 600; }
+
+em.terme-cle {
+  color: var(--brun);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.heb {
+  font-size: 1.3rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.arab {
+  font-size: 1.2rem;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: var(--brun);
+  font-style: normal;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.translitt {
+  font-style: italic;
+  color: var(--brun-clair);
+  font-size: 0.95em;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem 1rem 1.8rem;
+  border-left: 3px solid var(--or);
+  background: rgba(200,148,58,0.05);
+  font-style: italic;
+  color: var(--encre-douce);
+  border-radius: 0 3px 3px 0;
+}
+
+blockquote p { margin-bottom: 0.3rem; font-size: 1.02rem; }
+blockquote p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+blockquote cite {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-titre);
+  letter-spacing: 0.08em;
+  color: var(--or);
+  margin-top: 0.6rem;
+  font-style: normal;
+}
+
+/* ═══ NOTE MÉTHODOLOGIQUE ═══ */
+.note-methodo {
+  margin: 0 0 2.5rem 0;
+  padding: 1.3rem 1.6rem;
+  background: rgba(200,148,58,0.07);
+  border: 1px solid rgba(200,148,58,0.22);
+  border-radius: 4px;
+}
+
+.note-methodo-label {
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.7rem;
+  opacity: 0.85;
+}
+
+.note-methodo p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.7;
+  margin-bottom: 0.6rem;
+}
+.note-methodo p::first-letter { float: none; font-size: inherit; color: inherit; }
+.note-methodo p:last-child { margin-bottom: 0; }
+
+/* ═══ TABLEAUX ═══ */
+.tableau-wrapper {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border-radius: 4px;
+  border: 1px solid rgba(139,94,60,0.2);
+}
+
+.tableau-titre {
+  padding: 0.65rem 1.2rem;
+  background: rgba(26,18,8,0.06);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+thead th {
+  padding: 0.65rem 1rem;
+  background: rgba(26,18,8,0.85);
+  color: var(--or-pale);
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 400;
+}
+
+tbody tr { border-bottom: 1px solid rgba(139,94,60,0.1); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even) { background: rgba(200,148,58,0.03); }
+
+tbody td {
+  padding: 0.65rem 1rem;
+  color: var(--encre-douce);
+  vertical-align: top;
+}
+
+tbody td:first-child {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+/* ═══ TIMELINE ═══ */
+.timeline {
+  margin: 2rem 0;
+  padding-left: 2rem;
+  border-left: 2px solid rgba(200,148,58,0.2);
+}
+
+.timeline-item {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.55rem;
+  top: 0.55rem;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--or);
+  opacity: 0.5;
+}
+
+.timeline-epoch {
+  font-family: var(--font-titre);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 0.3rem;
+}
+
+.timeline-titre {
+  font-family: var(--font-titre);
+  font-size: 1rem;
+  color: var(--brun);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-corps {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  line-height: 1.65;
+}
+
+/* ═══ BOÎTE SYNTHÈSE ═══ */
+.synthese-bloc {
+  margin: 3rem 0;
+  padding: 2rem 2.2rem;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.synthese-bloc::before {
+  content: '✦';
+  position: absolute;
+  top: -1rem; right: 1rem;
+  font-size: 5rem;
+  color: var(--or);
+  opacity: 0.05;
+  font-family: var(--font-titre);
+}
+
+.synthese-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.synthese-bloc p {
+  color: var(--parchemin-fonce);
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  text-align: left;
+}
+
+.synthese-bloc p::first-letter { float: none; font-size: inherit; color: inherit; }
+.synthese-bloc strong { color: var(--or-pale); }
+
+/* ═══ ENCADRÉS ═══ */
+.encadre {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(200,148,58,0.22);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.encadre-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1.3rem;
+  background: rgba(200,148,58,0.08);
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+}
+
+.encadre-icone {
+  color: var(--or);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.encadre-label {
+  font-family: var(--font-titre);
+  font-size: 0.63rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+.encadre-body {
+  padding: 1.2rem 1.5rem;
+}
+
+.encadre-body p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  margin-bottom: 0.7rem;
+  text-align: left;
+}
+.encadre-body p::first-letter { float: none; font-size: inherit; color: inherit; }
+.encadre-body p:last-child { margin-bottom: 0; }
+
+/* ═══ GRILLE DEUX COLONNES ═══ */
+.deux-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin: 2rem 0;
+}
+
+.col-card {
+  padding: 1.4rem 1.5rem;
+  border: 1px solid rgba(200,148,58,0.2);
+  border-radius: 4px;
+  background: var(--parchemin-pale);
+}
+
+.col-card-titre {
+  font-family: var(--font-titre);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--brun);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  padding-bottom: 0.5rem;
+}
+
+.col-card p {
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+  line-height: 1.6;
+  margin-bottom: 0.4rem;
+  text-align: left;
+}
+.col-card p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+/* ═══ DÉBAT ═══ */
+.debat-bloc {
+  margin: 2rem 0;
+  border: 1px solid rgba(139,94,60,0.18);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.debat-voix {
+  padding: 1.2rem 1.5rem;
+}
+
+.debat-voix.question {
+  background: rgba(26,18,8,0.04);
+  border-bottom: 1px solid rgba(139,94,60,0.1);
+}
+
+.debat-voix.reponse {
+  background: rgba(200,148,58,0.04);
+}
+
+.debat-label {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.75;
+  margin-bottom: 0.6rem;
+}
+
+.debat-voix p {
+  font-size: 0.95rem;
+  color: var(--encre-douce);
+  margin-bottom: 0.6rem;
+  text-align: left;
+  line-height: 1.65;
+}
+.debat-voix p::first-letter { float: none; font-size: inherit; color: inherit; }
+.debat-voix p:last-child { margin-bottom: 0; }
+
+/* ═══ BILAN CONFIRME/ABSENT ═══ */
+.bilan-grille {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin: 2rem 0;
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bilan-col { background: var(--parchemin-pale); }
+
+.bilan-col-header {
+  padding: 0.65rem 1.2rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(139,94,60,0.15);
+}
+
+.bilan-col-header.confirme { background: rgba(44,100,44,0.08); color: #2c5f2e; }
+.bilan-col-header.absent   { background: rgba(139,26,26,0.07); color: var(--rouge-antique); }
+
+.bilan-col-item {
+  padding: 0.8rem 1.2rem;
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+  border-bottom: 1px solid rgba(139,94,60,0.07);
+  line-height: 1.55;
+}
+.bilan-col-item:last-child { border-bottom: none; }
+.bilan-col-item strong { color: var(--brun); font-size: 0.85rem; display: block; margin-bottom: 0.2rem; }
+
+/* ═══ PROMESSE ═══ */
+.promesse-bloc {
+  margin: 2rem 0;
+  border-left: 4px solid var(--rouge-antique);
+  background: rgba(139,26,26,0.04);
+  padding: 1.4rem 1.6rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.promesse-num {
+  font-family: var(--font-titre);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rouge-antique);
+  opacity: 0.75;
+  margin-bottom: 0.5rem;
+}
+
+.promesse-titre {
+  font-family: var(--font-titre);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--rouge-antique);
+  margin-bottom: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.promesse-corps {
+  font-size: 0.92rem;
+  color: var(--encre-douce);
+  line-height: 1.65;
+}
+.promesse-corps p { margin-bottom: 0.5rem; text-align: left; }
+.promesse-corps p::first-letter { float: none; font-size: inherit; color: inherit; }
+
+/* ═══ ORNEMENT ═══ */
+.ornement-sep {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--or);
+  opacity: 0.4;
+  font-size: 1.2rem;
+  letter-spacing: 1em;
+}
+
+/* ═══ SÉQUENCE ═══ */
+.sequence-bloc {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border: 1px solid rgba(200,148,58,0.18);
+  border-radius: 4px;
+  background: var(--parchemin-pale);
+}
+
+.seq-item {
+  display: grid;
+  grid-template-columns: 1.5rem 11rem 8rem 1fr;
+  gap: 0.8rem;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(139,94,60,0.07);
+  font-size: 0.9rem;
+}
+
+.seq-item:last-child { border-bottom: none; }
+
+.seq-fleche {
+  color: var(--or);
+  opacity: 0.6;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.seq-nom {
+  font-family: var(--font-titre);
+  font-size: 0.82rem;
+  color: var(--brun);
+  font-weight: 600;
+}
+
+.seq-date {
+  font-family: var(--font-corps);
+  font-size: 0.8rem;
+  color: var(--or);
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.seq-desc {
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+  line-height: 1.5;
+}
+
+/* ═══ SOUS-SECTION ═══ */
+.sous-section { margin: 2.5rem 0; }
+
+.sous-section-titre {
+  font-family: var(--font-titre);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brun);
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(139,94,60,0.12);
+}
+
+/* ═══ ALIYA CARDS ═══ */
+.aliya-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.aliya-card {
+  padding: 1.2rem 1.3rem;
+  border: 1px solid rgba(200,148,58,0.18);
+  border-radius: 4px;
+  background: var(--parchemin-pale);
+  position: relative;
+}
+
+.aliya-nom {
+  font-family: var(--font-titre);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--brun);
+  margin-bottom: 0.2rem;
+}
+
+.aliya-date {
+  font-family: var(--font-corps);
+  font-size: 0.78rem;
+  color: var(--or);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.aliya-desc {
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+  line-height: 1.55;
+}
+
+/* ═══ BTN RETOUR EN HAUT ═══ */
+#btn-top {
+  position: fixed;
+  bottom: 2rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--encre);
+  color: var(--or);
+  border: 1px solid var(--or-encre);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-family: var(--font-titre);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+
+#btn-top.visible { opacity: 0.7; }
+#btn-top:hover { opacity: 1; }
+
+/* ═══ NAV CHAPITRES ═══ */
+.nav-chapitres {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid rgba(139,94,60,0.2);
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  font-family: var(--font-titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brun);
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(139,94,60,0.25);
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover { background: rgba(200,148,58,0.08); color: var(--brun); border-color: var(--or); }
+
+.nav-centre {
+  font-family: var(--font-deco);
+  font-size: 0.7rem;
+  color: var(--or);
+  opacity: 0.5;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+}
+
+/* ═══ COLOPHON FINAL ═══ */
+.colophon {
+  margin: 4rem 0 2rem;
+  padding: 3rem 2.5rem;
+  background: var(--encre);
+  color: var(--parchemin-fonce);
+  border-radius: 4px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.colophon::before {
+  content: '✦';
+  position: absolute;
+  top: -2rem; left: 50%;
+  transform: translateX(-50%);
+  font-size: 8rem;
+  color: var(--or);
+  opacity: 0.04;
+  font-family: var(--font-titre);
+}
+
+.colophon-ornement {
+  font-family: var(--font-titre);
+  color: var(--or);
+  opacity: 0.5;
+  letter-spacing: 1.5em;
+  font-size: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.colophon-titre {
+  font-family: var(--font-deco);
+  font-size: 1.6rem;
+  color: var(--or-pale);
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.06em;
+}
+
+.colophon-corps {
+  font-size: 1rem;
+  color: rgba(237,224,202,0.75);
+  font-style: italic;
+  line-height: 1.8;
+  max-width: 560px;
+  margin: 0 auto 2rem;
+}
+.colophon-corps::first-letter { float: none; font-size: inherit; color: inherit; }
+
+.colophon-ligne {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--or) 30%, var(--or) 70%, transparent);
+  opacity: 0.15;
+  margin: 1.5rem auto;
+  max-width: 400px;
+}
+
+.colophon-meta {
+  font-family: var(--font-titre);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or);
+  opacity: 0.4;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+
+  #main { margin-left: 0; }
+  #menu-toggle { display: flex; }
+  .chapter-hero { padding: 4rem 1.5rem 3rem; }
+  .contenu { padding: 2rem 1.2rem 4rem; }
+  .deux-col { grid-template-columns: 1fr; }
+  .aliya-grille { grid-template-columns: 1fr; }
+  .bilan-grille { grid-template-columns: 1fr; }
+  .seq-item { grid-template-columns: 1fr; }
+  #btn-top { bottom: 1.2rem; right: 1.2rem; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE AMÉLIORÉ — PUBLICATION WEB
+═══════════════════════════════════════════ */
+@media (max-width: 680px) {
+  html { font-size: 16px; }
+  
+  .chapter-hero {
+    min-height: 50vh;
+    padding: 4rem 1.5rem 3rem;
+  }
+  
+  .hero-titre {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+  }
+  
+  .tableau-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 500px;
+  }
+  
+  .timeline-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .synthese {
+    padding: 1.8rem 1.2rem;
+  }
+  
+  .nav-chapitres {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  blockquote {
+    padding-left: 1rem;
+    margin-left: 0;
+  }
+}
+
+/* Scrollbar sidebar sur tous les navigateurs */
+#sidebar { scrollbar-width: thin; scrollbar-color: var(--or-encre) var(--encre); }
+
+/* Overlay mobile pour fermer la sidebar */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+#sidebar-overlay.visible { display: block; }
+
+/* Lien retour accueil dans sidebar */
+.sidebar-home {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-titre);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  opacity: 0.65;
+  border-bottom: 1px solid rgba(200,148,58,0.15);
+  transition: opacity 0.2s;
+}
+.sidebar-home:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-toggle" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<!-- ══════════════════════════════
+     SIDEBAR NAVIGATION
+══════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="livre-label">Livre numérique interactif</span>
+    <div class="livre-titre">Aux Origines</div>
+    <div class="livre-sous-titre">De la cosmogonie à la naissance d'Israël</div>
+  </div>
+
+    <div class="sidebar-nav">
+    <a href="chapitre-01-cosmogonie.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre I</span>
+      Cosmogonie &amp; Création
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-02-origines-mythiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre II</span>
+      Origines mythiques — Noé, Hénoch, Déluge
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-03-langues-semitiques.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre III</span>
+      Les Langues sémitiques
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-04-patriarches.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IV</span>
+      Les Patriarches
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-05-moise-exode.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre V</span>
+      Moïse &amp; l'Exode
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-06-israel-tribus.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VI</span>
+      Israël &amp; les Tribus
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-07-les-royaumes.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VII</span>
+      Les Royaumes
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-08-age-prophetique.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre VIII</span>
+      L'Âge prophétique
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-09-exil-second-temple.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre IX</span>
+      Exil &amp; Second Temple
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="chapitre-10-la-diaspora.html" class="chapitre-item">
+      <span class="chap-numero">Chapitre X</span>
+      La Diaspora
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="#" class="chapitre-item actif">
+      <span class="chap-numero">Chapitre XI</span>
+      Palestine &amp; 1948
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     CONTENU PRINCIPAL
+══════════════════════════════ -->
+<main id="main">
+
+  <!-- FRONTISPICE -->
+  <header class="chapter-hero">
+    <div class="hero-ornement">✦ ✦ ✦</div>
+    <div class="hero-numero">Chapitre XI</div>
+    <h1 class="hero-titre">Palestine &amp; 1948</h1>
+    <p class="hero-sous-titre">De l'étymologie philistine aux promesses britanniques contradictoires — comment deux peuples en sont arrivés à revendiquer la même terre sur des bases historiques toutes deux légitimes</p>
+    <blockquote class="hero-epigraphe">
+      « Le conflit israélo-palestinien n'est pas né en 1948 — il a été fabriqué entre 1915 et 1922 dans les chancelleries de Londres, Paris, et dans les couloirs de la Société des Nations, par des hommes qui disposaient des destins de millions de personnes sans les consulter. »
+      <cite>— Orient Scholar · Synthèse géopolitique</cite>
+    </blockquote>
+    <div class="deco-ligne">
+      <div class="deco-ligne-trait"></div>
+      <div class="deco-ligne-symbole">✦</div>
+      <div class="deco-ligne-trait"></div>
+    </div>
+    <div class="hero-vague"></div>
+  </header>
+
+  <!-- CORPS -->
+  <article class="contenu">
+
+    <!-- SECTION 0 — MÉTHODOLOGIQUE -->
+    <section class="section" id="s0">
+      <div class="note-methodo">
+        <div class="note-methodo-label">⚑ Posture méthodologique — Historien · Archéologue · Géopoliticien · Juriste international · Bibliste</div>
+        <p>Ce chapitre est le plus politiquement sensible de tout notre parcours — et précisément pour cette raison il exige la rigueur méthodologique la plus stricte. Nous appliquons exactement la même méthode critique que nous avons appliquée au mot « Israël » dans les chapitres précédents : remonter aux sources primaires, distinguer ce qui est attesté de ce qui est débattu, refuser les récits simplificateurs des deux côtés.</p>
+        <p>Le mot « Palestine » et le mot « Israël » ont des histoires parallèles, entrelacées, et souvent antagonistes. La terre elle-même a une histoire de peuplement continu et extraordinairement complexe depuis des millénaires. Aucun groupe n'a une antériorité absolue exclusive. Tous deux revendiquent cette terre sur des bases historiques, religieuses et nationales toutes deux réelles — et c'est précisément ce qui rend le conflit structurellement difficile.</p>
+        <p>La posture adoptée ici n'est ni pro-israélienne ni pro-palestinienne, ni pro-sioniste ni pro-arabe. Elle est celle de l'historien qui refuse la simplification sans refuser le jugement.</p>
+      </div>
+    </section>
+
+    <!-- SECTION I -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <div class="section-numero">I</div>
+        <div>
+          <div class="section-titre">D'où vient le nom « Palestine » ?</div>
+          <div class="section-sous-titre">Des Philistins à Hadrien — la trajectoire d'un mot qui survit à ceux qui l'ont donné</div>
+        </div>
+      </div>
+
+      <p>Le nom « Palestine » vient des <em class="terme-cle">Philistins</em> (<span class="heb">פְּלִשְׁתִּים</span> <span class="translitt">Pelishtim</span> en hébreu) — ce peuple côtier que nous avons croisé plusieurs fois dans notre parcours, adversaire récurrent d'Israël dans les textes bibliques et réalité archéologique bien attestée.</p>
+
+      <p>La trajectoire étymologique est d'une clarté remarquable : <em class="terme-cle">Pelishtim</em> (hébreu) → <em class="terme-cle">Palastu</em> ou <em class="terme-cle">Pilišta</em> (assyrien, attesté dans les annales de Tiglath-Piléser III, VIIIe siècle av. J.-C.) → <em class="terme-cle">Palaistinê</em> (grec, Hérodote, Ve siècle av. J.-C.) → <em class="terme-cle">Palaestina</em> (latin, époque romaine) → Palestine (français).</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">⚑</span>
+          <span class="encadre-label">Qui étaient les Philistins ? — Le débat archéologique</span>
+        </div>
+        <div class="encadre-body">
+          <p>Les Philistins s'installent sur la côte méridionale de Canaan vers 1200 av. J.-C. — au moment précis de l'effondrement du Bronze Récent que nous avons décrit au chapitre précédent. Ils font partie des <em>« Peuples de la Mer »</em> — coalitions de peuples en mouvement qui dévastent les côtes méditerranéennes orientales à cette période.</p>
+          <p>Leur origine est un sujet de débat archéologique actif. Les inscriptions égyptiennes (Medinet Habu) les représentent avec des coiffures à plumes caractéristiques. Une étude génétique publiée en 2019 par l'université de Hambourg, portant sur des ossements de la nécropole d'Ashkelon (l'une des cinq grandes cités de la Pentapole philistine avec Gaza, Ashdod, Ekron et Gath), a révélé une composante génétique d'origine européenne — probablement égéenne, crétoise ou anatolienne — suivie d'une intégration progressive aux populations locales sur deux ou trois générations. Ce résultat corrobore l'hypothèse d'une origine méditerranéenne occidentale, sans la confirmer de manière définitive.</p>
+          <p>Paradoxe remarquable : les Philistins — ce peuple dont le nom a donné son nom à toute la région — ont complètement disparu comme entité ethnique distincte vers le VIe siècle av. J.-C., assimilés aux populations levantines environnantes. Leur nom a survécu au peuple qui le portait.</p>
+        </div>
+      </div>
+
+      <h3>La décision d'Hadrien — 135 ap. J.-C.</h3>
+
+      <p>La démarche qui impose définitivement le nom à la région entière est une décision politique romaine. Après la répression de la révolte de Bar-Kokhba (132–135 ap. J.-C.) — le dernier soulèvement juif majeur contre Rome —, l'empereur <em class="terme-cle">Hadrien</em> prend une série de mesures punitives d'une brutalité délibérée : il interdit aux Juifs de résider à Jérusalem, rebaptise la ville <em>Aelia Capitolina</em>, et rebaptise la province de <em>Judée</em> en <em class="terme-cle">Syria Palaestina</em>.</p>
+
+      <p>Le choix du terme « Palaestina » est intentionnellement offensant — Hadrien reprend le nom des ennemis ancestraux des Juifs pour effacer symboliquement leur identité territoriale. C'est une <em>damnatio memoriae</em> géographique. La carte est rééditée, le nom est changé, l'histoire est censée recommencer à zéro.</p>
+
+      <blockquote>
+        <p>L'ironie historique est totale : le nom donné par un peuple (les Philistins) qui avait disparu depuis sept siècles, imposé par un empire (Rome) qui allait lui aussi disparaître, a survécu jusqu'au XXe siècle comme désignation de la région — et est devenu le nom national d'un peuple (les Palestiniens arabes) qui n'existait pas encore en tant qu'entité nationale distincte au moment où ce nom leur a été appliqué.</p>
+        <cite>— Observation historiographique sur la survivance des noms géographiques</cite>
+      </blockquote>
+    </section>
+
+    <!-- SECTION II -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <div class="section-numero">II</div>
+        <div>
+          <div class="section-titre">Canaan avant les noms — qui était là ?</div>
+          <div class="section-sous-titre">La question de l'antériorité et ses limites épistémologiques</div>
+        </div>
+      </div>
+
+      <p>La question « qui était là avant ? » est la plus fréquemment posée dans les débats sur le conflit contemporain. C'est aussi, en un sens précis, la moins bien posée. Remonter à l'origine d'un peuplement sur un territoire donné est une régression sans fond — chaque groupe a été précédé par un autre. Ce que nous pouvons faire, c'est décrire les couches successives avec la rigueur que permet l'archéologie et les sources textuelles.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Couches successives de peuplement de Canaan / Palestine — synthèse archéologique</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Période</th>
+              <th>Populations dominantes</th>
+              <th>Sources attestant le peuplement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>~8500–3500 av. J.-C.</td>
+              <td>Populations néolithiques cananéennes — agriculteurs-éleveurs proto-sémitiques</td>
+              <td>Sites de Jéricho (Tell es-Sultan), Ain Ghazal — parmi les premières villes du monde</td>
+            </tr>
+            <tr>
+              <td>~3500–1200 av. J.-C.</td>
+              <td>Cananéens — civilisation urbaine, langue proto-sémitique, panthéon El/Baal</td>
+              <td>Tablettes d'Amarna (XIVe s.) ; correspondance avec l'Égypte ; céramique et écritures locales</td>
+            </tr>
+            <tr>
+              <td>~1200 av. J.-C.</td>
+              <td>Arrivée simultanée des Israélites (intérieur/collines) et des Philistins (côte)</td>
+              <td>Stèle de Merneptah (1208 av.) ; archéologie des collines de Judée et Samarie (Finkelstein)</td>
+            </tr>
+            <tr>
+              <td>~1000–587 av. J.-C.</td>
+              <td>Royaumes d'Israël et de Juda — présence philistine côtière maintenue</td>
+              <td>Stèle de Tel Dan ; Siloé ; inscriptions de Kuntillet Ajrud ; sources assyriennes</td>
+            </tr>
+            <tr>
+              <td>587 av.–135 ap. J.-C.</td>
+              <td>Judéens sous domination babylonienne, perse, hellénistique, romaine — population rurale continue</td>
+              <td>Néhémie ; 1 Maccabées ; Flavius Josèphe ; fouilles de Jérusalem (Kenyon, Mazar)</td>
+            </tr>
+            <tr>
+              <td>135–638 ap. J.-C.</td>
+              <td>Syria Palaestina : populations judéo-chrétiennes, samaritaines, arabes-nabatéennes</td>
+              <td>Sources patristiques ; sources rabbiniques (Talmud de Jérusalem) ; archéologie byzantine</td>
+            </tr>
+            <tr>
+              <td>638–1099 ap. J.-C.</td>
+              <td>Conquête arabo-islamique — arabisation progressive de la population locale existante</td>
+              <td>Papyrus arabes de Nessana ; chroniques byzantines ; archéologie omeyyade et abbasside</td>
+            </tr>
+            <tr>
+              <td>1099–1291 ap. J.-C.</td>
+              <td>Interlude des Croisés — population locale maintenue sous domination franque</td>
+              <td>Chroniques des Croisades ; fouilles de Césarée, Acre, Jérusalem</td>
+            </tr>
+            <tr>
+              <td>1291–1517 ap. J.-C.</td>
+              <td>Mamelouks — population arabe palestinienne constituée, peuplement rural dense</td>
+              <td>Géographes arabes (Mujir al-Din) ; sources mameloukes ; cadastres fiscaux</td>
+            </tr>
+            <tr>
+              <td>1516–1917 ap. J.-C.</td>
+              <td>Empire ottoman — population arabe majority avec minorities chrétiennes et juives</td>
+              <td>Tahrir defterleri (recensements ottomans) ; voyageurs européens ; documentation consulaire</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Ce tableau révèle un fait fondamental que les deux récits nationaux ont tendance à obscurcir : <strong>la terre n'a jamais été vide</strong>. Ni à l'arrivée des proto-Israélites vers 1200 av. J.-C., ni pendant l'exil babylonien, ni pendant les deux millénaires de diaspora juive (70–1948 ap. J.-C.), ni à l'arrivée des immigrants sionistes à partir de 1882.</p>
+
+      <h3>Le point génétique — ce que la science dit de l'antériorité</h3>
+
+      <p>Les analyses génétiques modernes apportent un éclairage que ni les textes bibliques ni les sources arabes n'auraient pu fournir. Plusieurs études indépendantes (notamment Behar et al., 2010 ; Haber et al., 2013 ; Lazaridis et al., 2016) ont montré que les populations juives actuelles et les Palestiniens arabes actuels partagent des marqueurs génétiques communs significatifs, cohérents avec une <strong>origine commune dans les populations levantines antiques</strong>. Ce qui sépare ces deux populations au niveau génétique, c'est principalement la composante d'admixture différentielle — européenne pour les Juifs ashkénazes (diaspora européenne longue), nord-africaine et arabique pour les Palestiniens.</p>
+
+      <p>Ce résultat scientifique a une implication historiographique directe : les Palestiniens arabes d'aujourd'hui sont en grande partie les descendants biologiques des populations qui ont vécu dans cette région à travers les âges — y compris d'une fraction des Judéens de l'Antiquité qui n'ont pas émigré mais ont progressivement changé de langue (de l'araméen à l'arabe) et de religion (du judaïsme ou christianisme à l'islam) sous les influences successives des conquêtes. Ce ne sont pas des « Arabes venus d'Arabie » qui auraient remplacé une population locale disparue — ce sont les descendants de la population locale qui ont changé de langue et de religion.</p>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">⚑ Implication épistémologique</div>
+        <p>La question « qui était là en premier » est une question sans réponse nette et sans pertinence pratique pour le présent. Aucun groupe ne peut revendiquer une antériorité absolue exclusive sur cette terre. Ce que les deux parties peuvent légitimement revendiquer, c'est une <strong>présence continue et un attachement profond</strong> — mais sur des fondements différents : attachement religieux, mémoriel et national pour les Juifs ; attachement de peuplement continu et identité collective pour les Arabes palestiniens. Ces deux revendications ne s'excluent pas logiquement — mais elles entrent en conflit pratique sur le même espace.</p>
+      </div>
+    </section>
+
+    <!-- SECTION III -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <div class="section-numero">III</div>
+        <div>
+          <div class="section-titre">La Palestine romaine et byzantino-arabe</div>
+          <div class="section-sous-titre">Comment le nom géographique s'est dissocié de la réalité ethnique qu'il désignait</div>
+        </div>
+      </div>
+
+      <p>Après la décision d'Hadrien en 135 ap. J.-C., la <em class="terme-cle">Syria Palaestina</em> devient une désignation administrative romaine ordinaire. Elle englobe une population extraordinairement mélangée : Judéens restés sur place (la majorité de la population juive n'a pas été déportée — il y avait une limite pratique à ce que Rome pouvait déporter), Samaritains, populations gréco-romaines installées dans les villes, communautés chrétiennes naissantes, et une présence arabe croissante dans le Néguev et la Transjordanie.</p>
+
+      <p>En 395 ap. J.-C., lors de la division de l'Empire romain, la Palestine tombe dans la partie orientale — l'Empire byzantin. Elle est divisée en trois provinces administratives : <em>Palaestina Prima</em> (la côte et Judée), <em>Palaestina Secunda</em> (Galilée et Transjordanie nord) et <em>Palaestina Tertia</em> (Néguev et Sinaï). La population est alors majoritairement chrétienne, avec des minorités juives et samaritaines significatives.</p>
+
+      <h3>La conquête islamique — 636–640 ap. J.-C.</h3>
+
+      <p>La bataille du Yarmouk en août 636 marque la fin de la domination byzantine sur la région. Les armées arabes de l'islam naissant, sous le commandement de Khalid ibn al-Walid, écrasent l'armée byzantine. Jérusalem se rend à Omar ibn al-Khattab en 638 — le calife lui-même fait le voyage depuis Médine pour recevoir la reddition, dans un geste symbolique qui consacre l'importance spirituelle de la ville.</p>
+
+      <p>Ce qui se produit alors n'est pas un remplacement de population — c'est une transformation culturelle progressive sur plusieurs siècles. Les conquérants arabes sont numériquement moins nombreux que la population conquise. L'arabisation — l'adoption de la langue arabe — et l'islamisation — l'adoption de l'islam — se font graduellement, sous l'influence combinée de la langue administrative, de la fiscalité différentielle (<em class="terme-cle">jizya</em> — taxe de capitation pour les non-musulmans) et du prestige social de la religion dominante. Des îlots chrétiens (notamment les communautés melkites, latines et orthodoxes) et juifs subsistent tout au long de cette période.</p>
+
+      <p>La population qui émerge au terme de cette transformation médiévale — parlant arabe, pratiquant l'islam pour sa majorité, attachée à la terre — est ce que nous appelons aujourd'hui les Arabes palestiniens. Leur identité nationale distincte, en tant que « Palestiniens » spécifiquement (par opposition aux Syriens, Libanais ou Jordaniens), se cristallisera tardivement — au contact du sionisme au XXe siècle.</p>
+    </section>
+
+    <!-- SECTION IV -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <div class="section-numero">IV</div>
+        <div>
+          <div class="section-titre">La Palestine ottomane (1516–1917)</div>
+          <div class="section-sous-titre">Quatre siècles de domination qui ne furent pas un désert — la réalité démographique avant l'ère sioniste</div>
+        </div>
+      </div>
+
+      <p>Les Ottomans conquièrent la région en 1516, lors de la campagne du sultan Sélim Ier contre les Mamelouks. Elle fait dès lors partie de la province (vilayet) de Syrie, divisée ultérieurement en plusieurs unités administratives — principalement le Vilayet de Beyrouth et le Sandjak de Jérusalem (qui a le statut particulier d'être directement rattaché à Istanbul à partir de 1874, en raison de la sensibilité internationale de la ville sainte).</p>
+
+      <p>La période ottomane est souvent résumée à tort par la formule sioniste ancienne d'une « terre sans peuple pour un peuple sans terre » — formule attribuée à Israel Zangwill, popularisée à la fin du XIXe siècle. Les registres de recensement ottomans (<em class="terme-cle">tahrir defterleri</em>) contredisent formellement cette image.</p>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Démographie de la Palestine ottomane — données des recensements</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Période</th>
+              <th>Population totale estimée</th>
+              <th>Composition confessionnelle / ethnique</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>XVIe siècle</td>
+              <td>~300 000 personnes</td>
+              <td>Arabo-musulmans ~70%, Chrétiens arabes ~20%, Juifs ~10%</td>
+              <td>Tahrir defterleri ottomans (1525–1596)</td>
+            </tr>
+            <tr>
+              <td>Fin XVIIIe siècle</td>
+              <td>~250 000–300 000 (déclin relatif dû aux guerres et épidémies)</td>
+              <td>Structure similaire — Juifs concentrés dans les 4 villes saintes (Jérusalem, Hébron, Safed, Tibériade)</td>
+              <td>Estimations de voyageurs européens (Volney, 1783)</td>
+            </tr>
+            <tr>
+              <td>1880 (veille de la 1ère Aliya)</td>
+              <td>~450 000 personnes</td>
+              <td>Arabes musulmans ~75%, Chrétiens arabes ~17%, Juifs ~8% (~25 000–35 000)</td>
+              <td>Recensements ottomans ; estimations consulaires</td>
+            </tr>
+            <tr>
+              <td>1914 (veille de la Première Guerre)</td>
+              <td>~700 000 personnes</td>
+              <td>Arabes musulmans ~60%, Chrétiens arabes ~10%, Juifs ~30% (~85 000 après les premières Aliyot)</td>
+              <td>Recensement ottoman de 1914 ; rapports des consulats britannique, français, allemand</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>La Palestine ottomane n'est pas vide — mais elle est sous-peuplée par rapport à sa capacité agricole potentielle. Cette sous-population résulte d'un cumul de facteurs : épidémies récurrentes (dont le paludisme dans les plaines côtières et la vallée du Jourdain), insécurité rurale, fiscalité lourde, et un relatif déclin économique par rapport aux périodes antérieures. Les plaines côtières (la future zone de peuplement dense de l'immigration sioniste) sont partiellement marécageuses et réputées insalubres.</p>
+
+      <p>Au XIXe siècle, la population augmente progressivement — et des flux migratoires commencent dans les deux sens. Des Arabes arrivent d'Égypte, de Syrie, de Transjordanie — attirés par le développement économique relatif lié à l'ouverture commerciale ottomane. Et les premières vagues d'immigration juive commencent, d'abord dans le cadre de la philanthropie des Rothschild et des <em>hovevei Zion</em> (Amants de Sion), avant de prendre la forme organisée des Aliyot sionistes.</p>
+    </section>
+
+    <!-- SECTION V -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <div class="section-numero">V</div>
+        <div>
+          <div class="section-titre">Les Aliyot sionistes (1882–1948)</div>
+          <div class="section-sous-titre">Cinq vagues d'immigration qui transforment une démographie — et les tensions qu'elles engendrent</div>
+        </div>
+      </div>
+
+      <p>Le sionisme moderne se traduit par des vagues successives d'immigration juive en Palestine — les <em class="terme-cle">Aliyot</em> (<span class="heb">עֲלִיּוֹת</span> — « montées », au sens de montée vers la Terre Promise et vers Jérusalem, toujours décrite comme en hauteur dans la géographie symbolique juive).</p>
+
+      <div class="aliya-grille">
+        <div class="aliya-card">
+          <div class="aliya-nom">Première Aliya</div>
+          <span class="aliya-date">1882–1903</span>
+          <div class="aliya-desc">~25 000 Juifs principalement de Russie et de Roumanie, fuyant les pogroms post-1881. Fondation des premières colonies agricoles (moshavot) — Rishon LeZion, Rosh Pina, Zichron Yaakov — avec l'appui financier du baron Edmond de Rothschild.</div>
+        </div>
+        <div class="aliya-card">
+          <div class="aliya-nom">Deuxième Aliya</div>
+          <span class="aliya-date">1904–1914</span>
+          <div class="aliya-desc">~40 000 Juifs — dont David Ben Gourion et les fondateurs du mouvement ouvrier sioniste. Création des premiers kibboutzim. Idéologie socialiste-sioniste dominante. Construction des premières structures d'auto-gouvernement.</div>
+        </div>
+        <div class="aliya-card">
+          <div class="aliya-nom">Troisième Aliya</div>
+          <span class="aliya-date">1919–1923</span>
+          <div class="aliya-desc">~40 000 Juifs dans l'euphorie post-Déclaration Balfour et après la Révolution russe. Développement des structures institutionnelles de l'Yishouv (communauté juive en Palestine). Fondation de la Haganah (1920).</div>
+        </div>
+        <div class="aliya-card">
+          <div class="aliya-nom">Quatrième Aliya</div>
+          <span class="aliya-date">1924–1929</span>
+          <div class="aliya-desc">~82 000 Juifs, principalement de Pologne (fuyant les discriminations post-guerre). Peuplement plus bourgeois, plus urbain. Développement de Tel Aviv. Tensions croissantes avec la population arabe — émeutes de 1929 à Hébron et Jérusalem.</div>
+        </div>
+        <div class="aliya-card">
+          <div class="aliya-nom">Cinquième Aliya</div>
+          <span class="aliya-date">1929–1939</span>
+          <div class="aliya-desc">~250 000 Juifs fuyant la montée du nazisme en Allemagne et en Europe centrale. La plus massive et la plus décisive. En 1939, les Juifs représentent ~30% de la population de Palestine. Déclenche la Grande Révolte arabe (1936–1939).</div>
+        </div>
+        <div class="aliya-card">
+          <div class="aliya-nom">Aliya Bet (clandestine)</div>
+          <span class="aliya-date">1934–1948</span>
+          <div class="aliya-desc">Immigration illégale après le Livre Blanc de 1939 — ~100 000 Juifs tentent d'entrer en Palestine en contournant les restrictions britanniques. Navires interceptés, réfugiés refoulés. Après la Shoah, devient moralement insupportable à l'opinion internationale.</div>
+        </div>
+      </div>
+
+      <p>Chaque vague transforme la démographie de façon cumulative. En 1880, les Juifs représentent environ 5% de la population de Palestine (25 000 sur ~450 000). En 1947, la veille du vote de l'ONU sur le partage, ils représentent environ 33% (~630 000 sur ~1 900 000). Cette transformation démographique rapide — achetant des terres au prix du marché, créant des institutions économiques et culturelles parallèles, développant une force militaire (la Haganah) — génère des tensions croissantes avec la population arabe locale qui voit son cadre social et ses perspectives économiques se transformer radicalement.</p>
+
+      <div class="debat-bloc">
+        <div class="debat-voix question">
+          <div class="debat-label">Question — Daniel</div>
+          <p>Les acheteurs sionistes de terres n'agissaient-ils pas dans le cadre légal — en achetant les terres aux propriétaires légitimes ? La résistance arabe n'était-elle pas alors injustifiée ?</p>
+        </div>
+        <div class="debat-voix reponse">
+          <div class="debat-label">Orient Scholar — Historien · Sociologue</div>
+          <p>La question de la légalité est réelle mais insuffisante. Oui, les achats de terres sont pour la plupart légaux. Mais ils sont faits auprès des grands propriétaires terriens (<em>effendis</em>) absents — souvent des Libanais ou Syriens résidant à Beyrouth ou Damas — et non des paysans (<em>fellahin</em>) qui les cultivaient depuis des générations. L'achat légal de la terre aboutissait à l'expulsion juridique des paysans qui n'avaient pas de titre de propriété formel mais considéraient cette terre comme la leur par droit d'usage immémorial.</p>
+          <p>C'est le même mécanisme qu'on observe dans toute colonisation agricole — légal d'un point de vue formel, traumatique d'un point de vue sociologique. La légalité formelle ne résout pas la question de la justice substantielle. Ce n'est pas un argument anti-sioniste — c'est une description de ce que font tous les mouvements de colonisation agricole à travers l'histoire. L'originalité du cas palestinien est que les deux parties avaient des raisons historiques et humaines profondes de vouloir cette même terre.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION VI -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <div class="section-numero">VI</div>
+        <div>
+          <div class="section-titre">Les trois promesses britanniques contradictoires</div>
+          <div class="section-sous-titre">Comment l'Empire a fabriqué un conflit insoluble en 1915–1917</div>
+        </div>
+      </div>
+
+      <p>Pour comprendre 1948, il faut comprendre 1917. Le conflit israélo-palestinien ne naît pas de l'hostilité naturelle entre Juifs et Arabes — il est <em>fabriqué</em> dans les chancelleries européennes pendant la Première Guerre mondiale, par des décideurs qui font simultanément trois promesses incompatibles à trois parties différentes.</p>
+
+      <div class="promesse-bloc">
+        <div class="promesse-num">Promesse 1 · Juin 1915 – Juillet 1916</div>
+        <div class="promesse-titre">La Correspondance Hussein-McMahon — promesse d'indépendance arabe</div>
+        <div class="promesse-corps">
+          <p>Henry McMahon, Haut-Commissaire britannique en Égypte, échange une série de lettres avec le Chérif Hussein ibn Ali de La Mecque, gardien des lieux saints de l'islam. Les Britanniques ont besoin d'une révolte arabe pour déstabiliser l'arrière ottoman — Hussein veut un grand État arabe indépendant en échange de sa participation à la guerre.</p>
+          <p>McMahon s'engage à soutenir l'indépendance arabe « dans les limites demandées par le Chérif de La Mecque », sous réserve de certaines exclusions géographiques formulées de manière délibérément ambiguë. Il exclut explicitement les régions à l'ouest d'une ligne Alep-Hama-Homs-Damas — ce qui, dans l'esprit de McMahon, exclut le Liban côtier d'influence française, mais dont l'interprétation concernant la Palestine reste intentionnellement floue. Hussein comprend — ou veut comprendre — que la Palestine est incluse. Les Britanniques diront plus tard qu'elle était exclue. Ce débat n'a jamais été résolu.</p>
+          <p>Le résultat concret : la Révolte arabe éclate en juin 1916. T.E. Lawrence — « Lawrence d'Arabie » — coordonne les opérations. Les forces hachémites contribuent à la campagne du Sinaï et de Palestine, croyant travailler à la création d'un grand État arabe uni.</p>
+        </div>
+      </div>
+
+      <div class="promesse-bloc">
+        <div class="promesse-num">Promesse 2 · Mai 1916</div>
+        <div class="promesse-titre">Les Accords Sykes-Picot — partage colonial secret</div>
+        <div class="promesse-corps">
+          <p>Simultanément à la négociation avec Hussein, deux diplomates négocient secrètement le partage de l'Empire ottoman entre la France et la Grande-Bretagne. Sir Mark Sykes (britannique) et François Georges-Picot (français) signent en mai 1916 un accord secret qui divise le Moyen-Orient en sphères d'influence : zone A sous influence française (Syrie intérieure, Mossoul), zone B sous influence britannique (Mésopotamie actuelle), zone bleue à contrôle direct français (Liban côtier), zone rouge à contrôle direct britannique (Bassorah, Bagdad).</p>
+          <p>La Palestine, quant à elle, est placée dans une zone brune — sous administration <em>internationale</em> — en raison des intérêts des grandes puissances sur Jérusalem et les lieux saints chrétiens (y compris la Russie tsariste). Cet accord contredit directement les promesses faites à Hussein. Les Arabes n'en savent rien.</p>
+          <p>En novembre 1917, les Bolcheviks — après la Révolution russe — publient les archives secrètes tsaristes et révèlent l'accord Sykes-Picot au monde. C'est un choc pour les Arabes qui découvrent qu'ils ont été dupés dès le début.</p>
+        </div>
+      </div>
+
+      <div class="promesse-bloc">
+        <div class="promesse-num">Promesse 3 · 2 Novembre 1917</div>
+        <div class="promesse-titre">La Déclaration Balfour — foyer national juif</div>
+        <div class="promesse-corps">
+          <p>Le ministre des Affaires étrangères britannique Arthur James Balfour adresse une lettre à Lord Walter Rothschild, représentant de la communauté juive britannique. Cette lettre de 67 mots est l'un des documents les plus importants et les plus contestés du XXe siècle.</p>
+        </div>
+      </div>
+
+      <blockquote>
+        <p>« Le gouvernement de Sa Majesté envisage favorablement l'établissement en Palestine d'un foyer national pour le peuple juif, et emploiera tous ses efforts pour faciliter la réalisation de cet objectif, étant clairement entendu que rien ne sera fait qui puisse porter préjudice aux droits civils et religieux des communautés non juives existant en Palestine, ni aux droits et au statut politique dont jouissent les Juifs dans tout autre pays. »</p>
+        <cite>— Déclaration Balfour · 2 novembre 1917 · Archives nationales, Londres</cite>
+      </blockquote>
+
+      <p>Le décryptage de cette formulation révèle ses ambiguïtés constitutives, probablement délibérées :</p>
+
+      <div class="deux-col">
+        <div class="col-card">
+          <div class="col-card-titre">Les termes ambigus</div>
+          <p><strong>« Foyer national »</strong> — pas un État. Les sionistes y voient la promesse d'un État futur ; les Britanniques maintiennent une ambiguïté qui leur donne de la flexibilité politique.</p>
+          <p><strong>« En Palestine »</strong> — pas « la Palestine ». Autre ambiguïté géographique délibérée sur les limites.</p>
+          <p><strong>« Communautés non juives »</strong> — les Arabes palestiniens, représentant alors ~90% de la population, sont désignés anonymement. Leurs droits « civils et religieux » sont protégés, mais pas leurs droits <em>politiques</em> ou <em>nationaux</em>.</p>
+        </div>
+        <div class="col-card">
+          <div class="col-card-titre">Pourquoi les Britanniques font cette déclaration</div>
+          <p><strong>Stratégie de guerre</strong> — rallier l'opinion juive mondiale, particulièrement aux États-Unis (entrés en guerre en avril 1917) et en Russie (dont la révolution menace de sortir du conflit). Surestimation d'un « lobby juif mondial ».</p>
+          <p><strong>Intérêt géopolitique</strong> — contrôler la Palestine pour sécuriser le canal de Suez et la route vers l'Inde.</p>
+          <p><strong>Conviction sincère de certains</strong> — Lloyd George et Balfour lui-même sont des évangéliques qui croient au rétablissement des Juifs en Palestine comme accomplissement prophétique.</p>
+          <p><strong>Compétition avec l'Allemagne</strong> — les Allemands envisageaient une déclaration similaire.</p>
+        </div>
+      </div>
+
+      <h3>La conquête militaire et le système des mandats (1917–1922)</h3>
+
+      <p>Le général <em class="terme-cle">Edmund Allenby</em> entre à Jérusalem le 9 décembre 1917 — un mois exactement après la Déclaration Balfour — après avoir progressé depuis l'Égypte. Geste symbolique délibéré : il descend de cheval pour entrer à pied dans la ville sainte, contrastant avec l'entrée théâtrale de Guillaume II en 1898. La ville tombe sans combat majeur. En octobre 1918, l'armistice de Moudros met fin aux hostilités avec l'Empire ottoman vaincu.</p>
+
+      <p>À la Conférence de paix de Paris (1919), le président Wilson arrive avec son programme idéaliste des Quatorze Points et le principe d'autodétermination des peuples. Les appétits coloniaux britanniques et français créent une tension immédiate. La solution est le <em class="terme-cle">système des mandats</em> de la Société des Nations — invention juridique qui remplace les colonies par des « tutelles civilisationnelles temporaires ».</p>
+
+      <p>L'article 22 du Pacte de la SDN définit les mandats comme s'appliquant aux territoires dont les peuples « ne sont pas encore capables de se diriger eux-mêmes dans les conditions particulièrement difficiles du monde moderne ». C'est du colonialisme avec une rhétorique de bienveillance — mais c'est la formule qui permet aux Britanniques de prendre le contrôle des territoires arabes sans violer ouvertement le principe wilsonien.</p>
+
+      <p>Le <em class="terme-cle">Mandat britannique sur la Palestine</em> est approuvé par la SDN le 24 juillet 1922 et entre en vigueur le 29 septembre 1923. Sa caractéristique unique parmi tous les mandats : il intègre directement la Déclaration Balfour dans son préambule juridique, prévoyant simultanément la préparation à l'autonomie de la population arabe existante <em>et</em> la facilitation d'un foyer national juif pour une population qui n'est pas encore là. Deux objectifs structurellement contradictoires dans le même document.</p>
+    </section>
+
+    <!-- SECTION VII -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <div class="section-numero">VII</div>
+        <div>
+          <div class="section-titre">Le Mandat britannique — vingt-cinq ans d'échec structurel</div>
+          <div class="section-sous-titre">L'administration d'une contradiction inscrite dans les textes fondateurs</div>
+        </div>
+      </div>
+
+      <p>Les Britanniques se retrouvent à administrer un territoire avec deux populations dont les revendications s'excluent mutuellement, et avec deux promesses contradictoires dans leurs obligations juridiques internationales. Leur politique oscille constamment — favorisant tantôt les Juifs, tantôt les Arabes, satisfaisant finalement personne et s'aliénant les deux.</p>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-epoch">1920–1929</div>
+          <div class="timeline-titre">Les premières violences — la coexistence se détériore</div>
+          <div class="timeline-corps">Émeutes de 1920 à Jérusalem (5 Juifs, 4 Arabes tués). Émeutes de 1929 à Hébron — massacre de la communauté juive locale (67 morts) — l'une des plus anciennes d'Eretz Yisrael. Jaffa, Jérusalem. La coexistence de fait qui avait prévalu dans les premières années du mandat se fissure sous la pression démographique croissante de l'immigration.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-epoch">1936–1939</div>
+          <div class="timeline-titre">La Grande Révolte arabe</div>
+          <div class="timeline-corps">Soulèvement arabe généralisé contre l'immigration juive massive (la Cinquième Aliya) et la domination britannique. Grève générale de six mois, puis guérilla rurale. Les Britanniques répriment durement — environ 5 000 Arabes tués, 15 000 blessés, dirigeants du mouvement national arabe exilés. La répression désorganise durablement la direction politique palestinienne arabe — ce qui aura des conséquences catastrophiques en 1947–1948.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-epoch">Mai 1939</div>
+          <div class="timeline-titre">Le Livre Blanc de 1939 — la trahison des deux camps</div>
+          <div class="timeline-corps">Pour calmer la révolte arabe et sécuriser leurs arrières à la veille de la guerre contre Hitler, les Britanniques limitent drastiquement l'immigration juive à 75 000 personnes sur cinq ans, puis à zéro. Au moment précis où les Juifs européens ont le plus besoin de fuir — les portes de la Palestine se ferment. Des navires chargés de réfugiés se voient refuser l'entrée. Le SS <em>St. Louis</em> (mai 1939, 937 réfugiés) est refoulé par Cuba, les États-Unis et le Canada — et repart vers l'Europe. 254 de ses passagers mourront dans la Shoah.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-epoch">1945–1947</div>
+          <div class="timeline-titre">L'insurrection sioniste — après la Shoah, la rupture</div>
+          <div class="timeline-corps">Après la Shoah, les organisations para-militaires sionistes — principalement l'Irgoun de Menahem Begin et le Lehi (groupe Stern) — mènent une campagne contre l'administration britannique. Le 22 juillet 1946, l'Irgoun fait exploser l'Hôtel King David à Jérusalem — siège de l'administration militaire britannique. 91 personnes tuées — Britanniques, Arabes, Juifs. C'est l'attentat le plus meurtrier du mandat.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-epoch">Février 1947</div>
+          <div class="timeline-titre">L'abandon — le problème renvoyé à l'ONU</div>
+          <div class="timeline-corps">Le gouvernement Attlee annonce qu'il remet la question palestinienne à la nouvelle Organisation des Nations Unies, incapable de trouver une solution et épuisé financièrement et moralement par l'administration du mandat. L'ONU vote le Plan de Partage (Résolution 181) le 29 novembre 1947. Les Britanniques s'abstiennent, fixent la fin du mandat au 14 mai 1948, et quittent le pays sans organiser aucune transition — laissant deux peuples armés face à face.</div>
+        </div>
+
+      </div>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">⚑ Bilan du Mandat — Churchill et l'aveu tardif</div>
+        <p>Les Britanniques ont créé les conditions d'un conflit insoluble en faisant simultanément trois choses incompatibles : promettre l'indépendance arabe à Hussein, promettre un foyer national juif à Rothschild, promettre une gestion internationale à leurs alliés. Ils ont ensuite administré ces promesses contradictoires avec un pragmatisme cynique, satisfaisant finalement personne et s'aliénant les deux — avant de se retirer en laissant derrière eux une bombe à retardement.</p>
+        <p><strong>Winston Churchill</strong> — qui avait lui-même contribué à créer cette situation comme Secrétaire aux Colonies en 1921 — dira plus tard avec une désinvolture stupéfiante : <em>« Je n'avais pas réalisé que les Juifs auraient autant de succès à coloniser la Palestine. »</em></p>
+      </div>
+    </section>
+
+    <!-- SECTION VIII -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <div class="section-numero">VIII</div>
+        <div>
+          <div class="section-titre">La Shoah comme facteur décisif</div>
+          <div class="section-sous-titre">Comment l'extermination de six millions de Juifs a rendu la création d'Israël politiquement et moralement inévitable</div>
+        </div>
+      </div>
+
+      <p>La Shoah (<span class="heb">שׁוֹאָה</span> — « catastrophe » en hébreu ; <em class="terme-cle">Holocauste</em> dans le vocabulaire international) est l'extermination systématique et industrielle de six millions de Juifs par l'Allemagne nazie et ses collaborateurs entre 1941 et 1945. Elle constitue le contexte décisif — psychologique, politique et moral — sans lequel 1948 ne peut être pleinement compris.</p>
+
+      <h3>L'ampleur — ce que les chiffres signifient</h3>
+
+      <p>Six millions de Juifs tués — les deux tiers des Juifs d'Europe, un tiers de la population juive mondiale. Ce chiffre abstrait prend sa pleine dimension quand on le décompose pays par pays : Pologne — 3 millions de Juifs avant la guerre, 300 000 survivants (90% exterminés) ; Pays-Bas — 102 000 tués sur 140 000 (le taux le plus élevé d'Europe occidentale) ; France — 75 000 déportés, moins de 3 000 revenus.</p>
+
+      <p>La décision d'extermination est organisée lors de la Conférence de Wannsee le 20 janvier 1942 — quinze hauts fonctionnaires nazis qui se réunissent pendant 90 minutes pour coordonner la « Solution Finale de la Question Juive » (<em>Endlösung der Judenfrage</em>). Hannah Arendt, dans son compte rendu du procès Eichmann, introduit la formule devenue classique de la « banalité du mal » — ce n'est pas seulement la haine qui produit l'extermination, c'est aussi la bureaucratie, l'obéissance hiérarchique, et l'absence de pensée morale.</p>
+
+      <h3>La Conférence d'Évian — le monde qui abandonne</h3>
+
+      <p>En juillet 1938 — avant même la guerre, quand les Juifs d'Allemagne cherchent encore à émigrer — 32 nations se réunissent à Évian pour discuter du problème des réfugiés juifs fuyant l'Allemagne nazie. Résultat : pratiquement aucun pays n'augmente ses quotas d'immigration. La France dit avoir trop de réfugiés. Les États-Unis maintiennent leurs quotas restrictifs. L'Australie dit ne pas vouloir « importer » de problèmes raciaux. Hitler note avec satisfaction que le monde abandonne les Juifs.</p>
+
+      <p>Cet abandon collectif — documenté, officiel, signé — est fondamental pour comprendre pourquoi, après la Shoah, la création d'un État juif apparaît à une grande partie du monde comme une nécessité morale. L'alternative — continuer à dépendre de la bienveillance des nations — a montré ce qu'elle valait.</p>
+
+      <h3>La Shoah et 1948 — trois niveaux de causalité</h3>
+
+      <div class="deux-col">
+        <div class="col-card">
+          <div class="col-card-titre">Causalité psychologique</div>
+          <p>La conviction qu'il n'y a pas d'avenir pour les Juifs dans la diaspora européenne devient définitive après la Shoah. L'assimilation, la citoyenneté, l'intégration — toutes les stratégies de survie en diaspora ont échoué. Pour les survivants et le monde juif en général, un État est une nécessité existentielle, non plus un projet politique parmi d'autres.</p>
+        </div>
+        <div class="col-card">
+          <div class="col-card-titre">Causalité politique</div>
+          <p>La culpabilité des nations occidentales face à leur inaction pendant la Shoah — et pire, leur refus actif d'accueillir les réfugiés avant et pendant la guerre — rend le vote de l'ONU pour la partition de novembre 1947 politiquement possible. Sans la Shoah, il est douteux que les États-Unis aient exercé la pression nécessaire sur les États membres de l'ONU pour obtenir la majorité des deux tiers requise pour le Plan de Partage.</p>
+        </div>
+      </div>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">⚑</span>
+          <span class="encadre-label">Tension historiographique — la Shoah comme « cause » d'Israël</span>
+        </div>
+        <div class="encadre-body">
+          <p>Une lecture réductrice voudrait que l'État d'Israël soit une « compensation » accordée aux Juifs pour la Shoah — à des frais payés par les Palestiniens qui n'en sont pas responsables. Cette lecture est à la fois partiellement vraie et fondamentalement insuffisante.</p>
+          <p>Partiellement vraie : la culpabilité de la Shoah a joué un rôle dans le vote de l'ONU de novembre 1947. Des États qui auraient autrement voté contre ont voté pour, ou se sont abstenus, sous la pression américaine et la conscience de ce qui venait de se passer.</p>
+          <p>Fondamentalement insuffisante : le sionisme précède la Shoah de cinquante ans. Des flux d'immigration juive significatifs en Palestine existaient depuis 1882. L'Yishouv (communauté juive organisée en Palestine) avait déjà des institutions économiques, politiques et militaires complètes avant 1939. La Shoah n'a pas <em>créé</em> le sionisme — elle en a rendu l'aboutissement politiquement incontournable.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="ornement-sep">✦ ✦ ✦</div>
+
+    <!-- SECTION IX -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <div class="section-numero">IX</div>
+        <div>
+          <div class="section-titre">1948 — L'indépendance et la Nakba</div>
+          <div class="section-sous-titre">Les deux noms d'un même moment historique — et ce que chacun désigne de réel</div>
+        </div>
+      </div>
+
+      <p>Le 29 novembre 1947, l'Assemblée générale de l'ONU adopte la Résolution 181 — le Plan de Partage de la Palestine. La Palestine mandataire doit être divisée en un État juif (~56% du territoire, dont le Néguev désertique), un État arabe (~43%), et Jérusalem sous administration internationale.</p>
+
+      <p>Le résultat du vote : 33 pour, 13 contre, 10 abstentions. La majorité des deux tiers est atteinte de justesse. Les États-Unis exercent une pression considérable sur plusieurs États (notamment du Libéria, des Philippines, d'Haïti) pour obtenir ce résultat.</p>
+
+      <div class="deux-col">
+        <div class="col-card">
+          <div class="col-card-titre">La position de l'Yishouv juif</div>
+          <p>L'Agence juive accepte le plan — avec résignation plutôt qu'enthousiasme. Ben Gourion et les dirigeants sionistes estiment que l'État sur 56% du territoire est un point de départ acceptable. L'État peut toujours s'étendre par la suite — et la suite leur donnera raison.</p>
+        </div>
+        <div class="col-card">
+          <div class="col-card-titre">La position arabe — le refus</div>
+          <p>Les États arabes et les représentants palestiniens arabes rejettent unanimement le plan. Leur argument : les Juifs, représentant ~33% de la population, ne devraient pas recevoir 56% du territoire. La partition est perçue comme profondément injuste. Le problème fondamental est que le refus rend une solution négociée impossible — et la décision est remise à la guerre.</p>
+        </div>
+      </div>
+
+      <h3>La guerre de 1948 — deux noms pour un même événement</h3>
+
+      <p>La proclamation de l'État d'Israël (<span class="heb">מְדִינַת יִשְׂרָאֵל</span> — <em class="terme-cle">Medinat Yisrael</em>) le <strong>14 mai 1948</strong> par David Ben Gourion à Tel Aviv est immédiatement suivie de l'invasion par les armées de cinq États arabes voisins : Égypte, Transjordanie, Syrie, Irak, Liban.</p>
+
+      <div class="bilan-grille">
+        <div class="bilan-col">
+          <div class="bilan-col-header confirme">Milhemet HaAtsmaut — Guerre d'Indépendance (perspective israélienne)</div>
+          <div class="bilan-col-item"><strong>Ce qu'elle désigne</strong> La victoire militaire israélienne contre les armées arabes coalisées, permettant la naissance et la survie d'un État juif pour la première fois depuis 722 av. J.-C. — 2 670 ans d'intervalle.</div>
+          <div class="bilan-col-item"><strong>Ce qui est historiquement réel</strong> L'Yishouv, mieux organisé et mieux commandé que prévu, remporte une guerre que la plupart des observateurs anticipaient perdue. La résistance israélienne est réelle, la victoire militaire est indéniable.</div>
+          <div class="bilan-col-item"><strong>Ce qui est significatif</strong> Le nom hébreu du 14 mai — <em>Yom HaAtsmaut</em> — est le jour le plus célébré du calendrier civique israélien. La formule de la Déclaration d'indépendance reprend les termes du projet sioniste et de la promesse biblique dans une synthèse remarquable.</div>
+        </div>
+        <div class="bilan-col">
+          <div class="bilan-col-header absent">النكبة — Al-Nakba — La Catastrophe (perspective palestinienne)</div>
+          <div class="bilan-col-item"><strong>Ce qu'elle désigne</strong> La destruction de 530 villages arabes, l'exode ou l'expulsion de 700 000 à 750 000 Palestiniens arabes (selon les estimations les plus acceptées), et la naissance d'une question des réfugiés non résolue à ce jour.</div>
+          <div class="bilan-col-item"><strong>Ce qui est historiquement réel</strong> Les historiens israéliens « nouveaux » — notamment Benny Morris (dont les travaux à partir des archives de l'armée israélienne dans les années 1980 font référence) — ont documenté que le départ des réfugiés résulte d'une combinaison complexe : peur réelle (massacres attestés, notamment Deir Yassin le 9 avril 1948 — 107 morts), expulsions délibérées dans certains cas, et fuite devant les combats.</div>
+          <div class="bilan-col-item"><strong>Le Plan Dalet</strong> Le Plan Dalet de la Haganah (mars 1948) prévoyait la prise de contrôle de zones arabes et la « neutralisation » de leur population. Si cela constitue un plan d'expulsion délibéré ou une logique militaire de sécurisation des arrières est le débat historiographique le plus actif dans les études israéliennes contemporaines.</div>
+        </div>
+      </div>
+
+      <blockquote>
+        <p>Ces deux noms décrivent le même événement depuis deux perspectives opposées — et les deux sont historiquement réels. La création de l'État d'Israël et la catastrophe palestinienne ne sont pas deux événements séparés — ils sont les deux faces du même moment historique.</p>
+        <cite>— Orient Scholar · Conclusion historiographique</cite>
+      </blockquote>
+
+      <h3>Le nœud central — la question des réfugiés</h3>
+
+      <p>Les 700 000 réfugiés palestiniens de 1948 et leurs descendants — aujourd'hui estimés à plus de 5,9 millions selon l'UNRWA (l'agence de l'ONU chargée des réfugiés palestiniens) — constituent la question la plus difficile du conflit.</p>
+
+      <p>La Résolution 194 de l'Assemblée générale de l'ONU (décembre 1948) affirme que les réfugiés souhaitant rentrer dans leurs foyers et vivre en paix avec leurs voisins devraient être autorisés à le faire dès que possible. Cette résolution n'a jamais été mise en œuvre. Israël refuse le « droit au retour » au nom de l'impossibilité démographique — le retour de millions de Palestiniens rendrait l'État juif minoritaire chez lui. Les Palestiniens maintiennent ce droit comme principe fondamental de leur identité nationale.</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">⚑</span>
+          <span class="encadre-label">Le débat Benny Morris — les archives contre le récit officiel</span>
+        </div>
+        <div class="encadre-body">
+          <p>L'historien israélien Benny Morris a produit dans les années 1980 une révolution historiographique en Palestine et en Israël. En travaillant sur les archives déclassifiées de l'armée israélienne (Tsahal) et des institutions sionistes de l'époque, il a démontré que le récit officiel israélien — selon lequel les Palestiniens seraient partis volontairement, sur incitation de leurs dirigeants — ne correspondait pas à ce que les documents montraient. La majorité des départs résultaient d'une combinaison de peur, d'expulsions locales, et d'un contexte de guerre dans lequel les populations civiles n'avaient pas le choix.</p>
+          <p>Ce qui rend Morris particulièrement intéressant pour l'historien, c'est que ses conclusions factuelles sont acceptées par la plupart des historiens sérieux — mais que ses positions politiques personnelles ont évolué vers un soutien de plus en plus explicite à Israël, y compris à des positions controversées sur la politique contemporaine. Ses faits et ses conclusions normatives sont souvent dissociés dans le débat académique.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION X -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <div class="section-numero">X</div>
+        <div>
+          <div class="section-titre">Le sionisme — de la théologie à la politique</div>
+          <div class="section-sous-titre">La révolution conceptuelle d'Herzl et la tension interne au judaïsme qu'elle a créée</div>
+        </div>
+      </div>
+
+      <p>Le <em class="terme-cle">sionisme</em> (<span class="heb">צִיּוֹנוּת</span> <span class="translitt">Tsiyonut</span>) — mouvement politique fondé par Theodor Herzl avec la publication de <em>Der Judenstaat</em> (L'État juif) en 1896 — opère une transformation radicale dans l'histoire juive. Il prend le concept théologique d'<em class="terme-cle">Eretz Yisrael</em> (la Terre d'Israël) — entretenu pendant deux millénaires comme aspiration religieuse et eschatologique — et le sécularise en programme politique.</p>
+
+      <p>Pour Herzl lui-même — journaliste viennois assimilé, agnostique — la question n'est pas théologique. C'est une réponse nationale à l'antisémitisme européen. L'affaire Dreyfus qu'il a couverte comme journaliste à Paris en 1894 lui a montré que même dans la France des droits de l'homme, la haine des Juifs est prête à surgir. Les Juifs ont besoin d'un État comme les autres nations. La Palestine est choisie non parce que la Bible la promet, mais parce qu'elle est le point de convergence de la mémoire collective juive — et parce qu'elle est politiquement accessible (Empire ottoman en déclin).</p>
+
+      <div class="encadre">
+        <div class="encadre-header">
+          <span class="encadre-icone">✡</span>
+          <span class="encadre-label">Les trois positions internes au judaïsme face au sionisme</span>
+        </div>
+        <div class="encadre-body">
+          <p><strong>Sionisme laïc</strong> (Herzl, Ben Gourion) — la Terre est une nécessité politique, pas une obligation divine. L'État juif est un État comme les autres. La religion est une affaire privée — ou un ciment culturel, pas une loi politique.</p>
+          <p><strong>Sionisme religieux</strong> (Rav Abraham Isaac Kook et son fils Tsvi Yehuda Kook) — le retour en Terre d'Israël est le début de la Rédemption (<em class="terme-cle">geula</em>), le commencement de l'ère messianique. L'État d'Israël est un acte divin dans l'histoire, même si ses fondateurs sont laïcs. Cette position est la matrice idéologique du mouvement des colons contemporain.</p>
+          <p><strong>Anti-sionisme orthodoxe</strong> (Neturei Karta, certains courants harédim comme Satmar) — la Terre ne peut être reprise que par le Messie lui-même, pas par une initiative humaine politique. Créer un État souverain avant la venue du Messie est une transgression théologique grave — une tentative d'anticiper la Providence divine. Certains groupes ultra-orthodoxes maintiennent jusqu'à aujourd'hui un refus de principe de l'État d'Israël au nom de ce raisonnement.</p>
+        </div>
+      </div>
+
+      <p>Ce geste de sécularisation crée une tension interne au mouvement juif qui n'est pas résolue aujourd'hui — et qui s'est considérablement intensifiée dans l'État d'Israël contemporain, où le débat entre sionistes laïcs et religieux structure largement la politique intérieure.</p>
+
+      <h3>Le choix du nom — pourquoi « Israël » ?</h3>
+
+      <p>Le 14 mai 1948, David Ben Gourion proclame l'<em class="terme-cle">État d'Israël</em> à Tel Aviv. Le nom est choisi après débat — d'autres noms avaient été proposés par les membres du Conseil populaire juif : Judée, Sion, Eretz Yisrael, Tsabar.</p>
+
+      <p>« Israël » est retenu précisément parce qu'il transcende les divisions internes. Il est à la fois le nom biblique du peuple depuis Jacob (Genèse 32:29 — « ton nom ne sera plus Jacob, mais Israël »), le nom du royaume historique, et une désignation qui inclut tous les Juifs indépendamment de leur tribu d'origine ou de leur tendance religieuse ou laïque. C'est la première fois depuis 722 av. J.-C. — soit 2 670 ans — que le mot « Israël » désigne à nouveau un État territorial souverain reconnu internationalement.</p>
+    </section>
+
+    <!-- SECTION XI -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <div class="section-numero">XI</div>
+        <div>
+          <div class="section-titre">La question irrésolue — peuple, religion, territoire</div>
+          <div class="section-sous-titre">Pourquoi ce conflit est structurellement différent de la plupart des conflits territoriaux</div>
+        </div>
+      </div>
+
+      <p>Le parcours que nous avons accompli depuis la cosmogonie jusqu'à 1948 permet de comprendre pourquoi le conflit israélo-palestinien résiste à des solutions qui auraient résolu d'autres conflits territoriaux.</p>
+
+      <p>Le mot « Israël » est unique dans l'histoire des mots politiques parce qu'il fusionne inextricablement trois dimensions que d'autres nations séparent normalement :</p>
+
+      <div class="deux-col">
+        <div class="col-card">
+          <div class="col-card-titre">La structure du problème</div>
+          <p><strong>Dimension ethnique</strong> — les descendants biologiques de Jacob, avec toutes les ambiguïtés vues tout au long de notre parcours sur ce que cela signifie réellement (matrilinéarité rabbinique, patrilinéarité biblique, guiyour).</p>
+          <p><strong>Dimension religieuse</strong> — la relation d'alliance avec Yahvé, transmise par la pratique, la loi, la liturgie, indépendamment de l'origine géographique.</p>
+          <p><strong>Dimension territoriale</strong> — Eretz Yisrael, la terre spécifique, dont la sainteté est inscrite dans le droit religieux et la mémoire collective.</p>
+        </div>
+        <div class="col-card">
+          <div class="col-card-titre">Pourquoi c'est structurellement difficile</div>
+          <p>Dans la plupart des nations, ces dimensions sont séparables : on peut être français sans être catholique, catholique sans être français. Pour le concept d'« Israël » dans sa dimension historique profonde, les trois dimensions sont structurellement liées.</p>
+          <p>Un Juif athée de New York appartient-il à « Israël » ? Un Arabe chrétien citoyen de l'État d'Israël en fait-il partie ? Un Juif orthodoxe anti-sioniste est-il lié à Eretz Yisrael ? Les réponses varient radicalement selon la dimension retenue — et le droit international moderne ne connaît que des États et des citoyens, pas des peuples-religions-territoires fusionnés.</p>
+        </div>
+      </div>
+
+      <p>La revendication palestinienne a sa propre structure de difficulté : elle est fondée sur un peuplement continu et un attachement que le droit international a longtemps eu du mal à formaliser. Le droit à l'autodétermination des peuples — que Wilson proclamait en 1919 — s'applique clairement aux Palestiniens comme peuple, mais sa mise en œuvre se heurte à l'existence d'un autre État sur le même territoire depuis 1948, reconnu par la communauté internationale et avec une population de 9 millions de personnes.</p>
+
+      <p>Ce n'est pas un problème d'asymétrie des droits — c'est un problème de droits réels et légitimes des deux côtés qui se contredisent sur le même espace. Et c'est précisément pourquoi toutes les tentatives de solution — plan de partage de 1947, Oslo (1993), Camp David (2000), Annapolis (2007) — ont échoué à produire un règlement durable.</p>
+
+      <div class="synthese-bloc">
+        <div class="synthese-label">⚑ Ce que notre parcours entier éclaire</div>
+        <p>En remontant de 1948 à la cosmogonie — à travers la Création, Noé, Abraham, Moïse, l'Exode, les tribus, les royaumes, les prophètes, l'exil et la diaspora — nous avons assemblé les couches de sens qui rendent ce conflit aussi résistant à la résolution. Ce n'est pas un simple conflit territorial entre deux nations. C'est le lieu de rencontre de trois mille ans de mémoire théologique, d'identité nationale construite dans la souffrance, de promesses faites et trahies, de droits réels et antagonistes.</p>
+        <p><strong>La revendication juive n'est pas une invention récente</strong> — elle plonge ses racines dans les textes que nous avons lus depuis le chapitre I, dans une continuité de mémoire qui n'a pas d'équivalent dans l'histoire humaine. <strong>La revendication palestinienne n'est pas moins réelle</strong> — elle correspond à une présence de peuplement continu que les sources ottomanes, les archives britanniques et la génétique confirment toutes.</p>
+        <p>Ces deux réalités sont vraies simultanément — et leur coexistence sur le même territoire est la question la plus difficile que notre époque ait à résoudre.</p>
+      </div>
+    </section>
+
+    <!-- SECTION XII — TIMELINE -->
+    <section class="section" id="s12">
+      <div class="section-header">
+        <div class="section-numero">XII</div>
+        <div>
+          <div class="section-titre">Synthèse — Timeline complète</div>
+          <div class="section-sous-titre">Des Philistins à la proclamation de l'État d'Israël — jalons chronologiques</div>
+        </div>
+      </div>
+
+      <div class="tableau-wrapper">
+        <div class="tableau-titre">Palestine &amp; 1948 — Chronologie des jalons décisifs</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Événement</th>
+              <th>Signification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>~1200 av. J.-C.</td>
+              <td>Installation des Philistins sur la côte de Canaan</td>
+              <td>Origine du nom « Palestine » ; contemporains de l'émergence d'Israël</td>
+            </tr>
+            <tr>
+              <td>135 ap. J.-C.</td>
+              <td>Hadrien rebaptise la Judée « Syria Palaestina »</td>
+              <td>Imposition politique du nom à toute la région — acte de damnatio mémoriae</td>
+            </tr>
+            <tr>
+              <td>636–640 ap. J.-C.</td>
+              <td>Conquête arabe — bataille du Yarmouk</td>
+              <td>Début de l'arabisation et de l'islamisation progressive de la population locale</td>
+            </tr>
+            <tr>
+              <td>1516</td>
+              <td>Conquête ottomane — Sultan Sélim Ier</td>
+              <td>Début de 400 ans de domination ottomane sur la région</td>
+            </tr>
+            <tr>
+              <td>1880</td>
+              <td>Veille de la Première Aliya — ~450 000 habitants, Juifs ~5%</td>
+              <td>Baseline démographique avant l'immigration sioniste organisée</td>
+            </tr>
+            <tr>
+              <td>1882–1903</td>
+              <td>Première Aliya — ~25 000 immigrants juifs</td>
+              <td>Premières colonies agricoles sionistes financées par les Rothschild</td>
+            </tr>
+            <tr>
+              <td>1896</td>
+              <td>Herzl publie <em>Der Judenstaat</em></td>
+              <td>Fondation théorique du sionisme politique — sécularisation de l'aspiration territoriale juive</td>
+            </tr>
+            <tr>
+              <td>Juin 1915</td>
+              <td>Correspondance Hussein-McMahon — début</td>
+              <td>Promesse britannique d'un État arabe indépendant en échange de la révolte arabe</td>
+            </tr>
+            <tr>
+              <td>Mai 1916</td>
+              <td>Accords Sykes-Picot (secret)</td>
+              <td>Partage colonial franco-britannique du Moyen-Orient — contredit les promesses à Hussein</td>
+            </tr>
+            <tr>
+              <td>9 décembre 1917</td>
+              <td>Allenby entre à Jérusalem — fin de la domination ottomane</td>
+              <td>La Palestine passe sous contrôle britannique</td>
+            </tr>
+            <tr>
+              <td>2 novembre 1917</td>
+              <td>Déclaration Balfour</td>
+              <td>Promesse britannique d'un « foyer national juif » — troisième promesse contradictoire</td>
+            </tr>
+            <tr>
+              <td>24 juillet 1922</td>
+              <td>SDN approuve le Mandat britannique sur la Palestine</td>
+              <td>Formalisation juridique des contradictions — Balfour intégré dans le préambule du mandat</td>
+            </tr>
+            <tr>
+              <td>1929–1939</td>
+              <td>Cinquième Aliya — ~250 000 immigrants (fuite du nazisme)</td>
+              <td>Les Juifs atteignent ~30% de la population ; Grande Révolte arabe de 1936–1939</td>
+            </tr>
+            <tr>
+              <td>Mai 1939</td>
+              <td>Livre Blanc britannique — fermeture des portes</td>
+              <td>Immigration juive limitée à 75 000 sur cinq ans — au moment le plus critique pour les Juifs européens</td>
+            </tr>
+            <tr>
+              <td>20 janvier 1942</td>
+              <td>Conférence de Wannsee</td>
+              <td>Coordination bureaucratique de la « Solution Finale » — 6 millions de Juifs seront tués</td>
+            </tr>
+            <tr>
+              <td>22 juillet 1946</td>
+              <td>Attentat de l'Hôtel King David (Irgoun)</td>
+              <td>91 morts — l'insurrection sioniste signale la fin du mandat britannique</td>
+            </tr>
+            <tr>
+              <td>29 novembre 1947</td>
+              <td>ONU — Résolution 181 (Plan de Partage)</td>
+              <td>Juifs acceptent ; Arabes refusent. La décision est remise à la guerre.</td>
+            </tr>
+            <tr>
+              <td>9 avril 1948</td>
+              <td>Massacre de Deir Yassin (Irgoun + Lehi) — 107 morts</td>
+              <td>Déclenche la panique et la fuite de nombreux villages arabes</td>
+            </tr>
+            <tr>
+              <td>14 mai 1948</td>
+              <td>Proclamation de l'État d'Israël par Ben Gourion</td>
+              <td>Premier État juif souverain depuis 722 av. J.-C. — 2 670 ans d'intervalle</td>
+            </tr>
+            <tr>
+              <td>14–15 mai 1948</td>
+              <td>Invasion des armées arabes — début de la guerre</td>
+              <td>Milhemet HaAtsmaut (Israéliens) / Al-Nakba (Palestiniens) — deux noms, un événement</td>
+            </tr>
+            <tr>
+              <td>1948–1949</td>
+              <td>700 000–750 000 Palestiniens fuient ou sont expulsés</td>
+              <td>Naissance de la question des réfugiés — non résolue à ce jour ; 5,9 millions de descendants (UNRWA)</td>
+            </tr>
+            <tr>
+              <td>Décembre 1948</td>
+              <td>Résolution 194 de l'ONU — droit au retour</td>
+              <td>Jamais mise en œuvre — nœud central du conflit contemporain</td>
+            </tr>
+            <tr>
+              <td>1949</td>
+              <td>Armistices — lignes de la « Ligne Verte »</td>
+              <td>Israël contrôle 78% de la Palestine mandataire (contre 56% du plan de partage)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ornement-sep">✦ ✦ ✦</div>
+
+      <!-- COLOPHON FINAL -->
+      <div class="colophon">
+        <div class="colophon-ornement">✦ ✦ ✦</div>
+        <div class="colophon-titre">Aux Origines</div>
+        <div class="colophon-ligne"></div>
+        <p class="colophon-corps">De la cosmogonie à la naissance de l'État d'Israël — onze chapitres, trois mille ans d'histoire, une conversation entre Daniel et Orient Scholar sur les origines de la civilisation, des textes sacrés, de la mémoire collective, et du monde que nous habitons.</p>
+        <p class="colophon-corps">Ce livre commence là où les textes commencent — avant la lumière, avant le temps, dans le silence de l'<em>Ein Sof</em>. Il se termine là où l'histoire contemporaine commence : le 14 mai 1948, quand un homme debout à Tel Aviv prononce les mots qui relient deux mille ans de prière au présent politique.</p>
+        <p class="colophon-corps">Entre les deux — les patriarches et les tribus, Moïse et les prophètes, les rois et les exilés, les rabbins et les mystiques, les linguistes et les archéologues, les diplomates et les soldats, les réfugiés et les pionniers. L'histoire n'est jamais simple. Elle est toujours vivante.</p>
+        <div class="colophon-ligne"></div>
+        <div class="colophon-meta">Livre numérique interactif · Format HTML autonome · Série complète · XI chapitres</div>
+      </div>
+
+    </section>
+
+    <!-- NAVIGATION CHAPITRES -->
+        <nav class="nav-chapitres">
+      <a href="chapitre-10-la-diaspora.html" class="nav-btn">← Chapitre X</a>
+      <a href="index.html" class="nav-centre">✦ Aux Origines ✦</a>
+      <span style="opacity:0.3; font-family:var(--font-titre); font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase;">Fin du livre →</span>
+    </nav>
+
+  </article>
+</main>
+
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+const bar = document.getElementById('progress-bar');
+const btnTop = document.getElementById('btn-top');
+
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop;
+  const total = doc.scrollHeight - doc.clientHeight;
+  bar.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+  btnTop.classList.toggle('visible', scrolled > 400);
+  highlightActiveSection();
+});
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menu-toggle');
+  if (sidebar.classList.contains('open') &&
+      !sidebar.contains(e.target) &&
+      !toggle.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+
+function highlightActiveSection() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.section-item');
+  let current = '';
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) {
+      current = '#' + section.id;
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active-section');
+    if (link.getAttribute('href') === current) {
+      link.classList.add('active-section');
+    }
+  });
+}
+
+document.querySelectorAll('.section-item[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.innerWidth < 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+
+// Overlay mobile
+const overlay = document.getElementById('sidebar-overlay');
+if (overlay) {
+  overlay.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    overlay.classList.remove('visible');
+  });
+}
+
+// Update toggleSidebar to show overlay
+const origToggle = window.toggleSidebar;
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  if (overlay) overlay.classList.toggle('visible');
+};
+
+</script>
+
+</body>
+</html>
